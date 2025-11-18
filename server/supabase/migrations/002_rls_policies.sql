@@ -90,7 +90,7 @@ WITH CHECK (auth.uid() = id);
 CREATE POLICY "influencer_profiles_select_verified"
 ON influencer_profiles FOR SELECT
 USING (
-  is_verified = true
+  verification_status = 'verified'
   OR user_id = auth.uid()
   OR is_admin()
 );
