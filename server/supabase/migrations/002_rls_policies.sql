@@ -324,17 +324,23 @@ USING (user_id = auth.uid());
 CREATE POLICY "payments_select_influencer"
 ON payments FOR SELECT
 USING (
-  EXISTS (
-    SELECT 1 FROM course_applications ca
-    JOIN courses c ON ca.course_id = c.id
-    WHERE ca.id = payments.application_id
-    AND c.influencer_id = auth.uid()
+  (
+    payments.reference_type = 'course'
+    AND EXISTS (
+      SELECT 1 FROM courses c
+      JOIN influencer_profiles ip ON c.influencer_id = ip.id
+      WHERE c.id = payments.reference_id
+      AND ip.user_id = auth.uid()
+    )
   )
-  OR EXISTS (
-    SELECT 1 FROM party_applications pa
-    JOIN parties p ON pa.party_id = p.id
-    WHERE pa.id = payments.application_id
-    AND p.influencer_id = auth.uid()
+  OR (
+    payments.reference_type = 'party'
+    AND EXISTS (
+      SELECT 1 FROM parties p
+      JOIN influencer_profiles ip ON p.influencer_id = ip.id
+      WHERE p.id = payments.reference_id
+      AND ip.user_id = auth.uid()
+    )
   )
 );
 
