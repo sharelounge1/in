@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRAVELY Frontend - All Screens</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #0f0f1a;
+            --card: rgba(255, 255, 255, 0.05);
+            --glass: rgba(255, 255, 255, 0.1);
+            --text: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --purple: #667eea;
+            --pink: #f093fb;
+            --cyan: #4fd1c5;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans KR', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 36px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, var(--purple), var(--pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--text-secondary);
+            margin-bottom: 48px;
+        }
+
+        .section {
+            margin-bottom: 48px;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            padding-left: 16px;
+            border-left: 4px solid var(--purple);
+        }
+
+        .section-title span {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-left: 12px;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+        }
+
+        .card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: var(--text);
+            display: block;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            border-color: var(--purple);
+            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.2);
+        }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 16px;
+        }
+
+        .card-icon.purple {
+            background: rgba(102, 126, 234, 0.2);
+            color: var(--purple);
+        }
+
+        .card-icon.pink {
+            background: rgba(240, 147, 251, 0.2);
+            color: var(--pink);
+        }
+
+        .card-icon.cyan {
+            background: rgba(79, 209, 197, 0.2);
+            color: var(--cyan);
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .card-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+
+        .badge-new {
+            background: rgba(240, 147, 251, 0.2);
+            color: var(--pink);
+        }
+
+        .badge-important {
+            background: rgba(79, 209, 197, 0.2);
+            color: var(--cyan);
+        }
+
+        @media (max-width: 768px) {
+            .cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>TRAVELY Frontend</h1>
+        <p class="subtitle">Aurora Gradient 디자인 컨셉 - 전체 화면 목록</p>
+
+        <!-- User App -->
+        <section class="section">
+            <h2 class="section-title">유저 앱 <span>User App (Mobile)</span></h2>
+            <div class="cards">
+                <a href="user/login.html" class="card">
+                    <div class="card-icon purple"><i class="ri-login-box-line"></i></div>
+                    <div class="card-title">로그인</div>
+                    <div class="card-desc">소셜 로그인 (카카오, 네이버, 애플)</div>
+                </a>
+                <a href="user/terms-agreement.html" class="card">
+                    <div class="card-icon purple"><i class="ri-file-list-3-line"></i></div>
+                    <div class="card-title">약관 동의</div>
+                    <div class="card-desc">필수/선택 약관 동의</div>
+                </a>
+                <a href="user/home.html" class="card">
+                    <div class="card-icon purple"><i class="ri-home-5-line"></i></div>
+                    <div class="card-title">홈</div>
+                    <div class="card-desc">메인 화면, 서비스 소개, 내 인플루언서</div>
+                </a>
+                <a href="user/course-landing.html" class="card">
+                    <div class="card-icon purple"><i class="ri-compass-3-line"></i></div>
+                    <div class="card-title">코스 상세 (모집 링크)<span class="badge badge-important">중요</span></div>
+                    <div class="card-desc">인플루언서가 공유하는 모집 링크 화면</div>
+                </a>
+                <a href="user/course-apply.html" class="card">
+                    <div class="card-icon purple"><i class="ri-edit-line"></i></div>
+                    <div class="card-title">코스 신청</div>
+                    <div class="card-desc">신청 폼, 결제 수단 선택</div>
+                </a>
+                <a href="user/payment-complete.html" class="card">
+                    <div class="card-icon purple"><i class="ri-checkbox-circle-line"></i></div>
+                    <div class="card-title">결제 완료</div>
+                    <div class="card-desc">결제 성공 안내</div>
+                </a>
+                <a href="user/my-applications.html" class="card">
+                    <div class="card-icon purple"><i class="ri-file-list-2-line"></i></div>
+                    <div class="card-title">내 신청</div>
+                    <div class="card-desc">신청 목록, 상태별 필터</div>
+                </a>
+                <a href="user/active-travels.html" class="card">
+                    <div class="card-icon purple"><i class="ri-suitcase-3-line"></i></div>
+                    <div class="card-title">진행 중 여행</div>
+                    <div class="card-desc">확정된 여행 목록, D-Day</div>
+                </a>
+                <a href="user/notifications.html" class="card">
+                    <div class="card-icon purple"><i class="ri-notification-3-line"></i></div>
+                    <div class="card-title">알림</div>
+                    <div class="card-desc">알림 목록, 읽음/안읽음</div>
+                </a>
+                <a href="user/mypage.html" class="card">
+                    <div class="card-icon purple"><i class="ri-user-line"></i></div>
+                    <div class="card-title">마이페이지</div>
+                    <div class="card-desc">프로필, 메뉴 리스트</div>
+                </a>
+            </div>
+        </section>
+
+        <!-- Influencer App -->
+        <section class="section">
+            <h2 class="section-title">인플루언서 앱 <span>Influencer App (Web)</span></h2>
+            <div class="cards">
+                <a href="influencer/landing.html" class="card">
+                    <div class="card-icon pink"><i class="ri-rocket-line"></i></div>
+                    <div class="card-title">랜딩 페이지<span class="badge badge-important">중요</span></div>
+                    <div class="card-desc">서비스 소개, 기능, 수수료 안내</div>
+                </a>
+                <a href="influencer/dashboard.html" class="card">
+                    <div class="card-icon pink"><i class="ri-dashboard-line"></i></div>
+                    <div class="card-title">대시보드</div>
+                    <div class="card-desc">수익 요약, 현황, 퀵 액션</div>
+                </a>
+                <a href="influencer/course-list.html" class="card">
+                    <div class="card-icon pink"><i class="ri-map-pin-line"></i></div>
+                    <div class="card-title">코스 목록</div>
+                    <div class="card-desc">상태별 필터, 코스 카드</div>
+                </a>
+                <a href="influencer/course-create.html" class="card">
+                    <div class="card-icon pink"><i class="ri-add-circle-line"></i></div>
+                    <div class="card-title">코스 생성</div>
+                    <div class="card-desc">스텝별 입력 폼</div>
+                </a>
+                <a href="influencer/applications.html" class="card">
+                    <div class="card-icon pink"><i class="ri-group-line"></i></div>
+                    <div class="card-title">신청자 관리</div>
+                    <div class="card-desc">신청자 목록, 선정/미선정</div>
+                </a>
+                <a href="influencer/settlements.html" class="card">
+                    <div class="card-icon pink"><i class="ri-money-dollar-circle-line"></i></div>
+                    <div class="card-title">정산 내역</div>
+                    <div class="card-desc">정산 목록, 상세 내역</div>
+                </a>
+            </div>
+        </section>
+
+        <!-- Admin App -->
+        <section class="section">
+            <h2 class="section-title">관리자 앱 <span>Admin Dashboard (Web)</span></h2>
+            <div class="cards">
+                <a href="admin/login.html" class="card">
+                    <div class="card-icon cyan"><i class="ri-admin-line"></i></div>
+                    <div class="card-title">관리자 로그인</div>
+                    <div class="card-desc">이메일/비밀번호 로그인</div>
+                </a>
+                <a href="admin/dashboard.html" class="card">
+                    <div class="card-icon cyan"><i class="ri-bar-chart-box-line"></i></div>
+                    <div class="card-title">대시보드</div>
+                    <div class="card-desc">통계, 차트, 처리 대기 항목</div>
+                </a>
+                <a href="admin/users.html" class="card">
+                    <div class="card-icon cyan"><i class="ri-user-search-line"></i></div>
+                    <div class="card-title">유저 관리</div>
+                    <div class="card-desc">유저 목록, 검색, 필터</div>
+                </a>
+                <a href="admin/influencers.html" class="card">
+                    <div class="card-icon cyan"><i class="ri-star-line"></i></div>
+                    <div class="card-title">인플루언서 관리</div>
+                    <div class="card-desc">인플루언서 목록, 승인/거부</div>
+                </a>
+                <a href="admin/payments.html" class="card">
+                    <div class="card-icon cyan"><i class="ri-bank-card-line"></i></div>
+                    <div class="card-title">결제 내역</div>
+                    <div class="card-desc">결제 목록, 환불 처리</div>
+                </a>
+                <a href="admin/settlements.html" class="card">
+                    <div class="card-icon cyan"><i class="ri-exchange-funds-line"></i></div>
+                    <div class="card-title">정산 관리</div>
+                    <div class="card-desc">정산 목록, 일괄 처리</div>
+                </a>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

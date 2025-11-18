@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>로그인 - TRAVELY</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="../shared/aurora-style.css">
+    <style>
+        .login-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .login-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .login-logo {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .logo-text {
+            font-size: 40px;
+            font-weight: 900;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .logo-subtitle {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-top: 8px;
+        }
+
+        .login-intro {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .login-intro h1 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .login-intro p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .login-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .social-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 16px;
+            border-radius: var(--radius-md);
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            width: 100%;
+            transition: transform 0.2s;
+        }
+
+        .social-btn:active {
+            transform: scale(0.98);
+        }
+
+        .social-btn i {
+            font-size: 20px;
+        }
+
+        .btn-kakao {
+            background: #FEE500;
+            color: #000000;
+        }
+
+        .btn-naver {
+            background: #03C75A;
+            color: white;
+        }
+
+        .btn-apple {
+            background: white;
+            color: #000000;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .divider-line {
+            flex: 1;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .divider-text {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .guest-btn {
+            width: 100%;
+            padding: 14px;
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: var(--radius-md);
+            color: var(--text-secondary);
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .login-footer {
+            text-align: center;
+            padding-top: 24px;
+        }
+
+        .login-footer p {
+            font-size: 11px;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        .login-footer a {
+            color: var(--aurora-purple);
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="aurora-bg">
+        <div class="aurora-orb aurora-orb-1"></div>
+        <div class="aurora-orb aurora-orb-2"></div>
+        <div class="aurora-orb aurora-orb-3"></div>
+    </div>
+
+    <div class="mobile-container">
+        <div class="login-container">
+            <div class="login-content">
+                <div class="login-logo">
+                    <div class="logo-text">TRAVELY</div>
+                    <p class="logo-subtitle">인플루언서와 함께하는 특별한 여행</p>
+                </div>
+
+                <div class="login-intro">
+                    <h1>반가워요! 👋</h1>
+                    <p>좋아하는 인플루언서와 함께<br>특별한 여행을 시작해보세요</p>
+                </div>
+
+                <div class="login-buttons">
+                    <button class="social-btn btn-kakao" onclick="location.href='terms-agreement.html'">
+                        <i class="ri-kakao-talk-fill"></i>
+                        카카오로 시작하기
+                    </button>
+                    <button class="social-btn btn-naver">
+                        <i class="ri-naver-fill"></i>
+                        네이버로 시작하기
+                    </button>
+                    <button class="social-btn btn-apple">
+                        <i class="ri-apple-fill"></i>
+                        Apple로 시작하기
+                    </button>
+                </div>
+
+                <div class="divider">
+                    <div class="divider-line"></div>
+                    <span class="divider-text">또는</span>
+                    <div class="divider-line"></div>
+                </div>
+
+                <button class="guest-btn" onclick="location.href='home.html'">
+                    둘러보기
+                </button>
+            </div>
+
+            <div class="login-footer">
+                <p>
+                    로그인 시 <a href="#">이용약관</a> 및 <a href="#">개인정보처리방침</a>에<br>
+                    동의하는 것으로 간주합니다.
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>신청자 관리 - TRAVELY 인플루언서</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="../shared/aurora-style.css">
+    <style>
+        .app-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background: var(--bg-secondary);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 24px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .sidebar-logo {
+            font-size: 24px;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 32px;
+        }
+
+        .sidebar-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            background: var(--bg-glass);
+            border-radius: var(--radius-lg);
+            margin-bottom: 24px;
+        }
+
+        .profile-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--aurora-purple);
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .profile-name {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .profile-handle {
+            font-size: 12px;
+            color: var(--aurora-purple);
+        }
+
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: var(--radius-md);
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .nav-item:hover {
+            background: var(--bg-glass);
+            color: var(--text-primary);
+        }
+
+        .nav-item.active {
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .nav-item i {
+            font-size: 18px;
+        }
+
+        .nav-divider {
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+            margin: 16px 0;
+        }
+
+        .nav-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 8px 16px;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 260px;
+            padding: 32px;
+        }
+
+        .main-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 800;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        /* Status Summary */
+        .status-summary {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .status-card {
+            padding: 20px;
+            background: var(--bg-glass);
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .status-card:hover {
+            border-color: var(--aurora-purple);
+        }
+
+        .status-card.active {
+            border-color: var(--aurora-purple);
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .status-value {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+
+        .status-value.pending {
+            color: var(--warning);
+        }
+
+        .status-value.selected {
+            color: var(--success);
+        }
+
+        .status-value.rejected {
+            color: var(--error);
+        }
+
+        .status-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        /* Filter Section */
+        .filter-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .filter-left {
+            display: flex;
+            gap: 12px;
+        }
+
+        .course-select {
+            padding: 10px 16px;
+            padding-right: 40px;
+            background: var(--bg-glass);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            font-size: 14px;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.5)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 16px;
+            min-width: 200px;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            background: var(--bg-glass);
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .search-box input {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 14px;
+            width: 200px;
+        }
+
+        .search-box input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .search-box input:focus {
+            outline: none;
+        }
+
+        .search-box i {
+            color: var(--text-muted);
+        }
+
+        .bulk-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        /* Applications List */
+        .applications-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .application-card {
+            background: var(--bg-glass);
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            transition: all 0.3s;
+        }
+
+        .application-card:hover {
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .application-checkbox {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .applicant-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        .applicant-main {
+            flex: 1;
+        }
+
+        .applicant-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .applicant-name {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .applicant-age {
+            font-size: 12px;
+            color: var(--text-secondary);
+            padding: 2px 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-full);
+        }
+
+        .applicant-status {
+            padding: 4px 10px;
+            border-radius: var(--radius-full);
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .applicant-status.pending {
+            background: rgba(236, 201, 75, 0.2);
+            color: var(--warning);
+        }
+
+        .applicant-status.selected {
+            background: rgba(72, 187, 120, 0.2);
+            color: var(--success);
+        }
+
+        .applicant-status.rejected {
+            background: rgba(245, 101, 101, 0.2);
+            color: var(--error);
+        }
+
+        .applicant-meta {
+            display: flex;
+            gap: 16px;
+        }
+
+        .applicant-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .applicant-meta-item i {
+            color: var(--aurora-purple);
+        }
+
+        .application-course {
+            text-align: right;
+            min-width: 160px;
+        }
+
+        .course-name {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .application-date {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .application-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-btn {
+            padding: 8px 16px;
+            border-radius: var(--radius-md);
+            font-size: 12px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .action-btn.select {
+            background: var(--success);
+            color: white;
+        }
+
+        .action-btn.select:hover {
+            background: #3a9d67;
+        }
+
+        .action-btn.reject {
+            background: rgba(245, 101, 101, 0.2);
+            color: var(--error);
+        }
+
+        .action-btn.reject:hover {
+            background: rgba(245, 101, 101, 0.3);
+        }
+
+        .action-btn.view {
+            background: var(--bg-glass);
+            color: var(--text-primary);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .empty-icon {
+            font-size: 64px;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        .empty-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .empty-desc {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 32px;
+        }
+
+        .page-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: var(--radius-md);
+            background: var(--bg-glass);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .page-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .page-btn.active {
+            background: var(--gradient-primary);
+            color: white;
+            border-color: transparent;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .status-summary {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .application-card {
+                flex-wrap: wrap;
+            }
+
+            .application-course {
+                text-align: left;
+                width: 100%;
+                padding-top: 12px;
+                margin-top: 12px;
+                border-top: 1px solid rgba(255, 255, 255, 0.1);
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .filter-section {
+                flex-direction: column;
+                gap: 16px;
+                align-items: stretch;
+            }
+
+            .filter-left {
+                flex-direction: column;
+            }
+
+            .search-box input {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .status-summary {
+                grid-template-columns: 1fr;
+            }
+
+            .application-actions {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="aurora-bg">
+        <div class="aurora-orb aurora-orb-1"></div>
+        <div class="aurora-orb aurora-orb-2"></div>
+        <div class="aurora-orb aurora-orb-3"></div>
+    </div>
+
+    <div class="app-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">TRAVELY</div>
+
+            <div class="sidebar-profile">
+                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200" class="profile-avatar" alt="프로필">
+                <div class="profile-info">
+                    <div class="profile-name">여행하는 지나</div>
+                    <div class="profile-handle">@travel_jina</div>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">
+                    <i class="ri-dashboard-line"></i>
+                    대시보드
+                </a>
+                <a href="course-list.html" class="nav-item">
+                    <i class="ri-map-pin-line"></i>
+                    내 코스
+                </a>
+                <a href="applications.html" class="nav-item active">
+                    <i class="ri-user-follow-line"></i>
+                    신청자 관리
+                </a>
+                <a href="settlements.html" class="nav-item">
+                    <i class="ri-money-dollar-circle-line"></i>
+                    정산 내역
+                </a>
+
+                <div class="nav-divider"></div>
+                <div class="nav-label">설정</div>
+
+                <a href="profile.html" class="nav-item">
+                    <i class="ri-user-settings-line"></i>
+                    프로필 설정
+                </a>
+                <a href="account.html" class="nav-item">
+                    <i class="ri-bank-card-line"></i>
+                    계좌 관리
+                </a>
+                <a href="notifications.html" class="nav-item">
+                    <i class="ri-notification-3-line"></i>
+                    알림 설정
+                </a>
+
+                <div class="nav-divider"></div>
+
+                <a href="help.html" class="nav-item">
+                    <i class="ri-question-line"></i>
+                    도움말
+                </a>
+                <a href="logout.html" class="nav-item">
+                    <i class="ri-logout-box-line"></i>
+                    로그아웃
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="main-header">
+                <h1 class="page-title">신청자 관리</h1>
+                <div class="header-actions">
+                    <button class="btn btn-secondary">
+                        <i class="ri-download-line"></i>
+                        내보내기
+                    </button>
+                </div>
+            </div>
+
+            <!-- Status Summary -->
+            <div class="status-summary">
+                <div class="status-card active">
+                    <div class="status-value">65</div>
+                    <div class="status-label">전체 신청</div>
+                </div>
+                <div class="status-card">
+                    <div class="status-value pending">48</div>
+                    <div class="status-label">대기중</div>
+                </div>
+                <div class="status-card">
+                    <div class="status-value selected">12</div>
+                    <div class="status-label">선정됨</div>
+                </div>
+                <div class="status-card">
+                    <div class="status-value rejected">5</div>
+                    <div class="status-label">미선정</div>
+                </div>
+            </div>
+
+            <!-- Filter Section -->
+            <div class="filter-section">
+                <div class="filter-left">
+                    <select class="course-select">
+                        <option value="">전체 코스</option>
+                        <option value="1">발리 럭셔리 힐링 7일</option>
+                        <option value="2">도쿄 맛집 투어 5일</option>
+                        <option value="3">파리 아트 투어 6일</option>
+                    </select>
+                    <div class="search-box">
+                        <i class="ri-search-line"></i>
+                        <input type="text" placeholder="이름 또는 연락처 검색...">
+                    </div>
+                </div>
+                <div class="bulk-actions">
+                    <button class="btn btn-sm btn-secondary">
+                        <i class="ri-check-double-line"></i>
+                        일괄 선정
+                    </button>
+                </div>
+            </div>
+
+            <!-- Applications List -->
+            <div class="applications-list">
+                <!-- Application 1 -->
+                <div class="application-card">
+                    <input type="checkbox" class="application-checkbox">
+                    <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200" class="applicant-avatar" alt="신청자">
+                    <div class="applicant-main">
+                        <div class="applicant-header">
+                            <span class="applicant-name">김민지</span>
+                            <span class="applicant-age">28세 / 여</span>
+                            <span class="applicant-status pending">대기중</span>
+                        </div>
+                        <div class="applicant-meta">
+                            <div class="applicant-meta-item">
+                                <i class="ri-phone-line"></i>
+                                010-1234-5678
+                            </div>
+                            <div class="applicant-meta-item">
+                                <i class="ri-mail-line"></i>
+                                minji@email.com
+                            </div>
+                            <div class="applicant-meta-item">
+                                <i class="ri-instagram-line"></i>
+                                @minji_travel
+                            </div>
+                        </div>
+                    </div>
+                    <div class="application-course">
+                        <div class="course-name">발리 럭셔리 힐링 7일</div>
+                        <div class="application-date">2025.01.18 14:32</div>
+                    </div>
+                    <div class="application-actions">
+                        <button class="action-btn view">
+                            <i class="ri-eye-line"></i>
+                            상세
+                        </button>
+                        <button class="action-btn select">
+                            <i class="ri-check-line"></i>
+                            선정
+                        </button>
+                        <button class="action-btn reject">
+                            <i class="ri-close-line"></i>
+                            미선정
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Application 2 -->
+                <div class="application-card">
+                    <input type="checkbox" class="application-checkbox">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200" class="applicant-avatar" alt="신청자">
+                    <div class="applicant-main">
+                        <div class="applicant-header">
+                            <span class="applicant-name">박준혁</span>
+                            <span class="applicant-age">32세 / 남</span>
+                            <span class="applicant-status selected">선정됨</span>
+                        </div>
+                        <div class="applicant-meta">
+                            <div class="applicant-meta-item">
+                                <i class="ri-phone-line"></i>
+                                010-2345-6789
+                            </div>
+                            <div class="applicant-meta-item">
+                                <i class="ri-mail-line"></i>
+                                junhyuk@email.com
+                            </div>
+                            <div class="applicant-meta-item">
+                                <i class="ri-instagram-line"></i>
+                                @junhyuk_daily
+                            </div>
+                        </div>
+                    </div>
+                    <div class="application-course">
+                        <div class="course-name">도쿄 맛집 투어 5일</div>
+                        <div class="application-date">2025.01.18 10:15</div>
+                    </div>
+                    <div class="application-actions">
+                        <button class="action-btn view">
+                            <i class="ri-eye-line"></i>
+                            상세
+                        </button>
+                        <button class="action-btn reject">
+                            <i class="ri-close-line"></i>
+                            취소
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Application 3 -->
+                <div class="application-card">
+                    <input type="checkbox" class="application-checkbox">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200" class="applicant-avatar" alt="신청자">
+                    <div class="applicant-main">
+                        <div class="applicant-header">
+                            <span class="applicant-name">정다은</span>
+                            <span class="applicant-age">26세 / 여</span>
+                            <span class="applicant-status pending">대기중</span>
+                        </div>
+                        <div class="applicant-meta">
+                            <div class="applicant-meta-item">
+                                <i class="ri-phone-line"></i>
+                                010-3456-7890
+                            </div>
+                            <div class="applicant-meta-item">
+                                <i class="ri-mail-line"></i>
+                                daeun@email.com
+                            </div>
+                            <div class="applicant-meta-item">
+                                <i class="ri-instagram-line"></i>
+                                @daeun_log
+                            </div>
+                        </div>
+                    </div>
+                    <div class="application-course">
+                        <div class="course-name">발리 럭셔리 힐링 7일</div>
+                        <div class="application-date">2025.01.17 22:48</div>
+                    </div>
+                    <div class="application-actions">
+                        <button class="action-btn view">
+                            <i class="ri-eye-line"></i>
+                            상세
+                        </button>
+                        <button class="action-btn select">
+                            <i class="ri-check-line"></i>
+                            선정
+                        </button>
+                        <button class="action-btn reject">
+                            <i class="ri-close-line"></i>
+                            미선정
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Application 4 -->
+                <div class="application-card">
+                    <input type="checkbox" class="application-checkbox">
+                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200" class="applicant-avatar" alt="신청자">
+                    <div class="applicant-main">
+                        <div class="applicant-header">
+                            <span class="applicant-name">이수현</span>
+                            <span class="applicant-age">29세 / 남</span>
+                            <span class="applicant-status rejected">미선정</span>
+                        </div>
+                        <div class="applicant-meta">
+                            <div class="applicant-meta-item">
+                                <i class="ri-phone-line"></i>
+                                010-4567-8901
+                            </div>
+                            <div class="applicant-meta-item">
+                                <i class="ri-mail-line"></i>
+                                suhyun@email.com
+                            </div>
+                            <div class="applicant-meta-item">
+                                <i class="ri-instagram-line"></i>
+                                @suhyun_trip
+                            </div>
+                        </div>
+                    </div>
+                    <div class="application-course">
+                        <div class="course-name">파리 아트 투어 6일</div>
+                        <div class="application-date">2025.01.17 18:22</div>
+                    </div>
+                    <div class="application-actions">
+                        <button class="action-btn view">
+                            <i class="ri-eye-line"></i>
+                            상세
+                        </button>
+                        <button class="action-btn select">
+                            <i class="ri-check-line"></i>
+                            재선정
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Application 5 -->
+                <div class="application-card">
+                    <input type="checkbox" class="application-checkbox">
+                    <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=200" class="applicant-avatar" alt="신청자">
+                    <div class="applicant-main">
+                        <div class="applicant-header">
+                            <span class="applicant-name">최유진</span>
+                            <span class="applicant-age">31세 / 여</span>
+                            <span class="applicant-status pending">대기중</span>
+                        </div>
+                        <div class="applicant-meta">
+                            <div class="applicant-meta-item">
+                                <i class="ri-phone-line"></i>
+                                010-5678-9012
+                            </div>
+                            <div class="applicant-meta-item">
+                                <i class="ri-mail-line"></i>
+                                yujin@email.com
+                            </div>
+                            <div class="applicant-meta-item">
+                                <i class="ri-instagram-line"></i>
+                                @yujin_world
+                            </div>
+                        </div>
+                    </div>
+                    <div class="application-course">
+                        <div class="course-name">도쿄 맛집 투어 5일</div>
+                        <div class="application-date">2025.01.17 15:10</div>
+                    </div>
+                    <div class="application-actions">
+                        <button class="action-btn view">
+                            <i class="ri-eye-line"></i>
+                            상세
+                        </button>
+                        <button class="action-btn select">
+                            <i class="ri-check-line"></i>
+                            선정
+                        </button>
+                        <button class="action-btn reject">
+                            <i class="ri-close-line"></i>
+                            미선정
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination">
+                <button class="page-btn">
+                    <i class="ri-arrow-left-s-line"></i>
+                </button>
+                <button class="page-btn active">1</button>
+                <button class="page-btn">2</button>
+                <button class="page-btn">3</button>
+                <button class="page-btn">4</button>
+                <button class="page-btn">5</button>
+                <button class="page-btn">
+                    <i class="ri-arrow-right-s-line"></i>
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Status card click
+        document.querySelectorAll('.status-card').forEach(card => {
+            card.addEventListener('click', () => {
+                document.querySelectorAll('.status-card').forEach(c => c.classList.remove('active'));
+                card.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
