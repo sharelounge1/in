@@ -41,6 +41,14 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER STABLE;
 
+-- Function to get current user's influencer_profile id
+CREATE OR REPLACE FUNCTION get_my_influencer_id()
+RETURNS UUID AS $$
+BEGIN
+  RETURN (SELECT id FROM influencer_profiles WHERE user_id = auth.uid());
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER STABLE;
+
 -- =============================================
 -- Enable RLS on all tables
 -- =============================================
@@ -126,7 +134,7 @@ CREATE POLICY "courses_select_public"
 ON courses FOR SELECT
 USING (
   status = 'published'
-  OR influencer_id = auth.uid()
+  OR influencer_id = get_my_influencer_id()
   OR is_admin()
 );
 
@@ -134,20 +142,20 @@ USING (
 CREATE POLICY "courses_insert_own"
 ON courses FOR INSERT
 WITH CHECK (
-  influencer_id = auth.uid()
+  influencer_id = get_my_influencer_id()
   AND is_influencer()
 );
 
 -- Influencer can update their own courses
 CREATE POLICY "courses_update_own"
 ON courses FOR UPDATE
-USING (influencer_id = auth.uid())
-WITH CHECK (influencer_id = auth.uid());
+USING (influencer_id = get_my_influencer_id())
+WITH CHECK (influencer_id = get_my_influencer_id());
 
 -- Influencer can delete their own courses
 CREATE POLICY "courses_delete_own"
 ON courses FOR DELETE
-USING (influencer_id = auth.uid());
+USING (influencer_id = get_my_influencer_id());
 
 -- Admins can read all courses
 CREATE POLICY "courses_select_admin"
@@ -187,7 +195,7 @@ USING (
   EXISTS (
     SELECT 1 FROM courses
     WHERE courses.id = course_applications.course_id
-    AND courses.influencer_id = auth.uid()
+    AND courses.influencer_id = get_my_influencer_id()
   )
 );
 
@@ -198,14 +206,14 @@ USING (
   EXISTS (
     SELECT 1 FROM courses
     WHERE courses.id = course_applications.course_id
-    AND courses.influencer_id = auth.uid()
+    AND courses.influencer_id = get_my_influencer_id()
   )
 )
 WITH CHECK (
   EXISTS (
     SELECT 1 FROM courses
     WHERE courses.id = course_applications.course_id
-    AND courses.influencer_id = auth.uid()
+    AND courses.influencer_id = get_my_influencer_id()
   )
 );
 
@@ -223,7 +231,7 @@ CREATE POLICY "parties_select_public"
 ON parties FOR SELECT
 USING (
   status = 'published'
-  OR influencer_id = auth.uid()
+  OR influencer_id = get_my_influencer_id()
   OR is_admin()
 );
 
@@ -231,20 +239,20 @@ USING (
 CREATE POLICY "parties_insert_own"
 ON parties FOR INSERT
 WITH CHECK (
-  influencer_id = auth.uid()
+  influencer_id = get_my_influencer_id()
   AND is_influencer()
 );
 
 -- Influencer can update their own parties
 CREATE POLICY "parties_update_own"
 ON parties FOR UPDATE
-USING (influencer_id = auth.uid())
-WITH CHECK (influencer_id = auth.uid());
+USING (influencer_id = get_my_influencer_id())
+WITH CHECK (influencer_id = get_my_influencer_id());
 
 -- Influencer can delete their own parties
 CREATE POLICY "parties_delete_own"
 ON parties FOR DELETE
-USING (influencer_id = auth.uid());
+USING (influencer_id = get_my_influencer_id());
 
 -- Admins can read all parties
 CREATE POLICY "parties_select_admin"
@@ -284,7 +292,7 @@ USING (
   EXISTS (
     SELECT 1 FROM parties
     WHERE parties.id = party_applications.party_id
-    AND parties.influencer_id = auth.uid()
+    AND parties.influencer_id = get_my_influencer_id()
   )
 );
 
@@ -295,14 +303,14 @@ USING (
   EXISTS (
     SELECT 1 FROM parties
     WHERE parties.id = party_applications.party_id
-    AND parties.influencer_id = auth.uid()
+    AND parties.influencer_id = get_my_influencer_id()
   )
 )
 WITH CHECK (
   EXISTS (
     SELECT 1 FROM parties
     WHERE parties.id = party_applications.party_id
-    AND parties.influencer_id = auth.uid()
+    AND parties.influencer_id = get_my_influencer_id()
   )
 );
 
@@ -359,7 +367,7 @@ USING (is_admin());
 -- Influencers can read their own settlements
 CREATE POLICY "settlements_select_own"
 ON settlements FOR SELECT
-USING (influencer_id = auth.uid());
+USING (influencer_id = get_my_influencer_id());
 
 -- Admins can read all settlements
 CREATE POLICY "settlements_select_admin"
@@ -442,7 +450,7 @@ USING (is_admin());
 CREATE POLICY "reviews_select_public"
 ON reviews FOR SELECT
 USING (
-  is_active = true
+  status = 'active'
   OR user_id = auth.uid()
   OR is_admin()
 );
@@ -497,13 +505,13 @@ WITH CHECK (user_id = auth.uid());
 -- Target influencer can read inquiries directed to them
 CREATE POLICY "inquiries_select_influencer"
 ON inquiries FOR SELECT
-USING (target_influencer_id = auth.uid());
+USING (target_influencer_id = get_my_influencer_id());
 
 -- Target influencer can update inquiries (respond)
 CREATE POLICY "inquiries_update_influencer"
 ON inquiries FOR UPDATE
-USING (target_influencer_id = auth.uid())
-WITH CHECK (target_influencer_id = auth.uid());
+USING (target_influencer_id = get_my_influencer_id())
+WITH CHECK (target_influencer_id = get_my_influencer_id());
 
 -- Admins can read all inquiries
 CREATE POLICY "inquiries_select_admin"
