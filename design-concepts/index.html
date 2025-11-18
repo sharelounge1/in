@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRAVELY - Design Concepts</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans KR', sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 32px;
+            margin-bottom: 8px;
+            color: #1a1a1a;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+        }
+
+        .concepts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 24px;
+        }
+
+        .concept-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .concept-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        }
+
+        .concept-header {
+            padding: 24px;
+            color: white;
+        }
+
+        .concept-1 .concept-header {
+            background: linear-gradient(135deg, #667eea, #764ba2, #f093fb);
+        }
+
+        .concept-2 .concept-header {
+            background: #1a1a1a;
+        }
+
+        .concept-3 .concept-header {
+            background: linear-gradient(135deg, #FF6B6B, #4ECDC4);
+        }
+
+        .concept-4 .concept-header {
+            background: linear-gradient(135deg, #a78bfa, #f9a8d4);
+        }
+
+        .concept-5 .concept-header {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6, #a855f7);
+        }
+
+        .concept-number {
+            font-size: 12px;
+            opacity: 0.8;
+            margin-bottom: 4px;
+        }
+
+        .concept-name {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .concept-desc {
+            font-size: 13px;
+            opacity: 0.9;
+            line-height: 1.5;
+        }
+
+        .concept-links {
+            padding: 20px 24px;
+            display: flex;
+            gap: 12px;
+        }
+
+        .concept-link {
+            flex: 1;
+            padding: 12px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .link-user {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .link-user:hover {
+            background: #e0e0e0;
+        }
+
+        .link-influencer {
+            background: #333;
+            color: white;
+        }
+
+        .link-influencer:hover {
+            background: #555;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #999;
+            font-size: 13px;
+        }
+
+        @media (max-width: 768px) {
+            .concepts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>TRAVELY Design Concepts</h1>
+        <p class="subtitle">5가지 디자인 컨셉 - 유저 메인화면 & 인플루언서 랜딩페이지</p>
+
+        <div class="concepts-grid">
+            <!-- Concept 1 -->
+            <div class="concept-card concept-1">
+                <div class="concept-header">
+                    <div class="concept-number">CONCEPT 01</div>
+                    <div class="concept-name">Aurora Gradient</div>
+                    <div class="concept-desc">네온 그라데이션과 글래스모피즘으로 트렌디하고 미래지향적인 느낌</div>
+                </div>
+                <div class="concept-links">
+                    <a href="concept-1-aurora/user-main.html" class="concept-link link-user">유저 메인</a>
+                    <a href="concept-1-aurora/influencer-landing.html" class="concept-link link-influencer">인플루언서</a>
+                </div>
+            </div>
+
+            <!-- Concept 2 -->
+            <div class="concept-card concept-2">
+                <div class="concept-header">
+                    <div class="concept-number">CONCEPT 02</div>
+                    <div class="concept-name">Minimal Luxe</div>
+                    <div class="concept-desc">블랙/화이트 기반에 골드 포인트로 미니멀하면서도 럭셔리한 느낌</div>
+                </div>
+                <div class="concept-links">
+                    <a href="concept-2-minimal-luxe/user-main.html" class="concept-link link-user">유저 메인</a>
+                    <a href="concept-2-minimal-luxe/influencer-landing.html" class="concept-link link-influencer">인플루언서</a>
+                </div>
+            </div>
+
+            <!-- Concept 3 -->
+            <div class="concept-card concept-3">
+                <div class="concept-header">
+                    <div class="concept-number">CONCEPT 03</div>
+                    <div class="concept-name">Neo Tropical</div>
+                    <div class="concept-desc">코랄, 터콰이즈, 옐로우의 비비드 컬러로 에너지 넘치는 여행 느낌</div>
+                </div>
+                <div class="concept-links">
+                    <a href="concept-3-neo-tropical/user-main.html" class="concept-link link-user">유저 메인</a>
+                    <a href="concept-3-neo-tropical/influencer-landing.html" class="concept-link link-influencer">인플루언서</a>
+                </div>
+            </div>
+
+            <!-- Concept 4 -->
+            <div class="concept-card concept-4">
+                <div class="concept-header">
+                    <div class="concept-number">CONCEPT 04</div>
+                    <div class="concept-name">Soft Bento</div>
+                    <div class="concept-desc">파스텔 컬러와 벤토 그리드 레이아웃으로 부드럽고 정돈된 느낌</div>
+                </div>
+                <div class="concept-links">
+                    <a href="concept-4-soft-bento/user-main.html" class="concept-link link-user">유저 메인</a>
+                    <a href="concept-4-soft-bento/influencer-landing.html" class="concept-link link-influencer">인플루언서</a>
+                </div>
+            </div>
+
+            <!-- Concept 5 -->
+            <div class="concept-card concept-5">
+                <div class="concept-header">
+                    <div class="concept-number">CONCEPT 05</div>
+                    <div class="concept-name">Dark Premium</div>
+                    <div class="concept-desc">다크 테마에 퍼플 그라데이션으로 프리미엄하고 세련된 느낌</div>
+                </div>
+                <div class="concept-links">
+                    <a href="concept-5-dark-premium/user-main.html" class="concept-link link-user">유저 메인</a>
+                    <a href="concept-5-dark-premium/influencer-landing.html" class="concept-link link-influencer">인플루언서</a>
+                </div>
+            </div>
+        </div>
+
+        <p class="footer">Select a concept to preview the design</p>
+    </div>
+</body>
+</html>
