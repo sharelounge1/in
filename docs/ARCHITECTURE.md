@@ -6,6 +6,15 @@
 
 ---
 
+> **관련 문서**
+> - [전체 사이트 구조](./PROJECT_STRUCTURE.md)
+> - [DB 현황](./DB_STATUS.md)
+> - [DB 스키마 상세](./DATABASE_SCHEMA.md)
+> - [API 명세서](./API_SPECIFICATION.md)
+> - [백엔드 설정 가이드](./BACKEND_SETUP_GUIDE.md)
+
+---
+
 ## 1. 시스템 아키텍처 개요
 
 ### 1.1 전체 구조

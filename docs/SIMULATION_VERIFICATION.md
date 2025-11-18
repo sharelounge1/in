@@ -6,6 +6,14 @@
 
 ---
 
+> **관련 문서**
+> - [전체 사이트 구조](./PROJECT_STRUCTURE.md)
+> - [DB 현황](./DB_STATUS.md)
+> - [화면 명세서](./SCREEN_SPECIFICATIONS.md)
+> - [API 명세서](./API_SPECIFICATION.md)
+
+---
+
 ## 개요
 
 각 사용자 역할(유저, 인플루언서, 관리자)별로 3회의 가상 시뮬레이션을 진행하여 서비스 이용 전 과정에서 필요한 모든 기능, 화면, DB, API가 누락되지 않았는지 검증합니다.

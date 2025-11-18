@@ -6,6 +6,14 @@
 
 ---
 
+> **관련 문서**
+> - [전체 사이트 구조](./PROJECT_STRUCTURE.md)
+> - [DB 현황](./DB_STATUS.md)
+> - [정보 구조도](./INFORMATION_ARCHITECTURE.md)
+> - [API 명세서](./API_SPECIFICATION.md)
+
+---
+
 ## 문서 구성
 
 이 문서는 3개 앱의 주요 화면에 대한 상세 명세를 제공합니다.

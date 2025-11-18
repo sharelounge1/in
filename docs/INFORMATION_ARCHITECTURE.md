@@ -6,6 +6,14 @@
 
 ---
 
+> **관련 문서**
+> - [전체 사이트 구조](./PROJECT_STRUCTURE.md)
+> - [DB 현황](./DB_STATUS.md)
+> - [화면 명세서](./SCREEN_SPECIFICATIONS.md)
+> - [API 명세서](./API_SPECIFICATION.md)
+
+---
+
 ## 1. 서비스 구조 개요
 
 서비스는 3개의 독립된 애플리케이션으로 구성됩니다:

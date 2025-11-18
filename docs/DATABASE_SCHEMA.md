@@ -7,6 +7,14 @@
 
 ---
 
+> **관련 문서**
+> - [전체 사이트 구조](./PROJECT_STRUCTURE.md)
+> - [DB 현황](./DB_STATUS.md)
+> - [API 명세서](./API_SPECIFICATION.md)
+> - [백엔드 설정 가이드](./BACKEND_SETUP_GUIDE.md)
+
+---
+
 ## 1. ERD 개요
 
 ```

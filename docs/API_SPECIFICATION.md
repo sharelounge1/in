@@ -7,6 +7,14 @@
 
 ---
 
+> **관련 문서**
+> - [전체 사이트 구조](./PROJECT_STRUCTURE.md)
+> - [DB 현황](./DB_STATUS.md)
+> - [DB 스키마 상세](./DATABASE_SCHEMA.md)
+> - [백엔드 설정 가이드](./BACKEND_SETUP_GUIDE.md)
+
+---
+
 ## 공통 사항
 
 ### 인증 헤더
