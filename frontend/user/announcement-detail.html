@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>공지사항 상세 - TRAVELY</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="../shared/aurora-style.css">
+    <style>
+        .announcement-detail-container {
+            padding-bottom: 90px;
+        }
+
+        /* Content Section */
+        .content-section {
+            padding: 20px;
+        }
+
+        /* Announcement Header */
+        .announcement-header {
+            margin-bottom: 20px;
+        }
+
+        .announcement-badges {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .announcement-badge {
+            padding: 4px 10px;
+            border-radius: var(--radius-full);
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .badge-pinned {
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .badge-important {
+            background: rgba(236, 201, 75, 0.2);
+            color: var(--warning);
+        }
+
+        .announcement-title {
+            font-size: 20px;
+            font-weight: 700;
+            line-height: 1.4;
+            margin-bottom: 12px;
+        }
+
+        .announcement-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .meta-author {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .author-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--aurora-purple);
+        }
+
+        .author-name {
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .meta-date {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-left: auto;
+        }
+
+        /* Announcement Content */
+        .announcement-content {
+            padding: 20px 0;
+            font-size: 14px;
+            line-height: 1.8;
+            color: var(--text-secondary);
+        }
+
+        .announcement-content p {
+            margin-bottom: 16px;
+        }
+
+        .announcement-content strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .announcement-content ul {
+            padding-left: 20px;
+            margin-bottom: 16px;
+        }
+
+        .announcement-content li {
+            margin-bottom: 8px;
+        }
+
+        /* Images */
+        .announcement-images {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .announcement-image {
+            width: 100%;
+            border-radius: var(--radius-lg);
+        }
+
+        /* Stats */
+        .announcement-stats {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .stat-item i {
+            font-size: 16px;
+        }
+
+        /* Comments Section */
+        .comments-section {
+            padding: 20px;
+        }
+
+        .comments-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .comments-title {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .comments-count {
+            font-size: 14px;
+            color: var(--aurora-purple);
+        }
+
+        /* Comment List */
+        .comment-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .comment-item {
+            display: flex;
+            gap: 12px;
+        }
+
+        .comment-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        .comment-content {
+            flex: 1;
+        }
+
+        .comment-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+
+        .comment-author {
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .comment-date {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .comment-text {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .comment-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .comment-action {
+            font-size: 11px;
+            color: var(--text-muted);
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .comment-action:hover {
+            color: var(--text-primary);
+        }
+
+        /* Comment Input */
+        .comment-input-wrap {
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 430px;
+            padding: 12px 20px;
+            background: rgba(26, 26, 46, 0.95);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .comment-input-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 16px;
+            background: var(--bg-glass);
+            border-radius: var(--radius-lg);
+        }
+
+        .comment-input {
+            flex: 1;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 14px;
+            outline: none;
+        }
+
+        .comment-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .comment-submit {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .comment-submit:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="aurora-bg">
+        <div class="aurora-orb aurora-orb-1"></div>
+        <div class="aurora-orb aurora-orb-2"></div>
+        <div class="aurora-orb aurora-orb-3"></div>
+    </div>
+
+    <div class="mobile-container announcement-detail-container">
+        <!-- Header -->
+        <header class="header">
+            <a href="travel-announcements.html" class="header-back">
+                <i class="ri-arrow-left-line"></i>
+            </a>
+            <h1 class="header-title">공지사항</h1>
+            <div style="width: 40px;"></div>
+        </header>
+
+        <!-- Content Section -->
+        <div class="content-section">
+            <div class="announcement-header">
+                <div class="announcement-badges">
+                    <span class="announcement-badge badge-pinned">
+                        <i class="ri-pushpin-fill"></i> 고정
+                    </span>
+                    <span class="announcement-badge badge-important">중요</span>
+                </div>
+                <h1 class="announcement-title">여행 준비물 안내</h1>
+                <div class="announcement-meta">
+                    <div class="meta-author">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100" class="author-avatar" alt="작성자">
+                        <span class="author-name">여행하는 지나</span>
+                    </div>
+                    <span class="meta-date">2025.01.27 14:30</span>
+                </div>
+            </div>
+
+            <div class="announcement-content">
+                <p>안녕하세요, 여행자 여러분!</p>
+                <p>출발이 얼마 남지 않았네요. 준비물 체크리스트를 공유드립니다. 꼼꼼히 확인해주세요.</p>
+
+                <p><strong>필수 준비물</strong></p>
+                <ul>
+                    <li>여권 (유효기간 6개월 이상)</li>
+                    <li>수영복 2벌 이상</li>
+                    <li>선크림 (SPF50 이상 권장)</li>
+                    <li>선글라스, 모자</li>
+                    <li>편한 샌들/슬리퍼</li>
+                    <li>비상 약품 (두통약, 소화제, 밴드 등)</li>
+                </ul>
+
+                <p><strong>권장 준비물</strong></p>
+                <ul>
+                    <li>방수 폰케이스</li>
+                    <li>휴대용 선풍기</li>
+                    <li>모기 기피제</li>
+                    <li>후드 있는 얇은 자켓</li>
+                </ul>
+
+                <p>현지에서 구매 가능한 물품들도 있으니, 짐이 너무 무거워지지 않도록 주의해주세요!</p>
+                <p>궁금한 점은 댓글로 남겨주시면 답변드리겠습니다.</p>
+            </div>
+
+            <!-- Images -->
+            <div class="announcement-images">
+                <img src="https://images.unsplash.com/photo-1596178060810-72f53ce9a65c?w=800" class="announcement-image" alt="준비물">
+                <img src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=800" class="announcement-image" alt="준비물">
+            </div>
+
+            <!-- Stats -->
+            <div class="announcement-stats">
+                <div class="stat-item">
+                    <i class="ri-eye-line"></i>
+                    <span>조회 12</span>
+                </div>
+                <div class="stat-item">
+                    <i class="ri-chat-3-line"></i>
+                    <span>댓글 3</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comments Section -->
+        <div class="comments-section">
+            <div class="comments-header">
+                <h3 class="comments-title">댓글</h3>
+                <span class="comments-count">3개</span>
+            </div>
+
+            <div class="comment-list">
+                <div class="comment-item">
+                    <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100" class="comment-avatar" alt="댓글 작성자">
+                    <div class="comment-content">
+                        <div class="comment-header">
+                            <span class="comment-author">김민지</span>
+                            <span class="comment-date">1시간 전</span>
+                        </div>
+                        <div class="comment-text">
+                            꼼꼼한 안내 감사합니다! 방수 폰케이스는 현지에서 구매 가능한가요?
+                        </div>
+                        <div class="comment-actions">
+                            <button class="comment-action">답글</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="comment-item">
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100" class="comment-avatar" alt="댓글 작성자">
+                    <div class="comment-content">
+                        <div class="comment-header">
+                            <span class="comment-author">여행하는 지나</span>
+                            <span class="comment-date">30분 전</span>
+                        </div>
+                        <div class="comment-text">
+                            @김민지 네, 현지 마트에서 구매 가능해요! 다만 품질이 조금 떨어질 수 있어서 국내에서 미리 준비하시는 걸 추천드려요 :)
+                        </div>
+                        <div class="comment-actions">
+                            <button class="comment-action">답글</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="comment-item">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100" class="comment-avatar" alt="댓글 작성자">
+                    <div class="comment-content">
+                        <div class="comment-header">
+                            <span class="comment-author">박준혁</span>
+                            <span class="comment-date">15분 전</span>
+                        </div>
+                        <div class="comment-text">
+                            드론 가져가도 될까요? 발리에서 드론 촬영 가능한지 궁금합니다!
+                        </div>
+                        <div class="comment-actions">
+                            <button class="comment-action">답글</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comment Input -->
+        <div class="comment-input-wrap">
+            <div class="comment-input-container">
+                <input type="text" class="comment-input" placeholder="댓글을 입력하세요...">
+                <button class="comment-submit">
+                    <i class="ri-send-plane-2-fill"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <a href="home.html" class="nav-item">
+                <i class="ri-home-5-line"></i>
+                <span>홈</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="ri-sparkling-line"></i>
+                <span>파티</span>
+            </a>
+            <a href="my-applications.html" class="nav-item">
+                <i class="ri-file-list-3-line"></i>
+                <span>내신청</span>
+            </a>
+            <a href="active-travels.html" class="nav-item active">
+                <i class="ri-suitcase-3-fill"></i>
+                <span>진행중</span>
+            </a>
+            <a href="mypage.html" class="nav-item">
+                <i class="ri-user-line"></i>
+                <span>마이</span>
+            </a>
+        </nav>
+    </div>
+</body>
+</html>

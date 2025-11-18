@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>코스 상세 관리 - TRAVELY 인플루언서</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="../shared/aurora-style.css">
+    <style>
+        .app-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background: var(--bg-secondary);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 24px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .sidebar-logo {
+            font-size: 24px;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 32px;
+        }
+
+        .sidebar-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            background: var(--bg-glass);
+            border-radius: var(--radius-lg);
+            margin-bottom: 24px;
+        }
+
+        .profile-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--aurora-purple);
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .profile-name {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .profile-handle {
+            font-size: 12px;
+            color: var(--aurora-purple);
+        }
+
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: var(--radius-md);
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .nav-item:hover {
+            background: var(--bg-glass);
+            color: var(--text-primary);
+        }
+
+        .nav-item.active {
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .nav-item i {
+            font-size: 18px;
+        }
+
+        .nav-divider {
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+            margin: 16px 0;
+        }
+
+        .nav-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 8px 16px;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 260px;
+            padding: 32px;
+        }
+
+        .main-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .page-title-area {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .back-btn {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius-md);
+            background: var(--bg-glass);
+            color: var(--text-primary);
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 800;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        /* Course Summary Card */
+        .course-summary {
+            background: var(--bg-glass);
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 24px;
+            margin-bottom: 24px;
+            display: flex;
+            gap: 24px;
+        }
+
+        .course-thumbnail {
+            width: 200px;
+            height: 150px;
+            border-radius: var(--radius-md);
+            object-fit: cover;
+        }
+
+        .course-info {
+            flex: 1;
+        }
+
+        .course-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .course-meta {
+            display: flex;
+            gap: 24px;
+            margin-bottom: 16px;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .meta-item i {
+            color: var(--aurora-purple);
+        }
+
+        .course-stats {
+            display: flex;
+            gap: 32px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--aurora-purple);
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .course-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            align-items: flex-end;
+        }
+
+        .status-badge {
+            padding: 8px 16px;
+            border-radius: var(--radius-full);
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .status-badge.recruiting {
+            background: rgba(72, 187, 120, 0.2);
+            color: var(--success);
+        }
+
+        .status-badge.closed {
+            background: rgba(236, 201, 75, 0.2);
+            color: var(--warning);
+        }
+
+        .status-badge.ongoing {
+            background: rgba(66, 153, 225, 0.2);
+            color: var(--info);
+        }
+
+        .status-badge.completed {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-secondary);
+        }
+
+        .link-copy-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            background: var(--bg-glass);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .link-copy-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* Tabs */
+        .tabs-container {
+            margin-bottom: 24px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 8px;
+            padding: 0;
+            overflow-x: auto;
+        }
+
+        .tab {
+            padding: 12px 24px;
+            border-radius: var(--radius-full);
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            background: var(--bg-glass);
+            border: none;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .tab.active {
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .tab:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .tab-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 20px;
+            height: 20px;
+            padding: 0 6px;
+            margin-left: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: var(--radius-full);
+            font-size: 11px;
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Content Card */
+        .content-card {
+            background: var(--bg-glass);
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .card-body {
+            padding: 24px;
+        }
+
+        /* Applicant/Participant List */
+        .person-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .person-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: var(--radius-md);
+        }
+
+        .person-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .person-info {
+            flex: 1;
+        }
+
+        .person-name {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .person-meta {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .person-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-btn {
+            padding: 8px 12px;
+            border-radius: var(--radius-md);
+            font-size: 12px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .action-btn.approve {
+            background: rgba(72, 187, 120, 0.2);
+            color: var(--success);
+        }
+
+        .action-btn.approve:hover {
+            background: rgba(72, 187, 120, 0.3);
+        }
+
+        .action-btn.reject {
+            background: rgba(245, 101, 101, 0.2);
+            color: var(--error);
+        }
+
+        .action-btn.reject:hover {
+            background: rgba(245, 101, 101, 0.3);
+        }
+
+        /* Status Select */
+        .status-select {
+            padding: 8px 16px;
+            background: var(--bg-glass);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .course-summary {
+                flex-direction: column;
+            }
+
+            .course-thumbnail {
+                width: 100%;
+                height: 200px;
+            }
+
+            .course-actions {
+                flex-direction: row;
+                align-items: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="aurora-bg">
+        <div class="aurora-orb aurora-orb-1"></div>
+        <div class="aurora-orb aurora-orb-2"></div>
+        <div class="aurora-orb aurora-orb-3"></div>
+    </div>
+
+    <div class="app-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">TRAVELY</div>
+
+            <div class="sidebar-profile">
+                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200" class="profile-avatar" alt="프로필">
+                <div class="profile-info">
+                    <div class="profile-name">여행하는 지나</div>
+                    <div class="profile-handle">@travel_jina</div>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">
+                    <i class="ri-dashboard-line"></i>
+                    대시보드
+                </a>
+                <a href="course-list.html" class="nav-item active">
+                    <i class="ri-map-pin-line"></i>
+                    내 코스
+                </a>
+                <a href="applications.html" class="nav-item">
+                    <i class="ri-user-follow-line"></i>
+                    신청자 관리
+                </a>
+                <a href="settlements.html" class="nav-item">
+                    <i class="ri-money-dollar-circle-line"></i>
+                    정산 내역
+                </a>
+
+                <div class="nav-divider"></div>
+                <div class="nav-label">설정</div>
+
+                <a href="profile.html" class="nav-item">
+                    <i class="ri-user-settings-line"></i>
+                    프로필 설정
+                </a>
+                <a href="account.html" class="nav-item">
+                    <i class="ri-bank-card-line"></i>
+                    계좌 관리
+                </a>
+                <a href="notifications.html" class="nav-item">
+                    <i class="ri-notification-3-line"></i>
+                    알림 설정
+                </a>
+
+                <div class="nav-divider"></div>
+
+                <a href="help.html" class="nav-item">
+                    <i class="ri-question-line"></i>
+                    도움말
+                </a>
+                <a href="logout.html" class="nav-item">
+                    <i class="ri-logout-box-line"></i>
+                    로그아웃
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="main-header">
+                <div class="page-title-area">
+                    <a href="course-list.html" class="back-btn">
+                        <i class="ri-arrow-left-line"></i>
+                    </a>
+                    <h1 class="page-title">코스 상세 관리</h1>
+                </div>
+                <div class="header-actions">
+                    <select class="status-select">
+                        <option value="recruiting" selected>모집중</option>
+                        <option value="closed">모집마감</option>
+                        <option value="ongoing">진행중</option>
+                        <option value="completed">종료</option>
+                    </select>
+                    <a href="course-create.html" class="btn btn-secondary">
+                        <i class="ri-edit-line"></i>
+                        수정
+                    </a>
+                </div>
+            </div>
+
+            <!-- Course Summary -->
+            <div class="course-summary">
+                <img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=400" class="course-thumbnail" alt="코스 이미지">
+                <div class="course-info">
+                    <h2 class="course-title">발리 럭셔리 힐링 7일</h2>
+                    <div class="course-meta">
+                        <div class="meta-item">
+                            <i class="ri-calendar-line"></i>
+                            2024.02.20 - 2024.02.26
+                        </div>
+                        <div class="meta-item">
+                            <i class="ri-map-pin-line"></i>
+                            인도네시아 발리
+                        </div>
+                        <div class="meta-item">
+                            <i class="ri-money-dollar-circle-line"></i>
+                            2,890,000원
+                        </div>
+                    </div>
+                    <div class="course-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">12</div>
+                            <div class="stat-label">정원</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">8</div>
+                            <div class="stat-label">신청자</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">6</div>
+                            <div class="stat-label">선정됨</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">D-23</div>
+                            <div class="stat-label">출발까지</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="course-actions">
+                    <span class="status-badge recruiting">모집중</span>
+                    <button class="link-copy-btn" onclick="copyLink()">
+                        <i class="ri-link"></i>
+                        모집 링크 복사
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="tabs-container">
+                <div class="tabs">
+                    <button class="tab active" onclick="showTab('applicants')">
+                        신청자 관리
+                        <span class="tab-badge">8</span>
+                    </button>
+                    <button class="tab" onclick="showTab('participants')">
+                        참가자 관리
+                        <span class="tab-badge">6</span>
+                    </button>
+                    <button class="tab" onclick="showTab('announcements')">
+                        공지사항
+                        <span class="tab-badge">3</span>
+                    </button>
+                    <button class="tab" onclick="showTab('expenses')">
+                        경비/N빵
+                    </button>
+                    <button class="tab" onclick="showTab('settlement')">
+                        정산 정보
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tab Content: Applicants -->
+            <div id="applicants" class="tab-content active">
+                <div class="content-card">
+                    <div class="card-header">
+                        <h3 class="card-title">신청자 목록</h3>
+                        <span class="text-secondary" style="font-size: 13px;">총 8명</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="person-list">
+                            <div class="person-item">
+                                <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100" class="person-avatar" alt="신청자">
+                                <div class="person-info">
+                                    <div class="person-name">김민지</div>
+                                    <div class="person-meta">@minji_kim | 신청일: 2024.01.15</div>
+                                </div>
+                                <span class="badge badge-warning">대기중</span>
+                                <div class="person-actions">
+                                    <button class="action-btn approve">선정</button>
+                                    <button class="action-btn reject">거절</button>
+                                </div>
+                            </div>
+                            <div class="person-item">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100" class="person-avatar" alt="신청자">
+                                <div class="person-info">
+                                    <div class="person-name">박준혁</div>
+                                    <div class="person-meta">@junhyuk_p | 신청일: 2024.01.14</div>
+                                </div>
+                                <span class="badge badge-success">선정됨</span>
+                                <div class="person-actions">
+                                    <button class="action-btn reject">취소</button>
+                                </div>
+                            </div>
+                            <div class="person-item">
+                                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100" class="person-avatar" alt="신청자">
+                                <div class="person-info">
+                                    <div class="person-name">이수현</div>
+                                    <div class="person-meta">@suhyun_lee | 신청일: 2024.01.13</div>
+                                </div>
+                                <span class="badge badge-warning">대기중</span>
+                                <div class="person-actions">
+                                    <button class="action-btn approve">선정</button>
+                                    <button class="action-btn reject">거절</button>
+                                </div>
+                            </div>
+                            <div class="person-item">
+                                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100" class="person-avatar" alt="신청자">
+                                <div class="person-info">
+                                    <div class="person-name">정다은</div>
+                                    <div class="person-meta">@daeun_j | 신청일: 2024.01.12</div>
+                                </div>
+                                <span class="badge badge-success">선정됨</span>
+                                <div class="person-actions">
+                                    <button class="action-btn reject">취소</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab Content: Participants -->
+            <div id="participants" class="tab-content">
+                <div class="content-card">
+                    <div class="card-header">
+                        <h3 class="card-title">참가자 목록</h3>
+                        <a href="participants.html" class="btn btn-sm btn-secondary">상세 관리</a>
+                    </div>
+                    <div class="card-body">
+                        <div class="person-list">
+                            <div class="person-item">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100" class="person-avatar" alt="참가자">
+                                <div class="person-info">
+                                    <div class="person-name">박준혁</div>
+                                    <div class="person-meta">010-1234-5678 | @junhyuk_p</div>
+                                </div>
+                                <div style="text-align: right;">
+                                    <div style="font-size: 14px; font-weight: 600; color: var(--aurora-purple);">500,000원</div>
+                                    <div style="font-size: 11px; color: var(--text-muted);">경비 잔액</div>
+                                </div>
+                            </div>
+                            <div class="person-item">
+                                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100" class="person-avatar" alt="참가자">
+                                <div class="person-info">
+                                    <div class="person-name">정다은</div>
+                                    <div class="person-meta">010-9876-5432 | @daeun_j</div>
+                                </div>
+                                <div style="text-align: right;">
+                                    <div style="font-size: 14px; font-weight: 600; color: var(--aurora-purple);">500,000원</div>
+                                    <div style="font-size: 11px; color: var(--text-muted);">경비 잔액</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab Content: Announcements -->
+            <div id="announcements" class="tab-content">
+                <div class="content-card">
+                    <div class="card-header">
+                        <h3 class="card-title">공지사항</h3>
+                        <a href="announcements-manage.html" class="btn btn-sm btn-primary">
+                            <i class="ri-add-line"></i>
+                            공지 작성
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <div class="person-list">
+                            <div class="person-item">
+                                <div class="person-info" style="flex: 1;">
+                                    <div class="person-name">준비물 안내</div>
+                                    <div class="person-meta">2024.01.20 | 댓글 5개</div>
+                                </div>
+                                <span class="badge badge-primary">고정</span>
+                            </div>
+                            <div class="person-item">
+                                <div class="person-info" style="flex: 1;">
+                                    <div class="person-name">집합 장소 안내</div>
+                                    <div class="person-meta">2024.01.18 | 댓글 3개</div>
+                                </div>
+                            </div>
+                            <div class="person-item">
+                                <div class="person-info" style="flex: 1;">
+                                    <div class="person-name">첫 번째 인사</div>
+                                    <div class="person-meta">2024.01.15 | 댓글 12개</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab Content: Expenses -->
+            <div id="expenses" class="tab-content">
+                <div class="content-card">
+                    <div class="card-header">
+                        <h3 class="card-title">경비/N빵 관리</h3>
+                        <div style="display: flex; gap: 8px;">
+                            <a href="expense-status.html" class="btn btn-sm btn-secondary">경비 현황</a>
+                            <a href="nbang-manage.html" class="btn btn-sm btn-primary">N빵 관리</a>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px;">
+                            <div style="text-align: center; padding: 16px; background: rgba(255, 255, 255, 0.03); border-radius: var(--radius-md);">
+                                <div style="font-size: 20px; font-weight: 700; color: var(--aurora-purple);">3,000,000원</div>
+                                <div style="font-size: 12px; color: var(--text-secondary);">총 충전액</div>
+                            </div>
+                            <div style="text-align: center; padding: 16px; background: rgba(255, 255, 255, 0.03); border-radius: var(--radius-md);">
+                                <div style="font-size: 20px; font-weight: 700; color: var(--warning);">1,850,000원</div>
+                                <div style="font-size: 12px; color: var(--text-secondary);">총 사용액</div>
+                            </div>
+                            <div style="text-align: center; padding: 16px; background: rgba(255, 255, 255, 0.03); border-radius: var(--radius-md);">
+                                <div style="font-size: 20px; font-weight: 700; color: var(--success);">1,150,000원</div>
+                                <div style="font-size: 12px; color: var(--text-secondary);">잔액</div>
+                            </div>
+                        </div>
+                        <div class="person-list">
+                            <div class="person-item">
+                                <div class="person-info" style="flex: 1;">
+                                    <div class="person-name">현지 식사비</div>
+                                    <div class="person-meta">6명 참여 | 1인당 125,000원</div>
+                                </div>
+                                <div style="text-align: right;">
+                                    <div style="font-size: 14px; font-weight: 600;">750,000원</div>
+                                    <span class="badge badge-success">정산완료</span>
+                                </div>
+                            </div>
+                            <div class="person-item">
+                                <div class="person-info" style="flex: 1;">
+                                    <div class="person-name">액티비티 비용</div>
+                                    <div class="person-meta">6명 참여 | 1인당 183,333원</div>
+                                </div>
+                                <div style="text-align: right;">
+                                    <div style="font-size: 14px; font-weight: 600;">1,100,000원</div>
+                                    <span class="badge badge-success">정산완료</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab Content: Settlement -->
+            <div id="settlement" class="tab-content">
+                <div class="content-card">
+                    <div class="card-header">
+                        <h3 class="card-title">정산 정보</h3>
+                    </div>
+                    <div class="card-body">
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 24px;">
+                            <div style="padding: 20px; background: rgba(255, 255, 255, 0.03); border-radius: var(--radius-md);">
+                                <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 8px;">총 모집 금액</div>
+                                <div style="font-size: 24px; font-weight: 700;">17,340,000원</div>
+                            </div>
+                            <div style="padding: 20px; background: rgba(255, 255, 255, 0.03); border-radius: var(--radius-md);">
+                                <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 8px;">플랫폼 수수료 (10%)</div>
+                                <div style="font-size: 24px; font-weight: 700; color: var(--error);">-1,734,000원</div>
+                            </div>
+                            <div style="padding: 20px; background: var(--gradient-primary); border-radius: var(--radius-md);">
+                                <div style="font-size: 13px; color: rgba(255, 255, 255, 0.8); margin-bottom: 8px;">예상 정산액</div>
+                                <div style="font-size: 24px; font-weight: 700;">15,606,000원</div>
+                            </div>
+                            <div style="padding: 20px; background: rgba(255, 255, 255, 0.03); border-radius: var(--radius-md);">
+                                <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 8px;">정산 예정일</div>
+                                <div style="font-size: 24px; font-weight: 700;">2024.03.05</div>
+                            </div>
+                        </div>
+                        <div style="padding: 16px; background: rgba(66, 153, 225, 0.1); border-radius: var(--radius-md); border-left: 4px solid var(--info);">
+                            <div style="font-size: 13px; color: var(--info); font-weight: 600; margin-bottom: 4px;">정산 안내</div>
+                            <div style="font-size: 12px; color: var(--text-secondary);">코스 종료 후 7일 이내에 등록된 계좌로 정산금이 입금됩니다.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function showTab(tabId) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+
+            // Remove active from all tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Show selected tab content
+            document.getElementById(tabId).classList.add('active');
+
+            // Add active to clicked tab
+            event.currentTarget.classList.add('active');
+        }
+
+        function copyLink() {
+            const link = 'https://travely.app/course/bali-healing-7days';
+            navigator.clipboard.writeText(link).then(() => {
+                alert('모집 링크가 복사되었습니다!');
+            });
+        }
+    </script>
+</body>
+</html>

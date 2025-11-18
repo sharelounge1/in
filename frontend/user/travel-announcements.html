@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>공지사항 - TRAVELY</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="../shared/aurora-style.css">
+    <style>
+        .announcements-container {
+            padding-bottom: 90px;
+        }
+
+        /* Travel Header */
+        .travel-header {
+            padding: 16px 20px;
+            background: var(--bg-glass);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 16px;
+        }
+
+        .travel-mini {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .travel-mini-image {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-md);
+            object-fit: cover;
+        }
+
+        .travel-mini-info {
+            flex: 1;
+        }
+
+        .travel-mini-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .travel-mini-date {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        /* Tabs */
+        .detail-tabs {
+            display: flex;
+            padding: 0 20px;
+            gap: 8px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+        }
+
+        .detail-tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .detail-tab {
+            padding: 10px 18px;
+            border-radius: var(--radius-full);
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            background: var(--bg-glass);
+            border: none;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .detail-tab.active {
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .detail-tab .badge-count {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 18px;
+            height: 18px;
+            padding: 0 5px;
+            background: rgba(245, 101, 101, 0.9);
+            border-radius: var(--radius-full);
+            font-size: 10px;
+            margin-left: 6px;
+        }
+
+        .detail-tab.active .badge-count {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Announcement List */
+        .announcement-list {
+            padding: 0 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .announcement-card {
+            padding: 16px;
+            background: var(--bg-glass);
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-decoration: none;
+            color: var(--text-primary);
+            transition: all 0.3s;
+        }
+
+        .announcement-card:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .announcement-card.pinned {
+            border-color: var(--aurora-purple);
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .announcement-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .announcement-badge {
+            padding: 3px 8px;
+            border-radius: var(--radius-full);
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .badge-pinned {
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .badge-new {
+            background: rgba(245, 101, 101, 0.2);
+            color: var(--error);
+        }
+
+        .badge-important {
+            background: rgba(236, 201, 75, 0.2);
+            color: var(--warning);
+        }
+
+        .announcement-date {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-left: auto;
+        }
+
+        .announcement-title {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .announcement-title i {
+            color: var(--aurora-purple);
+            font-size: 14px;
+        }
+
+        .announcement-preview {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+
+        .announcement-footer {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .announcement-meta {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .announcement-meta i {
+            font-size: 14px;
+        }
+
+        /* Image Preview */
+        .announcement-images {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .announcement-thumb {
+            width: 60px;
+            height: 60px;
+            border-radius: var(--radius-sm);
+            object-fit: cover;
+        }
+
+        .announcement-thumb-more {
+            width: 60px;
+            height: 60px;
+            border-radius: var(--radius-sm);
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="aurora-bg">
+        <div class="aurora-orb aurora-orb-1"></div>
+        <div class="aurora-orb aurora-orb-2"></div>
+        <div class="aurora-orb aurora-orb-3"></div>
+    </div>
+
+    <div class="mobile-container announcements-container">
+        <!-- Header -->
+        <header class="header">
+            <a href="travel-detail.html" class="header-back">
+                <i class="ri-arrow-left-line"></i>
+            </a>
+            <h1 class="header-title">공지사항</h1>
+            <div style="width: 40px;"></div>
+        </header>
+
+        <!-- Travel Header -->
+        <div class="travel-header">
+            <div class="travel-mini">
+                <img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=200" class="travel-mini-image" alt="여행">
+                <div class="travel-mini-info">
+                    <div class="travel-mini-title">발리 럭셔리 힐링 7일</div>
+                    <div class="travel-mini-date">2025.02.20 - 02.26</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="detail-tabs">
+            <a href="travel-detail.html" class="detail-tab">
+                요약
+            </a>
+            <a href="travel-announcements.html" class="detail-tab active">
+                공지사항
+                <span class="badge-count">2</span>
+            </a>
+            <a href="travel-schedule.html" class="detail-tab">
+                일정
+            </a>
+            <a href="travel-expenses.html" class="detail-tab">
+                경비
+            </a>
+            <a href="travel-participants.html" class="detail-tab">
+                참가자
+            </a>
+        </div>
+
+        <!-- Announcement List -->
+        <div class="announcement-list">
+            <!-- Pinned Announcement -->
+            <a href="announcement-detail.html" class="announcement-card pinned">
+                <div class="announcement-header">
+                    <span class="announcement-badge badge-pinned">
+                        <i class="ri-pushpin-fill"></i> 고정
+                    </span>
+                    <span class="announcement-date">2025.01.25</span>
+                </div>
+                <div class="announcement-title">
+                    <i class="ri-pushpin-line"></i>
+                    필독! 출발 전 필수 확인사항
+                </div>
+                <div class="announcement-preview">
+                    여행에 참가해주신 모든 분들께 감사드립니다. 출발 전 반드시 확인해주셔야 할 사항들을 안내드리니 꼭 읽어주세요. 여권 유효기간, 비자 발급 여부...
+                </div>
+                <div class="announcement-footer">
+                    <div class="announcement-meta">
+                        <i class="ri-chat-3-line"></i>
+                        <span>8</span>
+                    </div>
+                    <div class="announcement-meta">
+                        <i class="ri-eye-line"></i>
+                        <span>12</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- New Announcement -->
+            <a href="announcement-detail.html" class="announcement-card">
+                <div class="announcement-header">
+                    <span class="announcement-badge badge-new">NEW</span>
+                    <span class="announcement-date">2시간 전</span>
+                </div>
+                <div class="announcement-title">
+                    여행 준비물 안내
+                </div>
+                <div class="announcement-preview">
+                    안녕하세요, 여행자 여러분! 출발이 얼마 남지 않았네요. 준비물 체크리스트를 공유드립니다. 수영복, 선크림(SPF50 이상 권장)...
+                </div>
+                <div class="announcement-images">
+                    <img src="https://images.unsplash.com/photo-1596178060810-72f53ce9a65c?w=200" class="announcement-thumb" alt="이미지">
+                    <img src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=200" class="announcement-thumb" alt="이미지">
+                </div>
+                <div class="announcement-footer">
+                    <div class="announcement-meta">
+                        <i class="ri-chat-3-line"></i>
+                        <span>3</span>
+                    </div>
+                    <div class="announcement-meta">
+                        <i class="ri-eye-line"></i>
+                        <span>10</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Important Announcement -->
+            <a href="announcement-detail.html" class="announcement-card">
+                <div class="announcement-header">
+                    <span class="announcement-badge badge-important">중요</span>
+                    <span class="announcement-date">1일 전</span>
+                </div>
+                <div class="announcement-title">
+                    경비 충전 안내
+                </div>
+                <div class="announcement-preview">
+                    현지에서 사용할 공동 경비 충전을 안내드립니다. 앱 내 경비 탭에서 충전 요청을 해주시면 됩니다. 권장 금액은 50만원입니다...
+                </div>
+                <div class="announcement-footer">
+                    <div class="announcement-meta">
+                        <i class="ri-chat-3-line"></i>
+                        <span>5</span>
+                    </div>
+                    <div class="announcement-meta">
+                        <i class="ri-eye-line"></i>
+                        <span>12</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Regular Announcement -->
+            <a href="announcement-detail.html" class="announcement-card">
+                <div class="announcement-header">
+                    <span class="announcement-date">3일 전</span>
+                </div>
+                <div class="announcement-title">
+                    참가자 단체 채팅방 안내
+                </div>
+                <div class="announcement-preview">
+                    여행 참가자 분들과 소통할 수 있는 단체 채팅방을 개설했습니다. 아래 링크를 통해 입장해주세요...
+                </div>
+                <div class="announcement-footer">
+                    <div class="announcement-meta">
+                        <i class="ri-chat-3-line"></i>
+                        <span>12</span>
+                    </div>
+                    <div class="announcement-meta">
+                        <i class="ri-eye-line"></i>
+                        <span>12</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Regular Announcement -->
+            <a href="announcement-detail.html" class="announcement-card">
+                <div class="announcement-header">
+                    <span class="announcement-date">5일 전</span>
+                </div>
+                <div class="announcement-title">
+                    선정 완료 안내
+                </div>
+                <div class="announcement-preview">
+                    많은 분들이 신청해주셔서 감사합니다. 최종 선정이 완료되었음을 안내드립니다. 선정되신 모든 분들께 개별 연락드리겠습니다...
+                </div>
+                <div class="announcement-footer">
+                    <div class="announcement-meta">
+                        <i class="ri-chat-3-line"></i>
+                        <span>20</span>
+                    </div>
+                    <div class="announcement-meta">
+                        <i class="ri-eye-line"></i>
+                        <span>12</span>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <a href="home.html" class="nav-item">
+                <i class="ri-home-5-line"></i>
+                <span>홈</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="ri-sparkling-line"></i>
+                <span>파티</span>
+            </a>
+            <a href="my-applications.html" class="nav-item">
+                <i class="ri-file-list-3-line"></i>
+                <span>내신청</span>
+            </a>
+            <a href="active-travels.html" class="nav-item active">
+                <i class="ri-suitcase-3-fill"></i>
+                <span>진행중</span>
+            </a>
+            <a href="mypage.html" class="nav-item">
+                <i class="ri-user-line"></i>
+                <span>마이</span>
+            </a>
+        </nav>
+    </div>
+</body>
+</html>

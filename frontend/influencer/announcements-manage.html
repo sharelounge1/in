@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>공지사항 관리 - TRAVELY 인플루언서</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="../shared/aurora-style.css">
+    <style>
+        .app-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background: var(--bg-secondary);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 24px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .sidebar-logo {
+            font-size: 24px;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 32px;
+        }
+
+        .sidebar-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            background: var(--bg-glass);
+            border-radius: var(--radius-lg);
+            margin-bottom: 24px;
+        }
+
+        .profile-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--aurora-purple);
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .profile-name {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .profile-handle {
+            font-size: 12px;
+            color: var(--aurora-purple);
+        }
+
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: var(--radius-md);
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .nav-item:hover {
+            background: var(--bg-glass);
+            color: var(--text-primary);
+        }
+
+        .nav-item.active {
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .nav-item i {
+            font-size: 18px;
+        }
+
+        .nav-divider {
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+            margin: 16px 0;
+        }
+
+        .nav-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 8px 16px;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 260px;
+            padding: 32px;
+        }
+
+        .main-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .page-title-area {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .back-btn {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius-md);
+            background: var(--bg-glass);
+            color: var(--text-primary);
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 800;
+        }
+
+        .page-subtitle {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        /* Content Card */
+        .content-card {
+            background: var(--bg-glass);
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .card-body {
+            padding: 24px;
+        }
+
+        /* Announcement List */
+        .announcement-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .announcement-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: var(--radius-md);
+            transition: all 0.3s;
+        }
+
+        .announcement-item:hover {
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .announcement-item.pinned {
+            border-left: 3px solid var(--aurora-purple);
+        }
+
+        .announcement-content {
+            flex: 1;
+        }
+
+        .announcement-title {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .pin-icon {
+            color: var(--aurora-purple);
+            font-size: 14px;
+        }
+
+        .announcement-meta {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .meta-item i {
+            font-size: 14px;
+        }
+
+        .announcement-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .action-btn {
+            padding: 8px 12px;
+            border-radius: var(--radius-md);
+            font-size: 12px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .action-btn.edit {
+            background: rgba(66, 153, 225, 0.2);
+            color: var(--info);
+        }
+
+        .action-btn.edit:hover {
+            background: rgba(66, 153, 225, 0.3);
+        }
+
+        .action-btn.delete {
+            background: rgba(245, 101, 101, 0.2);
+            color: var(--error);
+        }
+
+        .action-btn.delete:hover {
+            background: rgba(245, 101, 101, 0.3);
+        }
+
+        /* Pin Toggle */
+        .pin-toggle {
+            position: relative;
+            width: 44px;
+            height: 24px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .pin-toggle.active {
+            background: var(--aurora-purple);
+        }
+
+        .pin-toggle::after {
+            content: '';
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            background: white;
+            border-radius: 50%;
+            top: 3px;
+            left: 3px;
+            transition: all 0.3s;
+        }
+
+        .pin-toggle.active::after {
+            transform: translateX(20px);
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            width: 100%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .modal-close {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius-md);
+            background: var(--bg-glass);
+            border: none;
+            color: var(--text-primary);
+            cursor: pointer;
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            padding: 24px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Form */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            background: var(--bg-glass);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--aurora-purple);
+        }
+
+        .form-textarea {
+            min-height: 200px;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        .form-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+        }
+
+        .form-checkbox input {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--aurora-purple);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 48px 24px;
+        }
+
+        .empty-icon {
+            font-size: 48px;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        .empty-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .empty-desc {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .announcement-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .announcement-actions {
+                margin-top: 12px;
+                width: 100%;
+                justify-content: flex-end;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="aurora-bg">
+        <div class="aurora-orb aurora-orb-1"></div>
+        <div class="aurora-orb aurora-orb-2"></div>
+        <div class="aurora-orb aurora-orb-3"></div>
+    </div>
+
+    <div class="app-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">TRAVELY</div>
+
+            <div class="sidebar-profile">
+                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200" class="profile-avatar" alt="프로필">
+                <div class="profile-info">
+                    <div class="profile-name">여행하는 지나</div>
+                    <div class="profile-handle">@travel_jina</div>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">
+                    <i class="ri-dashboard-line"></i>
+                    대시보드
+                </a>
+                <a href="course-list.html" class="nav-item active">
+                    <i class="ri-map-pin-line"></i>
+                    내 코스
+                </a>
+                <a href="applications.html" class="nav-item">
+                    <i class="ri-user-follow-line"></i>
+                    신청자 관리
+                </a>
+                <a href="settlements.html" class="nav-item">
+                    <i class="ri-money-dollar-circle-line"></i>
+                    정산 내역
+                </a>
+
+                <div class="nav-divider"></div>
+                <div class="nav-label">설정</div>
+
+                <a href="profile.html" class="nav-item">
+                    <i class="ri-user-settings-line"></i>
+                    프로필 설정
+                </a>
+                <a href="account.html" class="nav-item">
+                    <i class="ri-bank-card-line"></i>
+                    계좌 관리
+                </a>
+                <a href="notifications.html" class="nav-item">
+                    <i class="ri-notification-3-line"></i>
+                    알림 설정
+                </a>
+
+                <div class="nav-divider"></div>
+
+                <a href="help.html" class="nav-item">
+                    <i class="ri-question-line"></i>
+                    도움말
+                </a>
+                <a href="logout.html" class="nav-item">
+                    <i class="ri-logout-box-line"></i>
+                    로그아웃
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="main-header">
+                <div class="page-title-area">
+                    <a href="course-detail.html" class="back-btn">
+                        <i class="ri-arrow-left-line"></i>
+                    </a>
+                    <div>
+                        <h1 class="page-title">공지사항 관리</h1>
+                        <p class="page-subtitle">발리 럭셔리 힐링 7일</p>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-primary" onclick="openModal()">
+                        <i class="ri-add-line"></i>
+                        공지 작성
+                    </button>
+                </div>
+            </div>
+
+            <!-- Announcements Card -->
+            <div class="content-card">
+                <div class="card-header">
+                    <h3 class="card-title">공지사항 목록</h3>
+                    <span style="font-size: 13px; color: var(--text-secondary);">총 3개</span>
+                </div>
+                <div class="card-body">
+                    <div class="announcement-list">
+                        <!-- Pinned Announcement -->
+                        <div class="announcement-item pinned">
+                            <div class="announcement-content">
+                                <div class="announcement-title">
+                                    <i class="ri-pushpin-fill pin-icon"></i>
+                                    준비물 안내
+                                </div>
+                                <div class="announcement-meta">
+                                    <div class="meta-item">
+                                        <i class="ri-calendar-line"></i>
+                                        2024.01.20
+                                    </div>
+                                    <div class="meta-item">
+                                        <i class="ri-chat-3-line"></i>
+                                        댓글 5개
+                                    </div>
+                                    <div class="meta-item">
+                                        <i class="ri-eye-line"></i>
+                                        조회 42
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="pin-toggle active" onclick="togglePin(this)" title="고정 해제"></div>
+                            <div class="announcement-actions">
+                                <button class="action-btn edit">
+                                    <i class="ri-edit-line"></i>
+                                    수정
+                                </button>
+                                <button class="action-btn delete">
+                                    <i class="ri-delete-bin-line"></i>
+                                    삭제
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Regular Announcements -->
+                        <div class="announcement-item">
+                            <div class="announcement-content">
+                                <div class="announcement-title">
+                                    집합 장소 안내
+                                </div>
+                                <div class="announcement-meta">
+                                    <div class="meta-item">
+                                        <i class="ri-calendar-line"></i>
+                                        2024.01.18
+                                    </div>
+                                    <div class="meta-item">
+                                        <i class="ri-chat-3-line"></i>
+                                        댓글 3개
+                                    </div>
+                                    <div class="meta-item">
+                                        <i class="ri-eye-line"></i>
+                                        조회 38
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="pin-toggle" onclick="togglePin(this)" title="고정하기"></div>
+                            <div class="announcement-actions">
+                                <button class="action-btn edit">
+                                    <i class="ri-edit-line"></i>
+                                    수정
+                                </button>
+                                <button class="action-btn delete">
+                                    <i class="ri-delete-bin-line"></i>
+                                    삭제
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="announcement-item">
+                            <div class="announcement-content">
+                                <div class="announcement-title">
+                                    첫 번째 인사
+                                </div>
+                                <div class="announcement-meta">
+                                    <div class="meta-item">
+                                        <i class="ri-calendar-line"></i>
+                                        2024.01.15
+                                    </div>
+                                    <div class="meta-item">
+                                        <i class="ri-chat-3-line"></i>
+                                        댓글 12개
+                                    </div>
+                                    <div class="meta-item">
+                                        <i class="ri-eye-line"></i>
+                                        조회 56
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="pin-toggle" onclick="togglePin(this)" title="고정하기"></div>
+                            <div class="announcement-actions">
+                                <button class="action-btn edit">
+                                    <i class="ri-edit-line"></i>
+                                    수정
+                                </button>
+                                <button class="action-btn delete">
+                                    <i class="ri-delete-bin-line"></i>
+                                    삭제
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Create/Edit Modal -->
+    <div class="modal-overlay" id="announcementModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">공지사항 작성</h3>
+                <button class="modal-close" onclick="closeModal()">
+                    <i class="ri-close-line"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">제목 *</label>
+                    <input type="text" class="form-input" placeholder="공지사항 제목을 입력하세요">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">내용 *</label>
+                    <textarea class="form-input form-textarea" placeholder="공지사항 내용을 입력하세요"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-checkbox">
+                        <input type="checkbox">
+                        <span>상단에 고정</span>
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label class="form-checkbox">
+                        <input type="checkbox" checked>
+                        <span>참가자에게 알림 전송</span>
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal()">취소</button>
+                <button class="btn btn-primary">
+                    <i class="ri-check-line"></i>
+                    작성 완료
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openModal() {
+            document.getElementById('announcementModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('announcementModal').classList.remove('active');
+        }
+
+        function togglePin(element) {
+            element.classList.toggle('active');
+            const item = element.closest('.announcement-item');
+            item.classList.toggle('pinned');
+
+            const title = item.querySelector('.announcement-title');
+            if (element.classList.contains('active')) {
+                if (!title.querySelector('.pin-icon')) {
+                    const icon = document.createElement('i');
+                    icon.className = 'ri-pushpin-fill pin-icon';
+                    title.prepend(icon);
+                }
+            } else {
+                const icon = title.querySelector('.pin-icon');
+                if (icon) icon.remove();
+            }
+        }
+
+        // Close modal on overlay click
+        document.getElementById('announcementModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>

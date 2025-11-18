@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>파티 신청 - TRAVELY</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="../shared/aurora-style.css">
+    <style>
+        .apply-container {
+            padding-bottom: 120px;
+        }
+
+        /* Header */
+        .apply-header {
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(15, 15, 26, 0.95);
+            backdrop-filter: blur(20px);
+        }
+
+        .back-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-md);
+            background: var(--bg-glass);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 20px;
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        /* Party Summary */
+        .party-summary {
+            margin: 0 20px 24px;
+            padding: 16px;
+            background: var(--bg-glass);
+            border-radius: var(--radius-lg);
+            display: flex;
+            gap: 12px;
+        }
+
+        .summary-image {
+            width: 80px;
+            height: 80px;
+            border-radius: var(--radius-md);
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        .summary-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .summary-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .summary-info {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .summary-price {
+            font-size: 16px;
+            font-weight: 700;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Form Section */
+        .form-section {
+            padding: 0 20px;
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .form-card {
+            background: var(--bg-glass);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .form-label .required {
+            color: var(--error);
+            margin-left: 2px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--aurora-purple);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+        }
+
+        .form-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .input-hint {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 6px;
+        }
+
+        /* Payment Section */
+        .payment-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .payment-option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .payment-option:hover {
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .payment-option.selected {
+            border-color: var(--aurora-purple);
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .payment-radio {
+            display: none;
+        }
+
+        .payment-check {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .payment-option.selected .payment-check {
+            border-color: var(--aurora-purple);
+            background: var(--aurora-purple);
+        }
+
+        .payment-option.selected .payment-check::after {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: white;
+        }
+
+        .payment-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-sm);
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .payment-icon.naver {
+            background: #03c75a;
+            color: white;
+        }
+
+        .payment-icon.kakao {
+            background: #fee500;
+            color: #3c1e1e;
+        }
+
+        .payment-icon.card {
+            background: var(--bg-glass);
+            color: var(--text-primary);
+        }
+
+        .payment-info {
+            flex: 1;
+        }
+
+        .payment-name {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .payment-desc {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        /* Terms Section */
+        .terms-section {
+            padding: 0 20px;
+            margin-bottom: 24px;
+        }
+
+        .terms-card {
+            background: var(--bg-glass);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+        }
+
+        .terms-all {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 16px;
+            cursor: pointer;
+        }
+
+        .terms-checkbox {
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        .terms-checkbox.checked {
+            background: var(--gradient-primary);
+            border-color: transparent;
+        }
+
+        .terms-checkbox.checked i {
+            color: white;
+            font-size: 14px;
+        }
+
+        .terms-text {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .terms-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .terms-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+        }
+
+        .terms-item .terms-checkbox {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+        }
+
+        .terms-item .terms-text {
+            font-size: 13px;
+            font-weight: 400;
+            color: var(--text-secondary);
+            flex: 1;
+        }
+
+        .terms-item .required-tag {
+            font-size: 11px;
+            color: var(--error);
+        }
+
+        .terms-link {
+            font-size: 12px;
+            color: var(--aurora-purple);
+            text-decoration: none;
+        }
+
+        /* Fixed Bottom */
+        .fixed-bottom {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 430px;
+            background: rgba(26, 26, 46, 0.98);
+            backdrop-filter: blur(20px);
+            padding: 16px 20px 32px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .total-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .total-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .total-amount {
+            font-size: 22px;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            border-radius: var(--radius-lg);
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: var(--shadow-glow);
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 40px rgba(102, 126, 234, 0.5);
+        }
+
+        .submit-btn:disabled {
+            background: var(--bg-glass);
+            box-shadow: none;
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="aurora-bg">
+        <div class="aurora-orb aurora-orb-1"></div>
+        <div class="aurora-orb aurora-orb-2"></div>
+        <div class="aurora-orb aurora-orb-3"></div>
+    </div>
+
+    <div class="mobile-container apply-container">
+        <!-- Header -->
+        <header class="apply-header">
+            <a href="party-detail.html" class="back-btn">
+                <i class="ri-arrow-left-s-line"></i>
+            </a>
+            <h1 class="header-title">파티 신청</h1>
+        </header>
+
+        <!-- Party Summary -->
+        <div class="party-summary">
+            <img src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=400" class="summary-image" alt="파티">
+            <div class="summary-content">
+                <h3 class="summary-title">한강 루프탑 선셋 파티</h3>
+                <p class="summary-info">2024.02.15 (토) 18:00<br>서울 용산구</p>
+                <div class="summary-price">150,000원</div>
+            </div>
+        </div>
+
+        <!-- Applicant Info -->
+        <div class="form-section">
+            <h2 class="section-title">신청자 정보</h2>
+            <div class="form-card">
+                <div class="form-group">
+                    <label class="form-label">
+                        이름 <span class="required">*</span>
+                    </label>
+                    <input type="text" class="form-input" placeholder="실명을 입력하세요">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">
+                        연락처 <span class="required">*</span>
+                    </label>
+                    <input type="tel" class="form-input" placeholder="010-0000-0000">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">
+                        인스타그램 <span class="required">*</span>
+                    </label>
+                    <input type="text" class="form-input" placeholder="@username">
+                    <p class="input-hint">파티 후 SNS 후기 작성을 위해 필요합니다</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Introduction -->
+        <div class="form-section">
+            <h2 class="section-title">자기소개 / 신청동기</h2>
+            <div class="form-card">
+                <div class="form-group">
+                    <textarea class="form-input form-textarea" placeholder="간단한 자기소개와 파티에 참여하고 싶은 이유를 작성해주세요."></textarea>
+                    <p class="input-hint">인플루언서가 참가자 선정 시 참고할 수 있습니다</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment Method -->
+        <div class="form-section">
+            <h2 class="section-title">결제 수단</h2>
+            <div class="payment-options">
+                <label class="payment-option selected">
+                    <input type="radio" name="payment" class="payment-radio" checked>
+                    <span class="payment-check"></span>
+                    <span class="payment-icon naver">N</span>
+                    <span class="payment-info">
+                        <span class="payment-name">네이버페이</span>
+                        <span class="payment-desc">네이버 간편결제</span>
+                    </span>
+                </label>
+                <label class="payment-option">
+                    <input type="radio" name="payment" class="payment-radio">
+                    <span class="payment-check"></span>
+                    <span class="payment-icon kakao">K</span>
+                    <span class="payment-info">
+                        <span class="payment-name">카카오페이</span>
+                        <span class="payment-desc">카카오 간편결제</span>
+                    </span>
+                </label>
+                <label class="payment-option">
+                    <input type="radio" name="payment" class="payment-radio">
+                    <span class="payment-check"></span>
+                    <span class="payment-icon card"><i class="ri-bank-card-line"></i></span>
+                    <span class="payment-info">
+                        <span class="payment-name">신용/체크카드</span>
+                        <span class="payment-desc">모든 카드 결제 가능</span>
+                    </span>
+                </label>
+            </div>
+        </div>
+
+        <!-- Terms Agreement -->
+        <div class="terms-section">
+            <h2 class="section-title">약관 동의</h2>
+            <div class="terms-card">
+                <div class="terms-all" onclick="toggleAllTerms()">
+                    <span class="terms-checkbox" id="allCheck">
+                        <i class="ri-check-line"></i>
+                    </span>
+                    <span class="terms-text">전체 동의</span>
+                </div>
+                <div class="terms-list">
+                    <div class="terms-item" onclick="toggleTerm(this)">
+                        <span class="terms-checkbox">
+                            <i class="ri-check-line"></i>
+                        </span>
+                        <span class="terms-text">이용약관 동의</span>
+                        <span class="required-tag">필수</span>
+                        <a href="#" class="terms-link">보기</a>
+                    </div>
+                    <div class="terms-item" onclick="toggleTerm(this)">
+                        <span class="terms-checkbox">
+                            <i class="ri-check-line"></i>
+                        </span>
+                        <span class="terms-text">개인정보 수집 및 이용 동의</span>
+                        <span class="required-tag">필수</span>
+                        <a href="#" class="terms-link">보기</a>
+                    </div>
+                    <div class="terms-item" onclick="toggleTerm(this)">
+                        <span class="terms-checkbox">
+                            <i class="ri-check-line"></i>
+                        </span>
+                        <span class="terms-text">환불 정책 동의</span>
+                        <span class="required-tag">필수</span>
+                        <a href="#" class="terms-link">보기</a>
+                    </div>
+                    <div class="terms-item" onclick="toggleTerm(this)">
+                        <span class="terms-checkbox">
+                            <i class="ri-check-line"></i>
+                        </span>
+                        <span class="terms-text">마케팅 정보 수신 동의</span>
+                        <span class="required-tag" style="color: var(--text-muted)">선택</span>
+                        <a href="#" class="terms-link">보기</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fixed Bottom -->
+        <div class="fixed-bottom">
+            <div class="total-section">
+                <span class="total-label">결제 금액</span>
+                <span class="total-amount">150,000원</span>
+            </div>
+            <button class="submit-btn" onclick="location.href='payment-complete.html'">결제하기</button>
+        </div>
+    </div>
+
+    <script>
+        // Payment option selection
+        document.querySelectorAll('.payment-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.payment-option').forEach(o => o.classList.remove('selected'));
+                this.classList.add('selected');
+            });
+        });
+
+        // Toggle individual term
+        function toggleTerm(element) {
+            const checkbox = element.querySelector('.terms-checkbox');
+            checkbox.classList.toggle('checked');
+            updateAllCheck();
+        }
+
+        // Toggle all terms
+        function toggleAllTerms() {
+            const allCheck = document.getElementById('allCheck');
+            const isChecked = allCheck.classList.contains('checked');
+            const allItems = document.querySelectorAll('.terms-item .terms-checkbox');
+
+            if (isChecked) {
+                allCheck.classList.remove('checked');
+                allItems.forEach(item => item.classList.remove('checked'));
+            } else {
+                allCheck.classList.add('checked');
+                allItems.forEach(item => item.classList.add('checked'));
+            }
+        }
+
+        // Update all check based on individual items
+        function updateAllCheck() {
+            const allCheck = document.getElementById('allCheck');
+            const allItems = document.querySelectorAll('.terms-item .terms-checkbox');
+            const allChecked = Array.from(allItems).every(item => item.classList.contains('checked'));
+
+            if (allChecked) {
+                allCheck.classList.add('checked');
+            } else {
+                allCheck.classList.remove('checked');
+            }
+        }
+    </script>
+</body>
+</html>

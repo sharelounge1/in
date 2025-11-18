@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>프로필 설정 - TRAVELY 인플루언서</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="../shared/aurora-style.css">
+    <style>
+        .app-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background: var(--bg-secondary);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 24px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .sidebar-logo {
+            font-size: 24px;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 32px;
+        }
+
+        .sidebar-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            background: var(--bg-glass);
+            border-radius: var(--radius-lg);
+            margin-bottom: 24px;
+        }
+
+        .profile-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--aurora-purple);
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .profile-name {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .profile-handle {
+            font-size: 12px;
+            color: var(--aurora-purple);
+        }
+
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: var(--radius-md);
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .nav-item:hover {
+            background: var(--bg-glass);
+            color: var(--text-primary);
+        }
+
+        .nav-item.active {
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .nav-item i {
+            font-size: 18px;
+        }
+
+        .nav-divider {
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+            margin: 16px 0;
+        }
+
+        .nav-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 8px 16px;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 260px;
+            padding: 32px;
+        }
+
+        .main-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .back-btn {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius-md);
+            background: var(--bg-glass);
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 20px;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 800;
+        }
+
+        /* Profile Image Section */
+        .profile-image-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 32px;
+            background: var(--bg-glass);
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 24px;
+        }
+
+        .profile-image-wrapper {
+            position: relative;
+            margin-bottom: 16px;
+        }
+
+        .profile-image-large {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--aurora-purple);
+        }
+
+        .profile-image-edit {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .profile-image-edit:hover {
+            transform: scale(1.1);
+        }
+
+        .profile-image-hint {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        /* Form Card */
+        .form-card {
+            background: var(--bg-glass);
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .form-card-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--aurora-purple);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+        }
+
+        .form-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.5)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            padding-right: 40px;
+        }
+
+        .char-count {
+            text-align: right;
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 8px;
+        }
+
+        /* SNS Links */
+        .sns-link-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .sns-link-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .sns-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: var(--radius-md);
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .sns-icon.instagram {
+            color: #E4405F;
+        }
+
+        .sns-icon.youtube {
+            color: #FF0000;
+        }
+
+        .sns-icon.tiktok {
+            color: #00F2EA;
+        }
+
+        .sns-icon.twitter {
+            color: #1DA1F2;
+        }
+
+        .sns-link-item .form-input {
+            flex: 1;
+        }
+
+        /* Category Tags */
+        .category-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .category-tag {
+            padding: 8px 16px;
+            border-radius: var(--radius-full);
+            font-size: 13px;
+            font-weight: 500;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .category-tag:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .category-tag.selected {
+            background: var(--gradient-primary);
+            border-color: transparent;
+            color: white;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 32px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px 24px;
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+            box-shadow: 0 0 30px rgba(102, 126, 234, 0.3);
+            flex: 1;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 40px rgba(102, 126, 234, 0.5);
+        }
+
+        .btn-secondary {
+            background: var(--bg-glass);
+            color: var(--text-primary);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="aurora-bg">
+        <div class="aurora-orb aurora-orb-1"></div>
+        <div class="aurora-orb aurora-orb-2"></div>
+        <div class="aurora-orb aurora-orb-3"></div>
+    </div>
+
+    <div class="app-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">TRAVELY</div>
+
+            <div class="sidebar-profile">
+                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200" class="profile-avatar" alt="프로필">
+                <div class="profile-info">
+                    <div class="profile-name">여행하는 지나</div>
+                    <div class="profile-handle">@travel_jina</div>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">
+                    <i class="ri-dashboard-line"></i>
+                    대시보드
+                </a>
+                <a href="course-list.html" class="nav-item">
+                    <i class="ri-map-pin-line"></i>
+                    내 코스
+                </a>
+                <a href="applications.html" class="nav-item">
+                    <i class="ri-user-follow-line"></i>
+                    신청자 관리
+                </a>
+                <a href="settlements.html" class="nav-item">
+                    <i class="ri-money-dollar-circle-line"></i>
+                    정산 내역
+                </a>
+
+                <div class="nav-divider"></div>
+                <div class="nav-label">설정</div>
+
+                <a href="settings.html" class="nav-item active">
+                    <i class="ri-settings-3-line"></i>
+                    설정
+                </a>
+
+                <div class="nav-divider"></div>
+
+                <a href="help.html" class="nav-item">
+                    <i class="ri-question-line"></i>
+                    도움말
+                </a>
+                <a href="logout.html" class="nav-item">
+                    <i class="ri-logout-box-line"></i>
+                    로그아웃
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="main-header">
+                <div class="header-left">
+                    <a href="settings.html" class="back-btn">
+                        <i class="ri-arrow-left-line"></i>
+                    </a>
+                    <h1 class="page-title">프로필 설정</h1>
+                </div>
+            </div>
+
+            <!-- Profile Image -->
+            <div class="profile-image-section">
+                <div class="profile-image-wrapper">
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400" class="profile-image-large" alt="프로필">
+                    <div class="profile-image-edit">
+                        <i class="ri-camera-line"></i>
+                    </div>
+                </div>
+                <div class="profile-image-hint">JPG, PNG 형식 / 최대 5MB</div>
+            </div>
+
+            <!-- Basic Info -->
+            <div class="form-card">
+                <div class="form-card-title">기본 정보</div>
+
+                <div class="form-group">
+                    <label class="form-label">활동명 *</label>
+                    <input type="text" class="form-input" value="여행하는 지나" placeholder="활동명을 입력하세요">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">카테고리 *</label>
+                    <div class="category-tags">
+                        <span class="category-tag selected">여행</span>
+                        <span class="category-tag">맛집</span>
+                        <span class="category-tag selected">라이프스타일</span>
+                        <span class="category-tag">뷰티</span>
+                        <span class="category-tag">패션</span>
+                        <span class="category-tag">운동/건강</span>
+                        <span class="category-tag">음악/공연</span>
+                        <span class="category-tag">기타</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">자기소개</label>
+                    <textarea class="form-input form-textarea" placeholder="팬들에게 보여질 자기소개를 작성해주세요">안녕하세요! 전 세계를 여행하며 특별한 경험을 공유하는 여행 크리에이터 지나입니다. 함께 여행하며 잊지 못할 추억을 만들어요!</textarea>
+                    <div class="char-count">92 / 500</div>
+                </div>
+            </div>
+
+            <!-- SNS Links -->
+            <div class="form-card">
+                <div class="form-card-title">SNS 링크</div>
+
+                <div class="sns-link-item">
+                    <div class="sns-icon instagram">
+                        <i class="ri-instagram-line"></i>
+                    </div>
+                    <input type="url" class="form-input" value="https://instagram.com/travel_jina" placeholder="Instagram 프로필 URL">
+                </div>
+
+                <div class="sns-link-item">
+                    <div class="sns-icon youtube">
+                        <i class="ri-youtube-line"></i>
+                    </div>
+                    <input type="url" class="form-input" value="https://youtube.com/@travel_jina" placeholder="YouTube 채널 URL">
+                </div>
+
+                <div class="sns-link-item">
+                    <div class="sns-icon tiktok">
+                        <i class="ri-tiktok-line"></i>
+                    </div>
+                    <input type="url" class="form-input" value="" placeholder="TikTok 프로필 URL">
+                </div>
+
+                <div class="sns-link-item">
+                    <div class="sns-icon twitter">
+                        <i class="ri-twitter-x-line"></i>
+                    </div>
+                    <input type="url" class="form-input" value="" placeholder="X (Twitter) 프로필 URL">
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button class="btn btn-secondary">취소</button>
+                <button class="btn btn-primary">
+                    <i class="ri-save-line"></i>
+                    저장하기
+                </button>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
