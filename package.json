@@ -1,0 +1,13 @@
+{
+  "name": "travely-frontend",
+  "version": "1.0.0",
+  "description": "TRAVELY 인플루언서 여행 플랫폼 프론트엔드",
+  "scripts": {
+    "dev": "vite frontend --port 5100 --open",
+    "build": "vite build frontend",
+    "preview": "vite preview frontend"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0"
+  }
+}
