@@ -4,58 +4,58 @@
 -- Description: Comprehensive RLS policies for all tables
 -- =============================================
 
--- Enable RLS on all tables
-ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
-ALTER TABLE influencer_profiles ENABLE ROW LEVEL SECURITY;
-ALTER TABLE courses ENABLE ROW LEVEL SECURITY;
-ALTER TABLE course_applications ENABLE ROW LEVEL SECURITY;
-ALTER TABLE parties ENABLE ROW LEVEL SECURITY;
-ALTER TABLE party_applications ENABLE ROW LEVEL SECURITY;
-ALTER TABLE payments ENABLE ROW LEVEL SECURITY;
-ALTER TABLE settlements ENABLE ROW LEVEL SECURITY;
-ALTER TABLE notifications ENABLE ROW LEVEL SECURITY;
-ALTER TABLE direct_messages ENABLE ROW LEVEL SECURITY;
-ALTER TABLE reviews ENABLE ROW LEVEL SECURITY;
-ALTER TABLE inquiries ENABLE ROW LEVEL SECURITY;
-
 -- =============================================
--- Helper Functions
+-- Helper Functions (MUST BE CREATED FIRST)
 -- =============================================
 
 -- Function to check if user is admin
 CREATE OR REPLACE FUNCTION is_admin()
 RETURNS BOOLEAN AS $$
 BEGIN
-  RETURN EXISTS (
-    SELECT 1 FROM profiles
-    WHERE id = auth.uid()
-    AND role = 'admin'
+  RETURN COALESCE(
+    (SELECT role = 'admin' FROM profiles WHERE id = auth.uid()),
+    false
   );
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+$$ LANGUAGE plpgsql SECURITY DEFINER STABLE;
 
 -- Function to check if user is influencer
 CREATE OR REPLACE FUNCTION is_influencer()
 RETURNS BOOLEAN AS $$
 BEGIN
-  RETURN EXISTS (
-    SELECT 1 FROM profiles
-    WHERE id = auth.uid()
-    AND role = 'influencer'
+  RETURN COALESCE(
+    (SELECT role IN ('influencer', 'admin') FROM profiles WHERE id = auth.uid()),
+    false
   );
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+$$ LANGUAGE plpgsql SECURITY DEFINER STABLE;
 
 -- Function to get user role
 CREATE OR REPLACE FUNCTION get_user_role()
 RETURNS TEXT AS $$
 BEGIN
-  RETURN (
-    SELECT role FROM profiles
-    WHERE id = auth.uid()
+  RETURN COALESCE(
+    (SELECT role FROM profiles WHERE id = auth.uid()),
+    'anonymous'
   );
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+$$ LANGUAGE plpgsql SECURITY DEFINER STABLE;
+
+-- =============================================
+-- Enable RLS on all tables
+-- =============================================
+ALTER TABLE IF EXISTS profiles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE IF EXISTS influencer_profiles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE IF EXISTS courses ENABLE ROW LEVEL SECURITY;
+ALTER TABLE IF EXISTS course_applications ENABLE ROW LEVEL SECURITY;
+ALTER TABLE IF EXISTS parties ENABLE ROW LEVEL SECURITY;
+ALTER TABLE IF EXISTS party_applications ENABLE ROW LEVEL SECURITY;
+ALTER TABLE IF EXISTS payments ENABLE ROW LEVEL SECURITY;
+ALTER TABLE IF EXISTS settlements ENABLE ROW LEVEL SECURITY;
+ALTER TABLE IF EXISTS notifications ENABLE ROW LEVEL SECURITY;
+ALTER TABLE IF EXISTS direct_messages ENABLE ROW LEVEL SECURITY;
+ALTER TABLE IF EXISTS reviews ENABLE ROW LEVEL SECURITY;
+ALTER TABLE IF EXISTS inquiries ENABLE ROW LEVEL SECURITY;
 
 -- =============================================
 -- PROFILES TABLE POLICIES
