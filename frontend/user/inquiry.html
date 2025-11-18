@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>1:1 문의하기 - TRAVELY</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="../shared/aurora-style.css">
+    <style>
+        .inquiry-container {
+            padding-bottom: 90px;
+        }
+
+        /* Form Content */
+        .inquiry-content {
+            padding: 20px;
+        }
+
+        /* Target Type Selection */
+        .target-type-section {
+            margin-bottom: 24px;
+        }
+
+        .target-type-label {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .target-type-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .target-type-option {
+            position: relative;
+        }
+
+        .target-type-option input {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .target-type-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            padding: 16px;
+            background: var(--bg-glass);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .target-type-option input:checked + .target-type-card {
+            border-color: var(--aurora-purple);
+            background: rgba(102, 126, 234, 0.15);
+        }
+
+        .target-type-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(102, 126, 234, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .target-type-icon i {
+            font-size: 20px;
+            color: var(--aurora-purple);
+        }
+
+        .target-type-text {
+            font-size: 13px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .target-type-desc {
+            font-size: 11px;
+            color: var(--text-secondary);
+            text-align: center;
+        }
+
+        /* Influencer Selector */
+        .influencer-selector {
+            margin-bottom: 24px;
+            display: none;
+        }
+
+        .influencer-selector.show {
+            display: block;
+        }
+
+        .selector-card {
+            padding: 16px;
+            background: var(--bg-glass);
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .selector-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-md);
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .selector-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .selector-item:active {
+            transform: scale(0.98);
+        }
+
+        .selector-item.selected {
+            background: rgba(102, 126, 234, 0.2);
+            border: 1px solid var(--aurora-purple);
+        }
+
+        .selector-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .selector-info {
+            flex: 1;
+        }
+
+        .selector-name {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .selector-course {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .selector-check {
+            color: var(--aurora-purple);
+            font-size: 20px;
+            opacity: 0;
+        }
+
+        .selector-item.selected .selector-check {
+            opacity: 1;
+        }
+
+        /* Form Group */
+        .form-section {
+            margin-bottom: 24px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .form-required {
+            color: var(--error);
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 14px 16px;
+            background: var(--bg-glass);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            font-size: 14px;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='rgba(255,255,255,0.5)' viewBox='0 0 24 24'%3E%3Cpath d='M12 15l-5-5h10l-5 5z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 20px;
+            cursor: pointer;
+        }
+
+        .form-select:focus {
+            outline: none;
+            border-color: var(--aurora-purple);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            background: var(--bg-glass);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--aurora-purple);
+        }
+
+        .form-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .form-textarea {
+            min-height: 150px;
+            resize: vertical;
+            font-family: inherit;
+            line-height: 1.6;
+        }
+
+        .form-helper {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 8px;
+        }
+
+        /* File Upload */
+        .file-upload {
+            border: 2px dashed rgba(255, 255, 255, 0.2);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .file-upload:hover {
+            border-color: var(--aurora-purple);
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .file-upload-icon {
+            font-size: 32px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .file-upload-text {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .file-upload-text span {
+            color: var(--aurora-purple);
+            font-weight: 600;
+        }
+
+        .file-upload-input {
+            display: none;
+        }
+
+        /* Attached Files */
+        .attached-files {
+            margin-top: 12px;
+        }
+
+        .attached-file {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: var(--bg-glass);
+            border-radius: var(--radius-md);
+            margin-bottom: 8px;
+        }
+
+        .attached-file-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: var(--radius-sm);
+            background: rgba(102, 126, 234, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .attached-file-icon i {
+            font-size: 18px;
+            color: var(--aurora-purple);
+        }
+
+        .attached-file-info {
+            flex: 1;
+        }
+
+        .attached-file-name {
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .attached-file-size {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .attached-file-remove {
+            padding: 8px;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+
+        /* Submit Button */
+        .submit-section {
+            padding: 20px;
+            position: sticky;
+            bottom: 70px;
+            background: linear-gradient(to top, var(--bg-primary) 50%, transparent);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--gradient-primary);
+            border: none;
+            border-radius: var(--radius-md);
+            color: white;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: var(--shadow-glow);
+            transition: all 0.3s;
+        }
+
+        .submit-btn:active {
+            transform: scale(0.98);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="aurora-bg">
+        <div class="aurora-orb aurora-orb-1"></div>
+        <div class="aurora-orb aurora-orb-2"></div>
+        <div class="aurora-orb aurora-orb-3"></div>
+    </div>
+
+    <div class="mobile-container inquiry-container">
+        <!-- Header -->
+        <header class="header">
+            <a href="mypage.html" class="header-back">
+                <i class="ri-arrow-left-line"></i>
+            </a>
+            <h1 class="header-title">1:1 문의하기</h1>
+            <div style="width: 40px;"></div>
+        </header>
+
+        <!-- Form Content -->
+        <div class="inquiry-content">
+            <!-- Target Type Selection -->
+            <div class="target-type-section">
+                <div class="target-type-label">문의 대상 선택</div>
+                <div class="target-type-options">
+                    <label class="target-type-option">
+                        <input type="radio" name="targetType" value="influencer" onchange="toggleInfluencerSelector(this.value)">
+                        <div class="target-type-card">
+                            <div class="target-type-icon">
+                                <i class="ri-user-star-line"></i>
+                            </div>
+                            <div class="target-type-text">인플루언서 문의</div>
+                            <div class="target-type-desc">코스/인플루언서 관련</div>
+                        </div>
+                    </label>
+                    <label class="target-type-option">
+                        <input type="radio" name="targetType" value="platform" checked onchange="toggleInfluencerSelector(this.value)">
+                        <div class="target-type-card">
+                            <div class="target-type-icon">
+                                <i class="ri-customer-service-2-line"></i>
+                            </div>
+                            <div class="target-type-text">플랫폼 문의</div>
+                            <div class="target-type-desc">결제/환불/기술 문제</div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Influencer/Course Selector -->
+            <div class="influencer-selector" id="influencerSelector">
+                <div class="form-label">문의할 코스 선택 <span class="form-required">*</span></div>
+                <div class="selector-card">
+                    <div class="selector-item" onclick="selectCourse(this)">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100" class="selector-avatar" alt="인플루언서">
+                        <div class="selector-info">
+                            <div class="selector-name">@travel_jina</div>
+                            <div class="selector-course">발리 럭셔리 힐링 7일</div>
+                        </div>
+                        <i class="ri-check-line selector-check"></i>
+                    </div>
+                    <div class="selector-item" onclick="selectCourse(this)">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100" class="selector-avatar" alt="인플루언서">
+                        <div class="selector-info">
+                            <div class="selector-name">@tokyo_life</div>
+                            <div class="selector-course">도쿄 맛집 & 카페 투어 5일</div>
+                        </div>
+                        <i class="ri-check-line selector-check"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Inquiry Type -->
+            <div class="form-section">
+                <label class="form-label">문의 유형 <span class="form-required">*</span></label>
+                <select class="form-select" required>
+                    <option value="" disabled selected>문의 유형을 선택하세요</option>
+                    <option value="general">일반문의</option>
+                    <option value="payment">결제문의</option>
+                    <option value="refund">환불문의</option>
+                    <option value="course">코스문의</option>
+                    <option value="other">기타</option>
+                </select>
+            </div>
+
+            <!-- Title -->
+            <div class="form-section">
+                <label class="form-label">제목 <span class="form-required">*</span></label>
+                <input type="text" class="form-input" placeholder="문의 제목을 입력하세요" required>
+            </div>
+
+            <!-- Content -->
+            <div class="form-section">
+                <label class="form-label">내용 <span class="form-required">*</span></label>
+                <textarea class="form-input form-textarea" placeholder="문의 내용을 자세히 작성해주세요" required></textarea>
+                <div class="form-helper">최소 10자 이상 입력해주세요</div>
+            </div>
+
+            <!-- File Upload -->
+            <div class="form-section">
+                <label class="form-label">첨부파일</label>
+                <div class="file-upload" onclick="document.getElementById('fileInput').click()">
+                    <div class="file-upload-icon">
+                        <i class="ri-upload-cloud-line"></i>
+                    </div>
+                    <div class="file-upload-text">
+                        <span>파일 선택</span> 또는 드래그 앤 드롭
+                    </div>
+                </div>
+                <input type="file" id="fileInput" class="file-upload-input" multiple accept="image/*,.pdf">
+                <div class="form-helper">이미지, PDF 파일 첨부 가능 (최대 10MB)</div>
+
+                <!-- Attached Files Preview -->
+                <div class="attached-files">
+                    <div class="attached-file">
+                        <div class="attached-file-icon">
+                            <i class="ri-image-line"></i>
+                        </div>
+                        <div class="attached-file-info">
+                            <div class="attached-file-name">screenshot.png</div>
+                            <div class="attached-file-size">2.4 MB</div>
+                        </div>
+                        <button class="attached-file-remove">
+                            <i class="ri-close-line"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="submit-section">
+            <button class="submit-btn">문의 등록</button>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <a href="home.html" class="nav-item">
+                <i class="ri-home-5-line"></i>
+                <span>홈</span>
+            </a>
+            <a href="parties.html" class="nav-item">
+                <i class="ri-goblet-line"></i>
+                <span>파티</span>
+            </a>
+            <a href="my-applications.html" class="nav-item">
+                <i class="ri-file-list-3-line"></i>
+                <span>내신청</span>
+            </a>
+            <a href="active-travels.html" class="nav-item">
+                <i class="ri-suitcase-3-line"></i>
+                <span>진행중</span>
+            </a>
+            <a href="mypage.html" class="nav-item active">
+                <i class="ri-user-fill"></i>
+                <span>마이</span>
+            </a>
+        </nav>
+    </div>
+
+    <script>
+        function toggleInfluencerSelector(value) {
+            const selector = document.getElementById('influencerSelector');
+            if (value === 'influencer') {
+                selector.classList.add('show');
+            } else {
+                selector.classList.remove('show');
+            }
+        }
+
+        function selectCourse(element) {
+            document.querySelectorAll('.selector-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            element.classList.add('selected');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>받은 문의 - TRAVELY 인플루언서</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="../shared/aurora-style.css">
+    <style>
+        .app-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background: var(--bg-secondary);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 24px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .sidebar-logo {
+            font-size: 24px;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 32px;
+        }
+
+        .sidebar-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            background: var(--bg-glass);
+            border-radius: var(--radius-lg);
+            margin-bottom: 24px;
+        }
+
+        .profile-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--aurora-purple);
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .profile-name {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .profile-handle {
+            font-size: 12px;
+            color: var(--aurora-purple);
+        }
+
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: var(--radius-md);
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .nav-item:hover {
+            background: var(--bg-glass);
+            color: var(--text-primary);
+        }
+
+        .nav-item.active {
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .nav-item i {
+            font-size: 18px;
+        }
+
+        .nav-divider {
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+            margin: 16px 0;
+        }
+
+        .nav-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 8px 16px;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 260px;
+            padding: 32px;
+        }
+
+        .main-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 800;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            padding: 24px;
+            background: var(--bg-glass);
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .stat-card:hover {
+            border-color: var(--aurora-purple);
+        }
+
+        .stat-card.active {
+            background: var(--gradient-primary);
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .stat-card.active .stat-label {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Filters */
+        .filters-row {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .filter-select {
+            padding: 12px 16px;
+            background: var(--bg-glass);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            font-size: 14px;
+            min-width: 180px;
+            cursor: pointer;
+        }
+
+        .filter-select option {
+            background: var(--bg-secondary);
+        }
+
+        .search-box {
+            flex: 1;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 16px 12px 44px;
+            background: var(--bg-glass);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        .search-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--aurora-purple);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+
+        /* Inquiry List */
+        .inquiry-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .inquiry-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 20px;
+            background: var(--bg-glass);
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .inquiry-item:hover {
+            border-color: var(--aurora-purple);
+            transform: translateX(4px);
+        }
+
+        .inquiry-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        .inquiry-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .inquiry-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+
+        .inquiry-user {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .inquiry-title {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .inquiry-preview {
+            font-size: 13px;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: 8px;
+        }
+
+        .inquiry-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .inquiry-course {
+            font-size: 12px;
+            color: var(--aurora-cyan);
+            background: rgba(79, 209, 197, 0.1);
+            padding: 4px 8px;
+            border-radius: var(--radius-sm);
+        }
+
+        .inquiry-date {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .inquiry-actions {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 12px;
+        }
+
+        .inquiry-status {
+            padding: 6px 12px;
+            border-radius: var(--radius-full);
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .inquiry-status.pending {
+            background: rgba(236, 201, 75, 0.2);
+            color: var(--warning);
+        }
+
+        .inquiry-status.completed {
+            background: rgba(72, 187, 120, 0.2);
+            color: var(--success);
+        }
+
+        .reply-btn {
+            padding: 8px 16px;
+            background: var(--gradient-primary);
+            border: none;
+            border-radius: var(--radius-md);
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s;
+        }
+
+        .reply-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin-top: 32px;
+        }
+
+        .pagination-btn {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-glass);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+            color: var(--text-secondary);
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .pagination-btn:hover {
+            border-color: var(--aurora-purple);
+            color: var(--text-primary);
+        }
+
+        .pagination-btn.active {
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .stats-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .filters-row {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="aurora-bg">
+        <div class="aurora-orb aurora-orb-1"></div>
+        <div class="aurora-orb aurora-orb-2"></div>
+        <div class="aurora-orb aurora-orb-3"></div>
+    </div>
+
+    <div class="app-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">TRAVELY</div>
+
+            <div class="sidebar-profile">
+                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200" class="profile-avatar" alt="Profile">
+                <div class="profile-info">
+                    <div class="profile-name">Travel Jina</div>
+                    <div class="profile-handle">@travel_jina</div>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">
+                    <i class="ri-dashboard-line"></i>
+                    Dashboard
+                </a>
+                <a href="course-list.html" class="nav-item">
+                    <i class="ri-map-pin-line"></i>
+                    My Courses
+                </a>
+                <a href="applications.html" class="nav-item">
+                    <i class="ri-user-follow-line"></i>
+                    Applications
+                </a>
+                <a href="inquiries.html" class="nav-item active">
+                    <i class="ri-question-answer-line"></i>
+                    Inquiries
+                </a>
+                <a href="settlements.html" class="nav-item">
+                    <i class="ri-money-dollar-circle-line"></i>
+                    Settlements
+                </a>
+
+                <div class="nav-divider"></div>
+                <div class="nav-label">Settings</div>
+
+                <a href="settings.html" class="nav-item">
+                    <i class="ri-settings-3-line"></i>
+                    Settings
+                </a>
+                <a href="profile-settings.html" class="nav-item">
+                    <i class="ri-user-settings-line"></i>
+                    Profile
+                </a>
+
+                <div class="nav-divider"></div>
+
+                <a href="#" class="nav-item">
+                    <i class="ri-logout-box-line"></i>
+                    Logout
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="main-header">
+                <h1 class="page-title">Received Inquiries</h1>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card active">
+                    <div class="stat-value">24</div>
+                    <div class="stat-label">Total</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">8</div>
+                    <div class="stat-label">Pending</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">16</div>
+                    <div class="stat-label">Completed</div>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="filters-row">
+                <select class="filter-select">
+                    <option value="">All Courses</option>
+                    <option value="bali">Bali Luxury Healing 7D</option>
+                    <option value="tokyo">Tokyo Food Tour 5D</option>
+                    <option value="paris">Paris Art Tour 6D</option>
+                    <option value="jeju">Jeju Healing Getaway 3D</option>
+                </select>
+                <div class="search-box">
+                    <i class="ri-search-line search-icon"></i>
+                    <input type="text" class="search-input" placeholder="Search by user name...">
+                </div>
+            </div>
+
+            <!-- Inquiry List -->
+            <div class="inquiry-list">
+                <div class="inquiry-item" onclick="location.href='inquiry-detail.html'">
+                    <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100" class="inquiry-avatar" alt="User">
+                    <div class="inquiry-content">
+                        <div class="inquiry-header">
+                            <span class="inquiry-user">Minji Kim</span>
+                        </div>
+                        <div class="inquiry-title">Question about visa requirements for Bali trip</div>
+                        <div class="inquiry-preview">Hello! I'm planning to join the Bali trip in February. I wanted to ask about the visa requirements...</div>
+                        <div class="inquiry-meta">
+                            <span class="inquiry-course">Bali Luxury Healing 7D</span>
+                            <span class="inquiry-date">10 mins ago</span>
+                        </div>
+                    </div>
+                    <div class="inquiry-actions">
+                        <span class="inquiry-status pending">Pending</span>
+                        <button class="reply-btn">
+                            <i class="ri-reply-line"></i>
+                            Reply
+                        </button>
+                    </div>
+                </div>
+
+                <div class="inquiry-item" onclick="location.href='inquiry-detail.html'">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100" class="inquiry-avatar" alt="User">
+                    <div class="inquiry-content">
+                        <div class="inquiry-header">
+                            <span class="inquiry-user">Junhyuk Park</span>
+                        </div>
+                        <div class="inquiry-title">Can I request a vegetarian meal option?</div>
+                        <div class="inquiry-preview">Hi! I'm a vegetarian and would like to know if the Tokyo food tour can accommodate my dietary needs...</div>
+                        <div class="inquiry-meta">
+                            <span class="inquiry-course">Tokyo Food Tour 5D</span>
+                            <span class="inquiry-date">32 mins ago</span>
+                        </div>
+                    </div>
+                    <div class="inquiry-actions">
+                        <span class="inquiry-status pending">Pending</span>
+                        <button class="reply-btn">
+                            <i class="ri-reply-line"></i>
+                            Reply
+                        </button>
+                    </div>
+                </div>
+
+                <div class="inquiry-item" onclick="location.href='inquiry-detail.html'">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100" class="inquiry-avatar" alt="User">
+                    <div class="inquiry-content">
+                        <div class="inquiry-header">
+                            <span class="inquiry-user">Daeun Jung</span>
+                        </div>
+                        <div class="inquiry-title">Regarding hotel room type preferences</div>
+                        <div class="inquiry-preview">I would prefer a single room if possible. Could you let me know about the room arrangements and any additional costs...</div>
+                        <div class="inquiry-meta">
+                            <span class="inquiry-course">Paris Art Tour 6D</span>
+                            <span class="inquiry-date">2 hours ago</span>
+                        </div>
+                    </div>
+                    <div class="inquiry-actions">
+                        <span class="inquiry-status completed">Completed</span>
+                        <button class="reply-btn">
+                            <i class="ri-eye-line"></i>
+                            View
+                        </button>
+                    </div>
+                </div>
+
+                <div class="inquiry-item" onclick="location.href='inquiry-detail.html'">
+                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100" class="inquiry-avatar" alt="User">
+                    <div class="inquiry-content">
+                        <div class="inquiry-header">
+                            <span class="inquiry-user">Suhyun Lee</span>
+                        </div>
+                        <div class="inquiry-title">Question about refund policy</div>
+                        <div class="inquiry-preview">What is the refund policy if I need to cancel due to unforeseen circumstances? I'm particularly concerned about...</div>
+                        <div class="inquiry-meta">
+                            <span class="inquiry-course">Bali Luxury Healing 7D</span>
+                            <span class="inquiry-date">3 hours ago</span>
+                        </div>
+                    </div>
+                    <div class="inquiry-actions">
+                        <span class="inquiry-status completed">Completed</span>
+                        <button class="reply-btn">
+                            <i class="ri-eye-line"></i>
+                            View
+                        </button>
+                    </div>
+                </div>
+
+                <div class="inquiry-item" onclick="location.href='inquiry-detail.html'">
+                    <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100" class="inquiry-avatar" alt="User">
+                    <div class="inquiry-content">
+                        <div class="inquiry-header">
+                            <span class="inquiry-user">Minjun Choi</span>
+                        </div>
+                        <div class="inquiry-title">Airport pickup service inquiry</div>
+                        <div class="inquiry-preview">Is there an airport pickup service included? My flight arrives late at night and I'm wondering about transportation...</div>
+                        <div class="inquiry-meta">
+                            <span class="inquiry-course">Jeju Healing Getaway 3D</span>
+                            <span class="inquiry-date">5 hours ago</span>
+                        </div>
+                    </div>
+                    <div class="inquiry-actions">
+                        <span class="inquiry-status pending">Pending</span>
+                        <button class="reply-btn">
+                            <i class="ri-reply-line"></i>
+                            Reply
+                        </button>
+                    </div>
+                </div>
+
+                <div class="inquiry-item" onclick="location.href='inquiry-detail.html'">
+                    <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100" class="inquiry-avatar" alt="User">
+                    <div class="inquiry-content">
+                        <div class="inquiry-header">
+                            <span class="inquiry-user">Yuna Han</span>
+                        </div>
+                        <div class="inquiry-title">Travel insurance recommendation</div>
+                        <div class="inquiry-preview">Do you have any recommended travel insurance companies? I want to make sure I'm properly covered for the trip...</div>
+                        <div class="inquiry-meta">
+                            <span class="inquiry-course">Bali Luxury Healing 7D</span>
+                            <span class="inquiry-date">Yesterday</span>
+                        </div>
+                    </div>
+                    <div class="inquiry-actions">
+                        <span class="inquiry-status completed">Completed</span>
+                        <button class="reply-btn">
+                            <i class="ri-eye-line"></i>
+                            View
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination">
+                <button class="pagination-btn">
+                    <i class="ri-arrow-left-s-line"></i>
+                </button>
+                <button class="pagination-btn active">1</button>
+                <button class="pagination-btn">2</button>
+                <button class="pagination-btn">3</button>
+                <button class="pagination-btn">
+                    <i class="ri-arrow-right-s-line"></i>
+                </button>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
