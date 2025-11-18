@@ -502,16 +502,51 @@ ON inquiries FOR UPDATE
 USING (user_id = auth.uid())
 WITH CHECK (user_id = auth.uid());
 
--- Target influencer can read inquiries directed to them
+-- Influencer can read inquiries related to their courses/parties
 CREATE POLICY "inquiries_select_influencer"
 ON inquiries FOR SELECT
-USING (target_influencer_id = get_my_influencer_id());
+USING (
+  (
+    reference_type = 'course'
+    AND EXISTS (
+      SELECT 1 FROM courses c
+      WHERE c.id = inquiries.reference_id
+      AND c.influencer_id = get_my_influencer_id()
+    )
+  )
+  OR (
+    reference_type = 'party'
+    AND EXISTS (
+      SELECT 1 FROM parties p
+      WHERE p.id = inquiries.reference_id
+      AND p.influencer_id = get_my_influencer_id()
+    )
+  )
+  OR assigned_to = auth.uid()
+);
 
--- Target influencer can update inquiries (respond)
+-- Influencer can update inquiries related to their courses/parties
 CREATE POLICY "inquiries_update_influencer"
 ON inquiries FOR UPDATE
-USING (target_influencer_id = get_my_influencer_id())
-WITH CHECK (target_influencer_id = get_my_influencer_id());
+USING (
+  (
+    reference_type = 'course'
+    AND EXISTS (
+      SELECT 1 FROM courses c
+      WHERE c.id = inquiries.reference_id
+      AND c.influencer_id = get_my_influencer_id()
+    )
+  )
+  OR (
+    reference_type = 'party'
+    AND EXISTS (
+      SELECT 1 FROM parties p
+      WHERE p.id = inquiries.reference_id
+      AND p.influencer_id = get_my_influencer_id()
+    )
+  )
+  OR assigned_to = auth.uid()
+);
 
 -- Admins can read all inquiries
 CREATE POLICY "inquiries_select_admin"
