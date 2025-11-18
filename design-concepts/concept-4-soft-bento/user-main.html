@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>TRAVELY - Concept 4: Soft Bento (User)</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #f5f3f0;
+            --card: #ffffff;
+            --text: #2d2d2d;
+            --text-light: #8a8a8a;
+            --purple: #a78bfa;
+            --pink: #f9a8d4;
+            --blue: #93c5fd;
+            --green: #86efac;
+            --peach: #fed7aa;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans KR', sans-serif;
+            background: var(--bg);
+            min-height: 100vh;
+            color: var(--text);
+        }
+
+        .mobile-container {
+            max-width: 430px;
+            margin: 0 auto;
+            min-height: 100vh;
+            padding-bottom: 80px;
+        }
+
+        /* Header */
+        .header {
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: var(--bg);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--purple);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .header-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: var(--card);
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text);
+            font-size: 18px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        /* Bento Grid */
+        .bento-grid {
+            padding: 20px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .bento-item {
+            background: var(--card);
+            border-radius: 20px;
+            padding: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+        }
+
+        .bento-hero {
+            grid-column: span 2;
+            background: linear-gradient(135deg, var(--purple), var(--pink));
+            color: white;
+            padding: 24px;
+        }
+
+        .bento-hero h1 {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .bento-hero p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        /* Course Bento */
+        .bento-course {
+            grid-column: span 2;
+        }
+
+        .bento-title {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .bento-title i {
+            color: var(--purple);
+        }
+
+        .course-scroll {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            margin: 0 -16px;
+            padding: 0 16px;
+        }
+
+        .course-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        .mini-course {
+            flex: 0 0 160px;
+            background: var(--bg);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .mini-course-img {
+            width: 100%;
+            height: 100px;
+            object-fit: cover;
+        }
+
+        .mini-course-content {
+            padding: 12px;
+        }
+
+        .mini-course-title {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .mini-course-price {
+            font-size: 14px;
+            font-weight: 800;
+            color: var(--purple);
+        }
+
+        /* Stats Bento */
+        .bento-stat {
+            text-align: center;
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin: 0 auto 8px;
+        }
+
+        .stat-icon.purple { background: rgba(167, 139, 250, 0.2); color: var(--purple); }
+        .stat-icon.pink { background: rgba(249, 168, 212, 0.2); color: var(--pink); }
+        .stat-icon.blue { background: rgba(147, 197, 253, 0.2); color: var(--blue); }
+        .stat-icon.green { background: rgba(134, 239, 172, 0.2); color: var(--green); }
+
+        .stat-value {
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: var(--text-light);
+        }
+
+        /* Party Bento */
+        .party-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .party-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: var(--bg);
+            border-radius: 12px;
+        }
+
+        .party-date-box {
+            width: 44px;
+            height: 44px;
+            background: var(--peach);
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .party-day {
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .party-month {
+            font-size: 9px;
+            color: var(--text-light);
+        }
+
+        .party-info {
+            flex: 1;
+        }
+
+        .party-name {
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .party-loc {
+            font-size: 10px;
+            color: var(--text-light);
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 430px;
+            background: var(--card);
+            padding: 8px 16px 24px;
+            display: flex;
+            justify-content: space-around;
+            border-radius: 20px 20px 0 0;
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.06);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 10px;
+            padding: 8px 16px;
+            border-radius: 12px;
+        }
+
+        .nav-item.active {
+            color: var(--purple);
+            background: rgba(167, 139, 250, 0.1);
+        }
+
+        .nav-item i {
+            font-size: 22px;
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-container">
+        <header class="header">
+            <div class="logo">travely</div>
+            <div class="header-actions">
+                <button class="header-btn"><i class="ri-search-line"></i></button>
+                <button class="header-btn"><i class="ri-notification-3-line"></i></button>
+            </div>
+        </header>
+
+        <div class="bento-grid">
+            <!-- Hero -->
+            <div class="bento-item bento-hero">
+                <h1>안녕하세요! 👋</h1>
+                <p>오늘도 특별한 여행을 찾아볼까요?</p>
+            </div>
+
+            <!-- Stats -->
+            <div class="bento-item bento-stat">
+                <div class="stat-icon purple"><i class="ri-compass-3-line"></i></div>
+                <div class="stat-value">12</div>
+                <div class="stat-label">오픈된 코스</div>
+            </div>
+
+            <div class="bento-item bento-stat">
+                <div class="stat-icon pink"><i class="ri-calendar-event-line"></i></div>
+                <div class="stat-value">8</div>
+                <div class="stat-label">예정된 파티</div>
+            </div>
+
+            <!-- Courses -->
+            <div class="bento-item bento-course">
+                <div class="bento-title">
+                    <i class="ri-fire-fill"></i> 인기 코스
+                </div>
+                <div class="course-scroll">
+                    <div class="mini-course">
+                        <img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=400" class="mini-course-img">
+                        <div class="mini-course-content">
+                            <div class="mini-course-title">발리 힐링 여행</div>
+                            <div class="mini-course-price">150만원</div>
+                        </div>
+                    </div>
+                    <div class="mini-course">
+                        <img src="https://images.unsplash.com/photo-1480796927426-f609979314bd?w=400" class="mini-course-img">
+                        <div class="mini-course-content">
+                            <div class="mini-course-title">도쿄 카페 투어</div>
+                            <div class="mini-course-price">98만원</div>
+                        </div>
+                    </div>
+                    <div class="mini-course">
+                        <img src="https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=400" class="mini-course-img">
+                        <div class="mini-course-content">
+                            <div class="mini-course-title">파리 아트 투어</div>
+                            <div class="mini-course-price">280만원</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Parties -->
+            <div class="bento-item" style="grid-column: span 2;">
+                <div class="bento-title">
+                    <i class="ri-calendar-check-line"></i> 다가오는 파티
+                </div>
+                <div class="party-list">
+                    <div class="party-item">
+                        <div class="party-date-box">
+                            <div class="party-day">14</div>
+                            <div class="party-month">FEB</div>
+                        </div>
+                        <div class="party-info">
+                            <div class="party-name">발렌타인 와인 파티</div>
+                            <div class="party-loc">서울 성수동</div>
+                        </div>
+                    </div>
+                    <div class="party-item">
+                        <div class="party-date-box">
+                            <div class="party-day">22</div>
+                            <div class="party-month">FEB</div>
+                        </div>
+                        <div class="party-info">
+                            <div class="party-name">봄맞이 피크닉</div>
+                            <div class="party-loc">서울 한강</div>
+                        </div>
+                    </div>
+                    <div class="party-item">
+                        <div class="party-date-box">
+                            <div class="party-day">01</div>
+                            <div class="party-month">MAR</div>
+                        </div>
+                        <div class="party-info">
+                            <div class="party-name">K-POP 댄스 파티</div>
+                            <div class="party-loc">서울 홍대</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <nav class="bottom-nav">
+            <a href="#" class="nav-item active">
+                <i class="ri-home-5-fill"></i>
+                <span>홈</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="ri-file-list-3-line"></i>
+                <span>신청</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="ri-suitcase-3-line"></i>
+                <span>여행</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="ri-user-line"></i>
+                <span>마이</span>
+            </a>
+        </nav>
+    </div>
+</body>
+</html>

@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>TRAVELY - Concept 3: Neo Tropical (User)</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --coral: #FF6B6B;
+            --turquoise: #4ECDC4;
+            --yellow: #FFE66D;
+            --navy: #2C3E50;
+            --cream: #FFF8F0;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans KR', sans-serif;
+            background: var(--cream);
+            min-height: 100vh;
+            color: var(--navy);
+        }
+
+        .mobile-container {
+            max-width: 430px;
+            margin: 0 auto;
+            min-height: 100vh;
+            position: relative;
+            padding-bottom: 80px;
+        }
+
+        /* Header */
+        .header {
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: var(--cream);
+        }
+
+        .logo {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--coral);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .header-btn {
+            width: 42px;
+            height: 42px;
+            border-radius: 14px;
+            background: var(--white);
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--navy);
+            font-size: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            position: relative;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            width: 8px;
+            height: 8px;
+            background: var(--coral);
+            border-radius: 50%;
+        }
+
+        /* Hero Banner */
+        .hero-banner {
+            margin: 20px;
+            padding: 28px 24px;
+            background: linear-gradient(135deg, var(--coral), #FF8E8E);
+            border-radius: 24px;
+            color: var(--white);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-banner::after {
+            content: '';
+            position: absolute;
+            bottom: -40px;
+            right: -40px;
+            width: 120px;
+            height: 120px;
+            background: var(--yellow);
+            border-radius: 50%;
+            opacity: 0.3;
+        }
+
+        .hero-emoji {
+            font-size: 40px;
+            margin-bottom: 12px;
+        }
+
+        .hero-title {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .hero-subtitle {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        /* Section */
+        .section {
+            padding: 0 20px;
+            margin-bottom: 28px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        .section-more {
+            font-size: 14px;
+            color: var(--turquoise);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* Course Cards */
+        .course-scroll {
+            display: flex;
+            gap: 16px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+        }
+
+        .course-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        .course-card {
+            flex: 0 0 240px;
+            background: var(--white);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+        }
+
+        .course-image-wrap {
+            position: relative;
+        }
+
+        .course-image {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+        }
+
+        .course-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            padding: 6px 12px;
+            background: var(--yellow);
+            color: var(--navy);
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .course-content {
+            padding: 16px;
+        }
+
+        .course-influencer {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .influencer-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 2px solid var(--turquoise);
+        }
+
+        .influencer-name {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--turquoise);
+        }
+
+        .course-title {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        .course-meta {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 12px;
+        }
+
+        .course-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .course-price {
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--coral);
+        }
+
+        .course-spots {
+            font-size: 11px;
+            padding: 4px 10px;
+            background: var(--turquoise);
+            color: white;
+            border-radius: 12px;
+            font-weight: 600;
+        }
+
+        /* Party Cards */
+        .party-card {
+            flex: 0 0 180px;
+            background: var(--white);
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+        }
+
+        .party-date-wrap {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: linear-gradient(135deg, var(--turquoise), #5DE0D6);
+            border-radius: 10px;
+            margin-bottom: 12px;
+        }
+
+        .party-date {
+            font-size: 13px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .party-title {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .party-location {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 10px;
+        }
+
+        .party-price {
+            font-size: 14px;
+            font-weight: 800;
+            color: var(--navy);
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 430px;
+            background: var(--white);
+            padding: 12px 20px 28px;
+            display: flex;
+            justify-content: space-around;
+            border-top-left-radius: 24px;
+            border-top-right-radius: 24px;
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            color: #bbb;
+            text-decoration: none;
+            font-size: 10px;
+            font-weight: 500;
+        }
+
+        .nav-item.active {
+            color: var(--coral);
+        }
+
+        .nav-item i {
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-container">
+        <header class="header">
+            <div class="logo">TRAVELY</div>
+            <div class="header-actions">
+                <button class="header-btn">
+                    <i class="ri-search-line"></i>
+                </button>
+                <button class="header-btn">
+                    <i class="ri-notification-3-line"></i>
+                    <span class="notification-badge"></span>
+                </button>
+            </div>
+        </header>
+
+        <div class="hero-banner">
+            <div class="hero-emoji">🌴</div>
+            <h1 class="hero-title">떠나요, 함께!</h1>
+            <p class="hero-subtitle">인플루언서와 함께하는 특별한 여행</p>
+        </div>
+
+        <section class="section">
+            <div class="section-header">
+                <h2 class="section-title">인기 코스 🔥</h2>
+                <a href="#" class="section-more">전체보기</a>
+            </div>
+            <div class="course-scroll">
+                <div class="course-card">
+                    <div class="course-image-wrap">
+                        <img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=600" alt="발리" class="course-image">
+                        <span class="course-badge">HOT</span>
+                    </div>
+                    <div class="course-content">
+                        <div class="course-influencer">
+                            <img src="https://i.pravatar.cc/100?img=1" alt="여행왕" class="influencer-avatar">
+                            <span class="influencer-name">여행왕</span>
+                        </div>
+                        <h3 class="course-title">발리 5박 6일 힐링</h3>
+                        <div class="course-meta">3.15 - 3.20 · 발리</div>
+                        <div class="course-footer">
+                            <span class="course-price">150만원</span>
+                            <span class="course-spots">3/10</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="course-card">
+                    <div class="course-image-wrap">
+                        <img src="https://images.unsplash.com/photo-1480796927426-f609979314bd?w=600" alt="도쿄" class="course-image">
+                        <span class="course-badge">NEW</span>
+                    </div>
+                    <div class="course-content">
+                        <div class="course-influencer">
+                            <img src="https://i.pravatar.cc/100?img=5" alt="도쿄러버" class="influencer-avatar">
+                            <span class="influencer-name">도쿄러버</span>
+                        </div>
+                        <h3 class="course-title">도쿄 감성 카페 투어</h3>
+                        <div class="course-meta">4.1 - 4.5 · 도쿄</div>
+                        <div class="course-footer">
+                            <span class="course-price">98만원</span>
+                            <span class="course-spots">5/8</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="course-card">
+                    <div class="course-image-wrap">
+                        <img src="https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=600" alt="파리" class="course-image">
+                    </div>
+                    <div class="course-content">
+                        <div class="course-influencer">
+                            <img src="https://i.pravatar.cc/100?img=9" alt="유럽여행가" class="influencer-avatar">
+                            <span class="influencer-name">유럽여행가</span>
+                        </div>
+                        <h3 class="course-title">파리 7일 아트 투어</h3>
+                        <div class="course-meta">5.10 - 5.17 · 파리</div>
+                        <div class="course-footer">
+                            <span class="course-price">280만원</span>
+                            <span class="course-spots">2/6</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <h2 class="section-title">파티 🎉</h2>
+                <a href="#" class="section-more">전체보기</a>
+            </div>
+            <div class="course-scroll">
+                <div class="party-card">
+                    <div class="party-date-wrap">
+                        <span class="party-date">2.14 금</span>
+                    </div>
+                    <h3 class="party-title">발렌타인 와인 파티</h3>
+                    <p class="party-location">📍 서울 성수동</p>
+                    <span class="party-price">50,000원</span>
+                </div>
+
+                <div class="party-card">
+                    <div class="party-date-wrap">
+                        <span class="party-date">2.22 토</span>
+                    </div>
+                    <h3 class="party-title">봄맞이 피크닉</h3>
+                    <p class="party-location">📍 서울 한강</p>
+                    <span class="party-price">30,000원</span>
+                </div>
+
+                <div class="party-card">
+                    <div class="party-date-wrap">
+                        <span class="party-date">3.1 토</span>
+                    </div>
+                    <h3 class="party-title">K-POP 댄스 파티</h3>
+                    <p class="party-location">📍 서울 홍대</p>
+                    <span class="party-price">40,000원</span>
+                </div>
+            </div>
+        </section>
+
+        <nav class="bottom-nav">
+            <a href="#" class="nav-item active">
+                <i class="ri-home-5-fill"></i>
+                <span>홈</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="ri-file-list-3-line"></i>
+                <span>내 신청</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="ri-suitcase-3-line"></i>
+                <span>진행 중</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="ri-user-line"></i>
+                <span>마이</span>
+            </a>
+        </nav>
+    </div>
+</body>
+</html>

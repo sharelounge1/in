@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRAVELY - Concept 3: Neo Tropical (Influencer)</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #fef9f3;
+            --card: #ffffff;
+            --text: #2d2d2d;
+            --text-light: #777777;
+            --coral: #FF6B6B;
+            --turquoise: #4ECDC4;
+            --yellow: #FFE66D;
+            --pink: #FF8E9E;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans KR', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            background: var(--bg);
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 900;
+            color: var(--coral);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text);
+            font-size: 14px;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--coral);
+        }
+
+        .header-btn {
+            padding: 12px 28px;
+            background: var(--coral);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .header-btn:hover {
+            background: var(--turquoise);
+            transform: translateY(-2px);
+        }
+
+        /* Hero */
+        .hero {
+            padding: 80px 40px 100px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            right: -100px;
+            width: 300px;
+            height: 300px;
+            background: var(--yellow);
+            border-radius: 50%;
+            opacity: 0.3;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -50px;
+            left: -50px;
+            width: 200px;
+            height: 200px;
+            background: var(--turquoise);
+            border-radius: 50%;
+            opacity: 0.3;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            background: var(--turquoise);
+            color: white;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 24px;
+        }
+
+        .hero h1 {
+            font-size: 52px;
+            font-weight: 900;
+            line-height: 1.2;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 span {
+            color: var(--coral);
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: var(--text-light);
+            margin-bottom: 40px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 18px 40px;
+            background: var(--coral);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 700;
+            transition: all 0.3s;
+            box-shadow: 0 8px 20px rgba(255, 107, 107, 0.3);
+        }
+
+        .hero-cta:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(255, 107, 107, 0.4);
+        }
+
+        /* Stats */
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            padding: 60px 40px;
+            background: white;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 48px;
+            font-weight: 900;
+            color: var(--turquoise);
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--text-light);
+            margin-top: 4px;
+        }
+
+        /* Features */
+        .features {
+            padding: 100px 40px;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            background: var(--yellow);
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: 36px;
+            font-weight: 900;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 32px;
+            border-radius: 24px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .feature-icon.coral { background: rgba(255, 107, 107, 0.15); color: var(--coral); }
+        .feature-icon.turquoise { background: rgba(78, 205, 196, 0.15); color: var(--turquoise); }
+        .feature-icon.yellow { background: rgba(255, 230, 109, 0.3); color: #d4a600; }
+        .feature-icon.pink { background: rgba(255, 142, 158, 0.15); color: var(--pink); }
+
+        .feature-title {
+            font-size: 16px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .feature-desc {
+            font-size: 14px;
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        /* How it works */
+        .how-it-works {
+            padding: 100px 40px;
+            background: white;
+        }
+
+        .steps {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .step {
+            text-align: center;
+            flex: 1;
+            position: relative;
+        }
+
+        .step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 40px;
+            right: -20px;
+            width: 40px;
+            height: 2px;
+            background: var(--turquoise);
+        }
+
+        .step-number {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--turquoise);
+            color: white;
+            font-size: 32px;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+
+        .step-title {
+            font-size: 16px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .step-desc {
+            font-size: 13px;
+            color: var(--text-light);
+        }
+
+        /* Commission */
+        .commission {
+            padding: 100px 40px;
+        }
+
+        .commission-card {
+            max-width: 600px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, var(--coral), var(--pink));
+            padding: 60px;
+            border-radius: 32px;
+            text-align: center;
+            color: white;
+        }
+
+        .commission-rate {
+            font-size: 72px;
+            font-weight: 900;
+        }
+
+        .commission-label {
+            font-size: 16px;
+            opacity: 0.9;
+            margin-bottom: 24px;
+        }
+
+        .commission-desc {
+            font-size: 14px;
+            opacity: 0.85;
+            line-height: 1.8;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 100px 40px;
+            background: var(--turquoise);
+            text-align: center;
+        }
+
+        .cta-section h2 {
+            font-size: 40px;
+            font-weight: 900;
+            color: white;
+            margin-bottom: 16px;
+        }
+
+        .cta-section p {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 32px;
+        }
+
+        .cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 18px 40px;
+            background: white;
+            color: var(--turquoise);
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+
+        .cta-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Footer */
+        .footer {
+            padding: 40px;
+            text-align: center;
+            font-size: 13px;
+            color: var(--text-light);
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 16px 20px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+                padding: 60px 20px;
+            }
+
+            .hero h1 {
+                font-size: 36px;
+            }
+
+            .stats {
+                flex-direction: column;
+                gap: 24px;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .steps {
+                flex-direction: column;
+            }
+
+            .step::after {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">travely</div>
+        <nav class="nav-links">
+            <a href="#features">기능</a>
+            <a href="#how">이용방법</a>
+            <a href="#commission">수수료</a>
+        </nav>
+        <button class="header-btn">시작하기</button>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+        <span class="hero-badge">FOR INFLUENCERS</span>
+        <h1>팬과 함께<br><span>특별한 여행</span>을<br>만들어보세요</h1>
+        <p>복잡한 결제, 환불, 정산, 세무는 저희에게 맡기고 여행 기획에만 집중하세요</p>
+        <a href="#" class="hero-cta">
+            <i class="ri-rocket-line"></i>
+            지금 시작하기
+        </a>
+    </section>
+
+    <!-- Stats -->
+    <section class="stats">
+        <div class="stat">
+            <div class="stat-value">500+</div>
+            <div class="stat-label">등록 인플루언서</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value">2,000+</div>
+            <div class="stat-label">진행된 여행</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value">98%</div>
+            <div class="stat-label">만족도</div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features" id="features">
+        <div class="section-header">
+            <span class="section-badge">FEATURES</span>
+            <h2 class="section-title">강력한 기능들</h2>
+        </div>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <div class="feature-icon coral">
+                    <i class="ri-calendar-check-line"></i>
+                </div>
+                <h3 class="feature-title">간편한 코스 등록</h3>
+                <p class="feature-desc">일정, 숙소, 포함사항을 쉽게 등록하고 관리할 수 있어요</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon turquoise">
+                    <i class="ri-bank-card-line"></i>
+                </div>
+                <h3 class="feature-title">안전한 결제</h3>
+                <p class="feature-desc">네이버페이로 안전하고 편리한 결제 환경을 제공해요</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon yellow">
+                    <i class="ri-group-line"></i>
+                </div>
+                <h3 class="feature-title">신청자 관리</h3>
+                <p class="feature-desc">신청자 조회와 선정 처리를 한 곳에서 관리해요</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon pink">
+                    <i class="ri-notification-3-line"></i>
+                </div>
+                <h3 class="feature-title">공지사항 발송</h3>
+                <p class="feature-desc">참가자에게 중요 공지를 손쉽게 전달해요</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon coral">
+                    <i class="ri-calculator-line"></i>
+                </div>
+                <h3 class="feature-title">자동 정산</h3>
+                <p class="feature-desc">수수료 계산부터 세금계산서까지 자동 처리돼요</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon turquoise">
+                    <i class="ri-pie-chart-line"></i>
+                </div>
+                <h3 class="feature-title">수익 분석</h3>
+                <p class="feature-desc">월별 수익과 정산 내역을 한눈에 확인해요</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- How it works -->
+    <section class="how-it-works" id="how">
+        <div class="section-header">
+            <span class="section-badge">HOW IT WORKS</span>
+            <h2 class="section-title">간단한 시작</h2>
+        </div>
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <h3 class="step-title">인플루언서 등록</h3>
+                <p class="step-desc">기본 정보와 SNS 계정 등록 후 심사</p>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <h3 class="step-title">코스/파티 생성</h3>
+                <p class="step-desc">여행 일정 입력 후 모집 시작</p>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <h3 class="step-title">여행 진행</h3>
+                <p class="step-desc">참가자 선정 후 여행 진행</p>
+            </div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <h3 class="step-title">정산 완료</h3>
+                <p class="step-desc">여행 종료 후 자동 정산</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Commission -->
+    <section class="commission" id="commission">
+        <div class="section-header">
+            <span class="section-badge">COMMISSION</span>
+            <h2 class="section-title">투명한 수수료</h2>
+        </div>
+        <div class="commission-card">
+            <div class="commission-rate">10%</div>
+            <p class="commission-label">기본 정산 수수료</p>
+            <p class="commission-desc">
+                참가비에서 플랫폼 수수료 10%와 PG 수수료 3.3%를 제외한<br>
+                금액이 정산됩니다. 개별 수수료율 협의가 가능해요!
+            </p>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+        <h2>지금 바로 시작하세요!</h2>
+        <p>팬들과 특별한 추억을 만들어보세요</p>
+        <a href="#" class="cta-btn">
+            <i class="ri-arrow-right-line"></i>
+            인플루언서 등록
+        </a>
+    </section>
+
+    <footer class="footer">
+        <p>&copy; 2024 TRAVELY. All rights reserved.</p>
+    </footer>
+</body>
+</html>
