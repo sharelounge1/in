@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>경비 현황 - 인플루언서</title>
+  <link rel="stylesheet" href="../shared/clean-style.css">
+  <style>
+    /* PC Layout Styles */
+    .pc-layout {
+      display: flex;
+      min-height: 100vh;
+      background: var(--bg-light);
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 250px;
+      background: var(--bg-white);
+      border-right: 1px solid var(--border-light);
+      position: fixed;
+      height: 100vh;
+      overflow-y: auto;
+      z-index: 100;
+      transition: transform 0.3s ease;
+    }
+
+    .sidebar-header {
+      padding: 24px;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .sidebar-logo {
+      font-size: 20px;
+      font-weight: 700;
+      background: var(--primary-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .sidebar-nav {
+      padding: 16px 0;
+    }
+
+    .sidebar-menu-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 24px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+
+    .sidebar-menu-item:hover {
+      background: var(--bg-light);
+      color: var(--text-primary);
+    }
+
+    .sidebar-menu-item.active {
+      background: rgba(124, 58, 237, 0.1);
+      color: var(--primary-start);
+      border-right: 3px solid var(--primary-start);
+    }
+
+    .sidebar-menu-item svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      margin-left: 250px;
+      max-width: calc(1400px - 250px);
+    }
+
+    /* Top Header */
+    .top-header {
+      background: var(--bg-white);
+      border-bottom: 1px solid var(--border-light);
+      padding: 16px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    .breadcrumb a {
+      color: var(--text-secondary);
+      text-decoration: none;
+    }
+
+    .breadcrumb a:hover {
+      color: var(--primary-start);
+    }
+
+    .breadcrumb-current {
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .mobile-link {
+      font-size: 13px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .mobile-link:hover {
+      color: var(--primary-start);
+    }
+
+    /* Page Content */
+    .page-content {
+      padding: 32px;
+    }
+
+    .page-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+
+    .page-subtitle {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+    }
+
+    /* Stats Cards */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .stat-box {
+      background: var(--bg-white);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      box-shadow: var(--shadow-card);
+    }
+
+    .stat-box-label {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+
+    .stat-box-value {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .stat-box-value.positive {
+      color: #10B981;
+    }
+
+    .stat-box-value.negative {
+      color: #EF4444;
+    }
+
+    /* Table */
+    .table-container {
+      background: var(--bg-white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+    }
+
+    .table-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border-light);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .table-title {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .data-table th {
+      padding: 14px 24px;
+      text-align: left;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      background: var(--bg-light);
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .data-table td {
+      padding: 16px 24px;
+      font-size: 14px;
+      color: var(--text-primary);
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .data-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .data-table tr:hover {
+      background: var(--bg-light);
+    }
+
+    .participant-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .participant-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--bg-gray);
+    }
+
+    .participant-name {
+      font-weight: 500;
+    }
+
+    .balance-positive {
+      color: #10B981;
+      font-weight: 600;
+    }
+
+    .balance-negative {
+      color: #EF4444;
+      font-weight: 600;
+    }
+
+    .balance-zero {
+      color: var(--text-muted);
+    }
+
+    /* Responsive */
+    .sidebar-toggle {
+      display: none;
+      background: none;
+      border: none;
+      padding: 8px;
+      cursor: pointer;
+    }
+
+    @media (max-width: 1024px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .main-content {
+        margin-left: 0;
+        max-width: 100%;
+      }
+
+      .sidebar-toggle {
+        display: block;
+      }
+
+      .stats-row {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .stats-row {
+        grid-template-columns: 1fr;
+      }
+
+      .data-table {
+        display: block;
+        overflow-x: auto;
+      }
+    }
+
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 99;
+    }
+
+    .sidebar-overlay.open {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="pc-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">인플루언서</div>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="dashboard-pc.html" class="sidebar-menu-item">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+          </svg>
+          대시보드
+        </a>
+        <a href="course-list-pc.html" class="sidebar-menu-item">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+          </svg>
+          코스 관리
+        </a>
+        <a href="active-course-pc.html" class="sidebar-menu-item">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+          진행중 코스
+        </a>
+        <a href="parties-pc.html" class="sidebar-menu-item">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+          </svg>
+          파티 관리
+        </a>
+        <a href="settlements-pc.html" class="sidebar-menu-item active">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+          </svg>
+          정산 관리
+        </a>
+        <a href="messages-pc.html" class="sidebar-menu-item">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+          </svg>
+          메시지
+        </a>
+        <a href="notifications-pc.html" class="sidebar-menu-item">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+          </svg>
+          알림
+        </a>
+        <a href="settings-pc.html" class="sidebar-menu-item">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+          설정
+        </a>
+      </nav>
+    </aside>
+
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Top Header -->
+      <header class="top-header">
+        <div style="display: flex; align-items: center; gap: 16px;">
+          <button class="sidebar-toggle" onclick="toggleSidebar()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+          <nav class="breadcrumb">
+            <a href="dashboard-pc.html">홈</a>
+            <span>/</span>
+            <a href="settlements-pc.html">정산 관리</a>
+            <span>/</span>
+            <span class="breadcrumb-current">경비 현황</span>
+          </nav>
+        </div>
+        <div class="header-actions">
+          <a href="../influencer/expense-status.html" class="mobile-link">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+            </svg>
+            모바일 버전
+          </a>
+        </div>
+      </header>
+
+      <!-- Page Content -->
+      <div class="page-content">
+        <h1 class="page-title">경비 현황</h1>
+        <p class="page-subtitle">제주도 3박 4일 힐링 여행의 경비 현황을 확인하세요</p>
+
+        <!-- Stats -->
+        <div class="stats-row">
+          <div class="stat-box">
+            <div class="stat-box-label">총 경비</div>
+            <div class="stat-box-value">3,240,000원</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-box-label">1인당 금액</div>
+            <div class="stat-box-value">270,000원</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-box-label">정산 완료</div>
+            <div class="stat-box-value positive">8명</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-box-label">미정산</div>
+            <div class="stat-box-value negative">4명</div>
+          </div>
+        </div>
+
+        <!-- Participant Balances Table -->
+        <div class="table-container">
+          <div class="table-header">
+            <h3 class="table-title">참가자별 잔액</h3>
+            <a href="nbang-manage-pc.html" class="btn btn-primary" style="padding: 8px 16px; font-size: 13px;">
+              N빵 계산
+            </a>
+          </div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>참가자</th>
+                <th>지불 금액</th>
+                <th>정산 금액</th>
+                <th>잔액</th>
+                <th>상태</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div class="participant-info">
+                    <div class="participant-avatar"></div>
+                    <span class="participant-name">김민지</span>
+                  </div>
+                </td>
+                <td>540,000원</td>
+                <td>270,000원</td>
+                <td class="balance-positive">+270,000원</td>
+                <td><span class="tag tag-success">받을 금액</span></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="participant-info">
+                    <div class="participant-avatar"></div>
+                    <span class="participant-name">이서윤</span>
+                  </div>
+                </td>
+                <td>270,000원</td>
+                <td>270,000원</td>
+                <td class="balance-zero">0원</td>
+                <td><span class="tag tag-primary">정산 완료</span></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="participant-info">
+                    <div class="participant-avatar"></div>
+                    <span class="participant-name">박준혁</span>
+                  </div>
+                </td>
+                <td>0원</td>
+                <td>270,000원</td>
+                <td class="balance-negative">-270,000원</td>
+                <td><span class="tag tag-warning">보낼 금액</span></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="participant-info">
+                    <div class="participant-avatar"></div>
+                    <span class="participant-name">최수아</span>
+                  </div>
+                </td>
+                <td>810,000원</td>
+                <td>270,000원</td>
+                <td class="balance-positive">+540,000원</td>
+                <td><span class="tag tag-success">받을 금액</span></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="participant-info">
+                    <div class="participant-avatar"></div>
+                    <span class="participant-name">정예린</span>
+                  </div>
+                </td>
+                <td>270,000원</td>
+                <td>270,000원</td>
+                <td class="balance-zero">0원</td>
+                <td><span class="tag tag-primary">정산 완료</span></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="participant-info">
+                    <div class="participant-avatar"></div>
+                    <span class="participant-name">한지우</span>
+                  </div>
+                </td>
+                <td>0원</td>
+                <td>270,000원</td>
+                <td class="balance-negative">-270,000원</td>
+                <td><span class="tag tag-warning">보낼 금액</span></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="participant-info">
+                    <div class="participant-avatar"></div>
+                    <span class="participant-name">강하늘</span>
+                  </div>
+                </td>
+                <td>540,000원</td>
+                <td>270,000원</td>
+                <td class="balance-positive">+270,000원</td>
+                <td><span class="tag tag-success">받을 금액</span></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="participant-info">
+                    <div class="participant-avatar"></div>
+                    <span class="participant-name">윤채원</span>
+                  </div>
+                </td>
+                <td>270,000원</td>
+                <td>270,000원</td>
+                <td class="balance-zero">0원</td>
+                <td><span class="tag tag-primary">정산 완료</span></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="participant-info">
+                    <div class="participant-avatar"></div>
+                    <span class="participant-name">임서준</span>
+                  </div>
+                </td>
+                <td>0원</td>
+                <td>270,000원</td>
+                <td class="balance-negative">-270,000원</td>
+                <td><span class="tag tag-warning">보낼 금액</span></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="participant-info">
+                    <div class="participant-avatar"></div>
+                    <span class="participant-name">송지아</span>
+                  </div>
+                </td>
+                <td>270,000원</td>
+                <td>270,000원</td>
+                <td class="balance-zero">0원</td>
+                <td><span class="tag tag-primary">정산 완료</span></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="participant-info">
+                    <div class="participant-avatar"></div>
+                    <span class="participant-name">오도윤</span>
+                  </div>
+                </td>
+                <td>0원</td>
+                <td>270,000원</td>
+                <td class="balance-negative">-270,000원</td>
+                <td><span class="tag tag-warning">보낼 금액</span></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="participant-info">
+                    <div class="participant-avatar"></div>
+                    <span class="participant-name">장시우</span>
+                  </div>
+                </td>
+                <td>270,000원</td>
+                <td>270,000원</td>
+                <td class="balance-zero">0원</td>
+                <td><span class="tag tag-primary">정산 완료</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('sidebarOverlay');
+      sidebar.classList.toggle('open');
+      overlay.classList.toggle('open');
+    }
+  </script>
+</body>
+</html>

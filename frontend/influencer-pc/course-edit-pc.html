@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>코스 수정 - 인플루언서</title>
+  <link rel="stylesheet" href="../shared/clean-style.css">
+  <style>
+    /* PC Layout Styles */
+    .pc-layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 250px;
+      background: var(--bg-white);
+      border-right: 1px solid var(--border-light);
+      position: fixed;
+      height: 100vh;
+      overflow-y: auto;
+      z-index: 1000;
+      transition: transform 0.3s ease;
+    }
+
+    .sidebar-header {
+      padding: 24px 20px;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .sidebar-logo {
+      font-size: 20px;
+      font-weight: 700;
+      background: var(--primary-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .sidebar-nav {
+      padding: 16px 0;
+    }
+
+    .sidebar-menu-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 20px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+
+    .sidebar-menu-item:hover {
+      background: var(--bg-light);
+      color: var(--text-primary);
+    }
+
+    .sidebar-menu-item.active {
+      background: rgba(124, 58, 237, 0.1);
+      color: var(--primary-start);
+    }
+
+    .sidebar-menu-item svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      margin-left: 250px;
+      background: var(--bg-light);
+      min-height: 100vh;
+    }
+
+    .main-wrapper {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    /* Top Header */
+    .top-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 24px;
+      background: var(--bg-white);
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    .breadcrumb a {
+      color: var(--text-secondary);
+      text-decoration: none;
+    }
+
+    .breadcrumb a:hover {
+      color: var(--primary-start);
+    }
+
+    .breadcrumb-current {
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .mobile-link {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 12px;
+      background: var(--bg-light);
+      border-radius: var(--radius-sm);
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 13px;
+    }
+
+    .mobile-link:hover {
+      background: var(--bg-gray);
+    }
+
+    .mobile-link svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .menu-toggle {
+      display: none;
+      padding: 8px;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+
+    .menu-toggle svg {
+      width: 24px;
+      height: 24px;
+      color: var(--text-primary);
+    }
+
+    /* Page Title */
+    .page-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 24px;
+    }
+
+    /* Form Card */
+    .form-card {
+      background: var(--bg-white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      padding: 32px;
+    }
+
+    .form-section {
+      margin-bottom: 32px;
+    }
+
+    .form-section:last-child {
+      margin-bottom: 0;
+    }
+
+    .form-section-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    /* Form Grid */
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .form-group.full {
+      grid-column: 1 / -1;
+    }
+
+    .form-label {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    .form-label .required {
+      color: #EF4444;
+    }
+
+    .form-input {
+      padding: 12px 16px;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-family: inherit;
+      transition: border-color 0.2s;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--primary-start);
+    }
+
+    .form-textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .form-select {
+      padding: 12px 16px;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-family: inherit;
+      background: var(--bg-white);
+    }
+
+    .form-hint {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* Current Image */
+    .current-image {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px;
+      background: var(--bg-light);
+      border-radius: var(--radius-md);
+      margin-bottom: 12px;
+    }
+
+    .current-image img {
+      width: 120px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: var(--radius-sm);
+    }
+
+    .current-image-info {
+      flex: 1;
+    }
+
+    .current-image-name {
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+
+    .current-image-size {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .change-image-btn {
+      padding: 8px 16px;
+      background: var(--bg-white);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .change-image-btn:hover {
+      background: var(--bg-gray);
+    }
+
+    /* Date Range */
+    .date-range {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .date-range span {
+      color: var(--text-muted);
+    }
+
+    /* Form Actions */
+    .form-actions {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border-light);
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 12px;
+    }
+
+    .btn-danger {
+      background: rgba(239, 68, 68, 0.1);
+      color: #EF4444;
+    }
+
+    .btn-danger:hover {
+      background: rgba(239, 68, 68, 0.2);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .main-content {
+        margin-left: 0;
+      }
+
+      .menu-toggle {
+        display: block;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Overlay for mobile */
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+    }
+
+    .sidebar-overlay.open {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="pc-layout">
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">INFLTRIP</div>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="dashboard-pc.html" class="sidebar-menu-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7" rx="1"/>
+            <rect x="14" y="3" width="7" height="7" rx="1"/>
+            <rect x="3" y="14" width="7" height="7" rx="1"/>
+            <rect x="14" y="14" width="7" height="7" rx="1"/>
+          </svg>
+          대시보드
+        </a>
+        <a href="course-list-pc.html" class="sidebar-menu-item active">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+          </svg>
+          코스 관리
+        </a>
+        <a href="active-course-pc.html" class="sidebar-menu-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12,6 12,12 16,14"/>
+          </svg>
+          진행중 코스
+        </a>
+        <a href="#" class="sidebar-menu-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+          파티 관리
+        </a>
+        <a href="#" class="sidebar-menu-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+            <line x1="1" y1="10" x2="23" y2="10"/>
+          </svg>
+          정산 관리
+        </a>
+        <a href="#" class="sidebar-menu-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+          </svg>
+          메시지
+        </a>
+        <a href="#" class="sidebar-menu-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+          </svg>
+          알림
+        </a>
+        <a href="#" class="sidebar-menu-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+          설정
+        </a>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Top Header -->
+      <header class="top-header">
+        <div class="flex items-center gap-3">
+          <button class="menu-toggle" id="menuToggle">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="3" y1="12" x2="21" y2="12"/>
+              <line x1="3" y1="6" x2="21" y2="6"/>
+              <line x1="3" y1="18" x2="21" y2="18"/>
+            </svg>
+          </button>
+          <nav class="breadcrumb">
+            <a href="dashboard-pc.html">홈</a>
+            <span>/</span>
+            <a href="course-list-pc.html">코스 관리</a>
+            <span>/</span>
+            <span class="breadcrumb-current">코스 수정</span>
+          </nav>
+        </div>
+        <div class="header-actions">
+          <a href="#" class="mobile-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
+              <line x1="12" y1="18" x2="12.01" y2="18"/>
+            </svg>
+            모바일 버전
+          </a>
+        </div>
+      </header>
+
+      <div class="main-wrapper">
+        <h1 class="page-title">코스 수정</h1>
+
+        <!-- Form -->
+        <div class="form-card">
+          <div class="form-section">
+            <h3 class="form-section-title">기본 정보</h3>
+            <div class="form-grid">
+              <div class="form-group full">
+                <label class="form-label">코스명 <span class="required">*</span></label>
+                <input type="text" class="form-input" value="제주 힐링 여행 3박 4일">
+              </div>
+              <div class="form-group full">
+                <label class="form-label">대표 이미지</label>
+                <div class="current-image">
+                  <img src="https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?w=120&h=80&fit=crop" alt="">
+                  <div class="current-image-info">
+                    <div class="current-image-name">jeju-main.jpg</div>
+                    <div class="current-image-size">1200 x 630px, 245KB</div>
+                  </div>
+                  <button class="change-image-btn">변경</button>
+                </div>
+              </div>
+              <div class="form-group full">
+                <label class="form-label">코스 설명 <span class="required">*</span></label>
+                <textarea class="form-input form-textarea">제주의 아름다운 자연 속에서 힐링하는 3박 4일 여행입니다. 성산일출봉에서 일출을 보고, 우도에서 자전거를 타며, 카페 투어와 맛집 탐방까지!
+
+이번 여행에서는 제가 직접 선별한 숨은 명소들과 로컬 맛집들을 함께 방문할 예정입니다.</textarea>
+              </div>
+              <div class="form-group">
+                <label class="form-label">목적지 <span class="required">*</span></label>
+                <input type="text" class="form-input" value="제주도">
+              </div>
+              <div class="form-group">
+                <label class="form-label">카테고리 <span class="required">*</span></label>
+                <select class="form-select">
+                  <option value="healing" selected>힐링</option>
+                  <option value="adventure">모험</option>
+                  <option value="food">맛집 투어</option>
+                  <option value="culture">문화 탐방</option>
+                  <option value="sports">스포츠</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <h3 class="form-section-title">여행 일정</h3>
+            <div class="form-grid">
+              <div class="form-group full">
+                <label class="form-label">여행 기간 <span class="required">*</span></label>
+                <div class="date-range">
+                  <input type="date" class="form-input" value="2024-02-15" style="flex: 1;">
+                  <span>~</span>
+                  <input type="date" class="form-input" value="2024-02-18" style="flex: 1;">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">모집 마감일 <span class="required">*</span></label>
+                <input type="date" class="form-input" value="2024-02-10">
+              </div>
+              <div class="form-group">
+                <label class="form-label">최대 인원 <span class="required">*</span></label>
+                <input type="number" class="form-input" value="20" min="1">
+                <span class="form-hint">현재 12명 신청</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <h3 class="form-section-title">가격 설정</h3>
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label">참가비 <span class="required">*</span></label>
+                <input type="number" class="form-input" value="890000">
+              </div>
+              <div class="form-group">
+                <label class="form-label">얼리버드 할인가</label>
+                <input type="number" class="form-input" value="790000">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button class="btn btn-danger">코스 삭제</button>
+            <div class="btn-group">
+              <a href="course-detail-pc.html" class="btn btn-secondary">취소</a>
+              <button class="btn btn-primary">저장</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Mobile menu toggle
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebar = document.getElementById('sidebar');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+    menuToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('open');
+      sidebarOverlay.classList.toggle('open');
+    });
+
+    sidebarOverlay.addEventListener('click', () => {
+      sidebar.classList.remove('open');
+      sidebarOverlay.classList.remove('open');
+    });
+  </script>
+</body>
+</html>

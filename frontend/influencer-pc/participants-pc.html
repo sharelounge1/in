@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>참가자 관리 - 인플루언서</title>
+  <link rel="stylesheet" href="../shared/clean-style.css">
+  <style>
+    /* PC Layout Styles */
+    .pc-layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 250px;
+      background: var(--bg-white);
+      border-right: 1px solid var(--border-light);
+      position: fixed;
+      height: 100vh;
+      overflow-y: auto;
+      z-index: 1000;
+      transition: transform 0.3s ease;
+    }
+
+    .sidebar-header {
+      padding: 24px 20px;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .sidebar-logo {
+      font-size: 20px;
+      font-weight: 700;
+      background: var(--primary-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .sidebar-nav {
+      padding: 16px 0;
+    }
+
+    .sidebar-menu-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 20px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+
+    .sidebar-menu-item:hover {
+      background: var(--bg-light);
+      color: var(--text-primary);
+    }
+
+    .sidebar-menu-item.active {
+      background: rgba(124, 58, 237, 0.1);
+      color: var(--primary-start);
+    }
+
+    .sidebar-menu-item svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      margin-left: 250px;
+      background: var(--bg-light);
+      min-height: 100vh;
+    }
+
+    .main-wrapper {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    /* Top Header */
+    .top-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 24px;
+      background: var(--bg-white);
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    .breadcrumb a {
+      color: var(--text-secondary);
+      text-decoration: none;
+    }
+
+    .breadcrumb a:hover {
+      color: var(--primary-start);
+    }
+
+    .breadcrumb-current {
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .mobile-link {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 12px;
+      background: var(--bg-light);
+      border-radius: var(--radius-sm);
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 13px;
+    }
+
+    .mobile-link:hover {
+      background: var(--bg-gray);
+    }
+
+    .mobile-link svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .menu-toggle {
+      display: none;
+      padding: 8px;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+
+    .menu-toggle svg {
+      width: 24px;
+      height: 24px;
+      color: var(--text-primary);
+    }
+
+    /* Page Header */
+    .page-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+
+    .page-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .page-subtitle {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+
+    /* Stats */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .stat-item {
+      background: var(--bg-white);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      box-shadow: var(--shadow-card);
+    }
+
+    .stat-item-value {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .stat-item-label {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+
+    /* Table Card */
+    .table-card {
+      background: var(--bg-white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+    }
+
+    .table-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .table-title {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .table-wrapper {
+      overflow-x: auto;
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .data-table th {
+      text-align: left;
+      padding: 16px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      background: var(--bg-light);
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .data-table td {
+      padding: 16px;
+      font-size: 14px;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .data-table tr:hover {
+      background: var(--bg-light);
+    }
+
+    /* Participant Info */
+    .participant-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .participant-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .participant-name {
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    .participant-phone {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* Expense Status */
+    .expense-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .expense-bar {
+      width: 60px;
+      height: 6px;
+      background: var(--bg-gray);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .expense-fill {
+      height: 100%;
+      border-radius: 3px;
+    }
+
+    .expense-fill.full {
+      background: #10B981;
+      width: 100%;
+    }
+
+    .expense-fill.partial {
+      background: #F59E0B;
+    }
+
+    .expense-fill.none {
+      background: #EF4444;
+      width: 0%;
+    }
+
+    .expense-amount {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    /* Status Badge */
+    .status-badge {
+      display: inline-flex;
+      padding: 4px 10px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .status-badge.paid {
+      background: rgba(16, 185, 129, 0.1);
+      color: #10B981;
+    }
+
+    .status-badge.partial {
+      background: rgba(245, 158, 11, 0.1);
+      color: #F59E0B;
+    }
+
+    .status-badge.unpaid {
+      background: rgba(239, 68, 68, 0.1);
+      color: #EF4444;
+    }
+
+    /* Table Actions */
+    .table-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .action-btn {
+      padding: 6px 12px;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .action-btn.view {
+      background: var(--bg-light);
+      color: var(--text-primary);
+    }
+
+    .action-btn.message {
+      background: rgba(59, 130, 246, 0.1);
+      color: #3B82F6;
+    }
+
+    /* Pagination */
+    .table-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px;
+      border-top: 1px solid var(--border-light);
+    }
+
+    .table-info {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .pagination {
+      display: flex;
+      gap: 4px;
+    }
+
+    .page-btn {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      background: var(--bg-white);
+      cursor: pointer;
+      text-decoration: none;
+      color: var(--text-primary);
+    }
+
+    .page-btn.active {
+      background: var(--primary-gradient);
+      border-color: transparent;
+      color: white;
+    }
+
+    .page-btn:hover:not(.active) {
+      background: var(--bg-light);
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .stats-row {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .main-content {
+        margin-left: 0;
+      }
+
+      .menu-toggle {
+        display: block;
+      }
+
+      .stats-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Overlay for mobile */
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+    }
+
+    .sidebar-overlay.open {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="pc-layout">
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">INFLTRIP</div>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="dashboard-pc.html" class="sidebar-menu-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7" rx="1"/>
+            <rect x="14" y="3" width="7" height="7" rx="1"/>
+            <rect x="3" y="14" width="7" height="7" rx="1"/>
+            <rect x="14" y="14" width="7" height="7" rx="1"/>
+          </svg>
+          대시보드
+        </a>
+        <a href="course-list-pc.html" class="sidebar-menu-item active">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+          </svg>
+          코스 관리
+        </a>
+        <a href="active-course-pc.html" class="sidebar-menu-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12,6 12,12 16,14"/>
+          </svg>
+          진행중 코스
+        </a>
+        <a href="#" class="sidebar-menu-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+          파티 관리
+        </a>
+        <a href="#" class="sidebar-menu-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+            <line x1="1" y1="10" x2="23" y2="10"/>
+          </svg>
+          정산 관리
+        </a>
+        <a href="#" class="sidebar-menu-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+          </svg>
+          메시지
+        </a>
+        <a href="#" class="sidebar-menu-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+          </svg>
+          알림
+        </a>
+        <a href="#" class="sidebar-menu-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+          설정
+        </a>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Top Header -->
+      <header class="top-header">
+        <div class="flex items-center gap-3">
+          <button class="menu-toggle" id="menuToggle">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="3" y1="12" x2="21" y2="12"/>
+              <line x1="3" y1="6" x2="21" y2="6"/>
+              <line x1="3" y1="18" x2="21" y2="18"/>
+            </svg>
+          </button>
+          <nav class="breadcrumb">
+            <a href="dashboard-pc.html">홈</a>
+            <span>/</span>
+            <a href="course-list-pc.html">코스 관리</a>
+            <span>/</span>
+            <span class="breadcrumb-current">참가자 관리</span>
+          </nav>
+        </div>
+        <div class="header-actions">
+          <a href="#" class="mobile-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
+              <line x1="12" y1="18" x2="12.01" y2="18"/>
+            </svg>
+            모바일 버전
+          </a>
+        </div>
+      </header>
+
+      <div class="main-wrapper">
+        <!-- Page Header -->
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">참가자 관리</h1>
+            <p class="page-subtitle">제주 힐링 여행 3박 4일</p>
+          </div>
+          <div class="flex gap-2">
+            <a href="active-course-pc.html" class="btn btn-outline">코스 관리</a>
+            <button class="btn btn-primary">전체 메시지</button>
+          </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-row">
+          <div class="stat-item">
+            <div class="stat-item-value">12</div>
+            <div class="stat-item-label">전체 참가자</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-item-value" style="color: #10B981;">10,680,000원</div>
+            <div class="stat-item-label">총 참가비</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-item-value" style="color: #F59E0B;">1,250,000원</div>
+            <div class="stat-item-label">추가 경비</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-item-value" style="color: var(--primary-start);">92%</div>
+            <div class="stat-item-label">경비 수금률</div>
+          </div>
+        </div>
+
+        <!-- Table -->
+        <div class="table-card">
+          <div class="table-header">
+            <h3 class="table-title">참가자 목록</h3>
+            <button class="btn btn-outline" style="padding: 8px 16px; font-size: 13px;">Excel 다운로드</button>
+          </div>
+          <div class="table-wrapper">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>참가자</th>
+                  <th>참가비</th>
+                  <th>추가 경비</th>
+                  <th>경비 현황</th>
+                  <th>상태</th>
+                  <th>관리</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <div class="participant-info">
+                      <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" alt="" class="participant-avatar">
+                      <div>
+                        <div class="participant-name">김민지</div>
+                        <div class="participant-phone">010-1234-5678</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>890,000원</td>
+                  <td>120,000원</td>
+                  <td>
+                    <div class="expense-status">
+                      <div class="expense-bar">
+                        <div class="expense-fill full"></div>
+                      </div>
+                      <span class="expense-amount">100%</span>
+                    </div>
+                  </td>
+                  <td><span class="status-badge paid">완납</span></td>
+                  <td>
+                    <div class="table-actions">
+                      <button class="action-btn view">상세</button>
+                      <button class="action-btn message">메시지</button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="participant-info">
+                      <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop" alt="" class="participant-avatar">
+                      <div>
+                        <div class="participant-name">이준혁</div>
+                        <div class="participant-phone">010-2345-6789</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>890,000원</td>
+                  <td>85,000원</td>
+                  <td>
+                    <div class="expense-status">
+                      <div class="expense-bar">
+                        <div class="expense-fill partial" style="width: 70%;"></div>
+                      </div>
+                      <span class="expense-amount">70%</span>
+                    </div>
+                  </td>
+                  <td><span class="status-badge partial">일부납</span></td>
+                  <td>
+                    <div class="table-actions">
+                      <button class="action-btn view">상세</button>
+                      <button class="action-btn message">메시지</button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="participant-info">
+                      <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&h=80&fit=crop" alt="" class="participant-avatar">
+                      <div>
+                        <div class="participant-name">박서연</div>
+                        <div class="participant-phone">010-3456-7890</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>890,000원</td>
+                  <td>150,000원</td>
+                  <td>
+                    <div class="expense-status">
+                      <div class="expense-bar">
+                        <div class="expense-fill full"></div>
+                      </div>
+                      <span class="expense-amount">100%</span>
+                    </div>
+                  </td>
+                  <td><span class="status-badge paid">완납</span></td>
+                  <td>
+                    <div class="table-actions">
+                      <button class="action-btn view">상세</button>
+                      <button class="action-btn message">메시지</button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="participant-info">
+                      <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&h=80&fit=crop" alt="" class="participant-avatar">
+                      <div>
+                        <div class="participant-name">최동현</div>
+                        <div class="participant-phone">010-4567-8901</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>890,000원</td>
+                  <td>0원</td>
+                  <td>
+                    <div class="expense-status">
+                      <div class="expense-bar">
+                        <div class="expense-fill none"></div>
+                      </div>
+                      <span class="expense-amount">0%</span>
+                    </div>
+                  </td>
+                  <td><span class="status-badge unpaid">미납</span></td>
+                  <td>
+                    <div class="table-actions">
+                      <button class="action-btn view">상세</button>
+                      <button class="action-btn message">메시지</button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="participant-info">
+                      <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&h=80&fit=crop" alt="" class="participant-avatar">
+                      <div>
+                        <div class="participant-name">정유나</div>
+                        <div class="participant-phone">010-5678-9012</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>890,000원</td>
+                  <td>95,000원</td>
+                  <td>
+                    <div class="expense-status">
+                      <div class="expense-bar">
+                        <div class="expense-fill full"></div>
+                      </div>
+                      <span class="expense-amount">100%</span>
+                    </div>
+                  </td>
+                  <td><span class="status-badge paid">완납</span></td>
+                  <td>
+                    <div class="table-actions">
+                      <button class="action-btn view">상세</button>
+                      <button class="action-btn message">메시지</button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="table-footer">
+            <div class="table-info">총 12명 중 1-5 표시</div>
+            <div class="pagination">
+              <a href="#" class="page-btn">&lt;</a>
+              <a href="#" class="page-btn active">1</a>
+              <a href="#" class="page-btn">2</a>
+              <a href="#" class="page-btn">3</a>
+              <a href="#" class="page-btn">&gt;</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Mobile menu toggle
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebar = document.getElementById('sidebar');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+    menuToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('open');
+      sidebarOverlay.classList.toggle('open');
+    });
+
+    sidebarOverlay.addEventListener('click', () => {
+      sidebar.classList.remove('open');
+      sidebarOverlay.classList.remove('open');
+    });
+  </script>
+</body>
+</html>

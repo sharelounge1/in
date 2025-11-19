@@ -327,8 +327,10 @@
     <!-- Sidebar -->
     <aside class="sidebar">
       <div class="sidebar-logo">
-        <div class="sidebar-logo-text">인플루언서 여행</div>
-        <div class="sidebar-logo-sub">관리자 시스템</div>
+        <a href="./dashboard.html" style="text-decoration: none;">
+          <div class="sidebar-logo-text">인플루언서 여행</div>
+          <div class="sidebar-logo-sub">관리자 시스템</div>
+        </a>
       </div>
       <ul class="sidebar-menu">
         <li class="sidebar-item">
@@ -382,6 +384,14 @@
             <span class="sidebar-badge">12</span>
           </a>
         </li>
+        <li class="sidebar-item" style="margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--border-light);">
+          <a href="./login.html" class="sidebar-link">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+            </svg>
+            로그아웃
+          </a>
+        </li>
       </ul>
     </aside>
 
@@ -404,7 +414,7 @@
 
       <!-- Stats Grid -->
       <div class="stats-grid">
-        <div class="stat-card">
+        <a href="./users.html" class="stat-card" style="text-decoration: none; cursor: pointer;">
           <div class="stat-card-header">
             <div class="stat-icon blue">
               <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -415,8 +425,8 @@
           </div>
           <div class="stat-value">8,456</div>
           <div class="stat-label">총 회원수</div>
-        </div>
-        <div class="stat-card">
+        </a>
+        <a href="./influencers.html" class="stat-card" style="text-decoration: none; cursor: pointer;">
           <div class="stat-card-header">
             <div class="stat-icon purple">
               <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -427,8 +437,8 @@
           </div>
           <div class="stat-value">127</div>
           <div class="stat-label">활동 인플루언서</div>
-        </div>
-        <div class="stat-card">
+        </a>
+        <a href="./payments.html" class="stat-card" style="text-decoration: none; cursor: pointer;">
           <div class="stat-card-header">
             <div class="stat-icon green">
               <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -439,8 +449,8 @@
           </div>
           <div class="stat-value">1.2억</div>
           <div class="stat-label">이번 달 거래액</div>
-        </div>
-        <div class="stat-card">
+        </a>
+        <a href="./settlements.html" class="stat-card" style="text-decoration: none; cursor: pointer;">
           <div class="stat-card-header">
             <div class="stat-icon orange">
               <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -451,7 +461,7 @@
           </div>
           <div class="stat-value">342</div>
           <div class="stat-label">진행중 코스</div>
-        </div>
+        </a>
       </div>
 
       <!-- Content Grid -->
@@ -472,7 +482,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
+              <tr onclick="window.location.href='./influencers.html'" style="cursor: pointer;">
                 <td>
                   <div class="user-cell">
                     <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100" alt="" class="user-avatar">
@@ -486,7 +496,7 @@
                 <td>2024-01-15</td>
                 <td><span class="status-badge pending">대기중</span></td>
               </tr>
-              <tr>
+              <tr onclick="window.location.href='./influencers.html'" style="cursor: pointer;">
                 <td>
                   <div class="user-cell">
                     <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100" alt="" class="user-avatar">
@@ -500,7 +510,7 @@
                 <td>2024-01-14</td>
                 <td><span class="status-badge pending">대기중</span></td>
               </tr>
-              <tr>
+              <tr onclick="window.location.href='./influencers.html'" style="cursor: pointer;">
                 <td>
                   <div class="user-cell">
                     <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100" alt="" class="user-avatar">
@@ -514,7 +524,7 @@
                 <td>2024-01-13</td>
                 <td><span class="status-badge approved">승인완료</span></td>
               </tr>
-              <tr>
+              <tr onclick="window.location.href='./influencers.html'" style="cursor: pointer;">
                 <td>
                   <div class="user-cell">
                     <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100" alt="" class="user-avatar">

@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>코스 관리 - 인플루언서</title>
+  <link rel="stylesheet" href="../shared/clean-style.css">
+  <style>
+    /* PC Layout Styles */
+    .pc-layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 250px;
+      background: var(--bg-white);
+      border-right: 1px solid var(--border-light);
+      position: fixed;
+      height: 100vh;
+      overflow-y: auto;
+      z-index: 1000;
+      transition: transform 0.3s ease;
+    }
+
+    .sidebar-header {
+      padding: 24px 20px;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .sidebar-logo {
+      font-size: 20px;
+      font-weight: 700;
+      background: var(--primary-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .sidebar-nav {
+      padding: 16px 0;
+    }
+
+    .sidebar-menu-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 20px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+
+    .sidebar-menu-item:hover {
+      background: var(--bg-light);
+      color: var(--text-primary);
+    }
+
+    .sidebar-menu-item.active {
+      background: rgba(124, 58, 237, 0.1);
+      color: var(--primary-start);
+    }
+
+    .sidebar-menu-item svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      margin-left: 250px;
+      background: var(--bg-light);
+      min-height: 100vh;
+    }
+
+    .main-wrapper {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    /* Top Header */
+    .top-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 24px;
+      background: var(--bg-white);
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    .breadcrumb a {
+      color: var(--text-secondary);
+      text-decoration: none;
+    }
+
+    .breadcrumb a:hover {
+      color: var(--primary-start);
+    }
+
+    .breadcrumb-current {
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .mobile-link {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 12px;
+      background: var(--bg-light);
+      border-radius: var(--radius-sm);
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 13px;
+    }
+
+    .mobile-link:hover {
+      background: var(--bg-gray);
+    }
+
+    .mobile-link svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .menu-toggle {
+      display: none;
+      padding: 8px;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+
+    .menu-toggle svg {
+      width: 24px;
+      height: 24px;
+      color: var(--text-primary);
+    }
+
+    /* Page Header */
+    .page-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+
+    .page-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    /* Filters */
+    .filters-card {
+      background: var(--bg-white);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      box-shadow: var(--shadow-card);
+      margin-bottom: 24px;
+    }
+
+    .filters-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .filter-label {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+
+    .filter-select {
+      padding: 10px 14px;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      min-width: 150px;
+      font-family: inherit;
+    }
+
+    .filter-input {
+      padding: 10px 14px;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      min-width: 200px;
+      font-family: inherit;
+    }
+
+    .filter-btn {
+      padding: 10px 20px;
+      background: var(--bg-light);
+      border: none;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      margin-top: auto;
+    }
+
+    .filter-btn:hover {
+      background: var(--bg-gray);
+    }
+
+    /* Table Card */
+    .table-card {
+      background: var(--bg-white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+    }
+
+    .table-wrapper {
+      overflow-x: auto;
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .data-table th {
+      text-align: left;
+      padding: 16px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      background: var(--bg-light);
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .data-table td {
+      padding: 16px;
+      font-size: 14px;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .data-table tr:hover {
+      background: var(--bg-light);
+    }
+
+    .course-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .course-thumb {
+      width: 60px;
+      height: 40px;
+      border-radius: var(--radius-sm);
+      object-fit: cover;
+    }
+
+    .course-name {
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    .course-date {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* Status Badge */
+    .status-badge {
+      display: inline-flex;
+      padding: 4px 10px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .status-badge.recruiting {
+      background: rgba(124, 58, 237, 0.1);
+      color: var(--primary-start);
+    }
+
+    .status-badge.confirmed {
+      background: rgba(16, 185, 129, 0.1);
+      color: #10B981;
+    }
+
+    .status-badge.in-progress {
+      background: rgba(59, 130, 246, 0.1);
+      color: #3B82F6;
+    }
+
+    .status-badge.completed {
+      background: rgba(107, 114, 128, 0.1);
+      color: #6B7280;
+    }
+
+    .status-badge.cancelled {
+      background: rgba(239, 68, 68, 0.1);
+      color: #EF4444;
+    }
+
+    /* Table Actions */
+    .table-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .table-btn {
+      padding: 6px 12px;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .table-btn.view {
+      background: var(--bg-light);
+      color: var(--text-primary);
+    }
+
+    .table-btn.edit {
+      background: rgba(59, 130, 246, 0.1);
+      color: #3B82F6;
+    }
+
+    .table-btn.delete {
+      background: rgba(239, 68, 68, 0.1);
+      color: #EF4444;
+    }
+
+    .table-btn svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    /* Pagination */
+    .table-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px;
+      border-top: 1px solid var(--border-light);
+    }
+
+    .table-info {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .pagination {
+      display: flex;
+      gap: 4px;
+    }
+
+    .page-btn {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      background: var(--bg-white);
+      cursor: pointer;
+      text-decoration: none;
+      color: var(--text-primary);
+    }
+
+    .page-btn.active {
+      background: var(--primary-gradient);
+      border-color: transparent;
+      color: white;
+    }
+
+    .page-btn:hover:not(.active) {
+      background: var(--bg-light);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .main-content {
+        margin-left: 0;
+      }
+
+      .menu-toggle {
+        display: block;
+      }
+
+      .filters-row {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .filter-group {
+        width: 100%;
+      }
+
+      .filter-select,
+      .filter-input {
+        width: 100%;
+      }
+    }
+
+    /* Overlay for mobile */
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+    }
+
+    .sidebar-overlay.open {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="pc-layout">
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">INFLTRIP</div>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="dashboard-pc.html" class="sidebar-menu-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7" rx="1"/>
+            <rect x="14" y="3" width="7" height="7" rx="1"/>
+            <rect x="3" y="14" width="7" height="7" rx="1"/>
+            <rect x="14" y="14" width="7" height="7" rx="1"/>
+          </svg>
+          대시보드
+        </a>
+        <a href="course-list-pc.html" class="sidebar-menu-item active">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+          </svg>
+          코스 관리
+        </a>
+        <a href="active-course-pc.html" class="sidebar-menu-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12,6 12,12 16,14"/>
+          </svg>
+          진행중 코스
+        </a>
+        <a href="#" class="sidebar-menu-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+          파티 관리
+        </a>
+        <a href="#" class="sidebar-menu-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+            <line x1="1" y1="10" x2="23" y2="10"/>
+          </svg>
+          정산 관리
+        </a>
+        <a href="#" class="sidebar-menu-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+          </svg>
+          메시지
+        </a>
+        <a href="#" class="sidebar-menu-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+          </svg>
+          알림
+        </a>
+        <a href="#" class="sidebar-menu-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+          설정
+        </a>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Top Header -->
+      <header class="top-header">
+        <div class="flex items-center gap-3">
+          <button class="menu-toggle" id="menuToggle">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="3" y1="12" x2="21" y2="12"/>
+              <line x1="3" y1="6" x2="21" y2="6"/>
+              <line x1="3" y1="18" x2="21" y2="18"/>
+            </svg>
+          </button>
+          <nav class="breadcrumb">
+            <a href="dashboard-pc.html">홈</a>
+            <span>/</span>
+            <span class="breadcrumb-current">코스 관리</span>
+          </nav>
+        </div>
+        <div class="header-actions">
+          <a href="#" class="mobile-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
+              <line x1="12" y1="18" x2="12.01" y2="18"/>
+            </svg>
+            모바일 버전
+          </a>
+        </div>
+      </header>
+
+      <div class="main-wrapper">
+        <!-- Page Header -->
+        <div class="page-header">
+          <h1 class="page-title">코스 관리</h1>
+          <a href="course-create-pc.html" class="btn btn-primary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 18px; height: 18px; margin-right: 6px;">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="12" y1="8" x2="12" y2="16"/>
+              <line x1="8" y1="12" x2="16" y2="12"/>
+            </svg>
+            새 코스 만들기
+          </a>
+        </div>
+
+        <!-- Filters -->
+        <div class="filters-card">
+          <div class="filters-row">
+            <div class="filter-group">
+              <label class="filter-label">상태</label>
+              <select class="filter-select">
+                <option value="">전체 상태</option>
+                <option value="recruiting">모집중</option>
+                <option value="confirmed">모집완료</option>
+                <option value="in-progress">진행중</option>
+                <option value="completed">완료</option>
+                <option value="cancelled">취소</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <label class="filter-label">기간</label>
+              <select class="filter-select">
+                <option value="">전체 기간</option>
+                <option value="this-month">이번 달</option>
+                <option value="last-month">지난 달</option>
+                <option value="this-year">올해</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <label class="filter-label">검색</label>
+              <input type="text" class="filter-input" placeholder="코스명으로 검색">
+            </div>
+            <button class="filter-btn">검색</button>
+          </div>
+        </div>
+
+        <!-- Table -->
+        <div class="table-card">
+          <div class="table-wrapper">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>코스 정보</th>
+                  <th>상태</th>
+                  <th>모집 현황</th>
+                  <th>가격</th>
+                  <th>여행 일정</th>
+                  <th>관리</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <div class="course-info">
+                      <img src="https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?w=120&h=80&fit=crop" alt="" class="course-thumb">
+                      <div>
+                        <div class="course-name">제주 힐링 여행 3박 4일</div>
+                        <div class="course-date">생성일: 2024.01.15</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td><span class="status-badge recruiting">모집중</span></td>
+                  <td>12/20명</td>
+                  <td>890,000원</td>
+                  <td>2024.02.15 - 02.18</td>
+                  <td>
+                    <div class="table-actions">
+                      <a href="course-detail-pc.html" class="table-btn view">상세</a>
+                      <a href="course-edit-pc.html" class="table-btn edit">수정</a>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="course-info">
+                      <img src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=120&h=80&fit=crop" alt="" class="course-thumb">
+                      <div>
+                        <div class="course-name">오사카 맛집 투어 2박 3일</div>
+                        <div class="course-date">생성일: 2024.01.10</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td><span class="status-badge confirmed">모집완료</span></td>
+                  <td>15/15명</td>
+                  <td>750,000원</td>
+                  <td>2024.02.01 - 02.03</td>
+                  <td>
+                    <div class="table-actions">
+                      <a href="course-detail-pc.html" class="table-btn view">상세</a>
+                      <a href="course-edit-pc.html" class="table-btn edit">수정</a>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="course-info">
+                      <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=120&h=80&fit=crop" alt="" class="course-thumb">
+                      <div>
+                        <div class="course-name">스위스 알프스 트레킹</div>
+                        <div class="course-date">생성일: 2024.01.05</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td><span class="status-badge in-progress">진행중</span></td>
+                  <td>8/10명</td>
+                  <td>2,500,000원</td>
+                  <td>2024.01.20 - 01.27</td>
+                  <td>
+                    <div class="table-actions">
+                      <a href="course-detail-pc.html" class="table-btn view">상세</a>
+                      <a href="active-course-pc.html" class="table-btn edit">관리</a>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="course-info">
+                      <img src="https://images.unsplash.com/photo-1552733407-5d5c46c3bb3b?w=120&h=80&fit=crop" alt="" class="course-thumb">
+                      <div>
+                        <div class="course-name">발리 요가 리트릿</div>
+                        <div class="course-date">생성일: 2023.12.20</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td><span class="status-badge completed">완료</span></td>
+                  <td>20/20명</td>
+                  <td>1,200,000원</td>
+                  <td>2024.01.05 - 01.10</td>
+                  <td>
+                    <div class="table-actions">
+                      <a href="course-detail-pc.html" class="table-btn view">상세</a>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="course-info">
+                      <img src="https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=120&h=80&fit=crop" alt="" class="course-thumb">
+                      <div>
+                        <div class="course-name">파리 아트 투어</div>
+                        <div class="course-date">생성일: 2023.12.15</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td><span class="status-badge cancelled">취소</span></td>
+                  <td>3/15명</td>
+                  <td>1,800,000원</td>
+                  <td>2024.01.10 - 01.15</td>
+                  <td>
+                    <div class="table-actions">
+                      <a href="course-detail-pc.html" class="table-btn view">상세</a>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="table-footer">
+            <div class="table-info">총 5개 코스 중 1-5 표시</div>
+            <div class="pagination">
+              <a href="#" class="page-btn">&lt;</a>
+              <a href="#" class="page-btn active">1</a>
+              <a href="#" class="page-btn">2</a>
+              <a href="#" class="page-btn">3</a>
+              <a href="#" class="page-btn">&gt;</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Mobile menu toggle
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebar = document.getElementById('sidebar');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+    menuToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('open');
+      sidebarOverlay.classList.toggle('open');
+    });
+
+    sidebarOverlay.addEventListener('click', () => {
+      sidebar.classList.remove('open');
+      sidebarOverlay.classList.remove('open');
+    });
+  </script>
+</body>
+</html>

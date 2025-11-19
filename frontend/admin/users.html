@@ -325,8 +325,10 @@
     <!-- Sidebar -->
     <aside class="sidebar">
       <div class="sidebar-logo">
-        <div class="sidebar-logo-text">인플루언서 여행</div>
-        <div class="sidebar-logo-sub">관리자 시스템</div>
+        <a href="./dashboard.html" style="text-decoration: none;">
+          <div class="sidebar-logo-text">인플루언서 여행</div>
+          <div class="sidebar-logo-sub">관리자 시스템</div>
+        </a>
       </div>
       <ul class="sidebar-menu">
         <li class="sidebar-item">
@@ -378,6 +380,14 @@
             </svg>
             문의 관리
             <span class="sidebar-badge">12</span>
+          </a>
+        </li>
+        <li class="sidebar-item" style="margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--border-light);">
+          <a href="./login.html" class="sidebar-link">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+            </svg>
+            로그아웃
           </a>
         </li>
       </ul>
@@ -436,7 +446,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
+            <tr style="cursor: pointer;" onclick="alert('회원 상세 정보를 표시합니다.')">
               <td>
                 <div class="user-cell">
                   <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100" alt="" class="user-avatar">
@@ -452,12 +462,12 @@
               <td>2시간 전</td>
               <td>
                 <div class="action-buttons">
-                  <button class="action-btn action-btn-view">상세</button>
-                  <button class="action-btn action-btn-block">차단</button>
+                  <button class="action-btn action-btn-view" onclick="event.stopPropagation(); alert('회원 상세 정보를 표시합니다.')">상세</button>
+                  <button class="action-btn action-btn-block" onclick="event.stopPropagation(); alert('회원을 차단 처리합니다.')">차단</button>
                 </div>
               </td>
             </tr>
-            <tr>
+            <tr style="cursor: pointer;" onclick="alert('회원 상세 정보를 표시합니다.')">
               <td>
                 <div class="user-cell">
                   <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100" alt="" class="user-avatar">
@@ -473,12 +483,12 @@
               <td>30분 전</td>
               <td>
                 <div class="action-buttons">
-                  <button class="action-btn action-btn-view">상세</button>
-                  <button class="action-btn action-btn-block">차단</button>
+                  <button class="action-btn action-btn-view" onclick="event.stopPropagation(); alert('회원 상세 정보를 표시합니다.')">상세</button>
+                  <button class="action-btn action-btn-block" onclick="event.stopPropagation(); alert('회원을 차단 처리합니다.')">차단</button>
                 </div>
               </td>
             </tr>
-            <tr>
+            <tr style="cursor: pointer;" onclick="alert('회원 상세 정보를 표시합니다.')">
               <td>
                 <div class="user-cell">
                   <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100" alt="" class="user-avatar">
@@ -494,12 +504,12 @@
               <td>7일 전</td>
               <td>
                 <div class="action-buttons">
-                  <button class="action-btn action-btn-view">상세</button>
-                  <button class="action-btn action-btn-block">차단</button>
+                  <button class="action-btn action-btn-view" onclick="event.stopPropagation(); alert('회원 상세 정보를 표시합니다.')">상세</button>
+                  <button class="action-btn action-btn-block" onclick="event.stopPropagation(); alert('회원을 차단 처리합니다.')">차단</button>
                 </div>
               </td>
             </tr>
-            <tr>
+            <tr style="cursor: pointer;" onclick="alert('회원 상세 정보를 표시합니다.')">
               <td>
                 <div class="user-cell">
                   <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100" alt="" class="user-avatar">
@@ -515,12 +525,12 @@
               <td>14일 전</td>
               <td>
                 <div class="action-buttons">
-                  <button class="action-btn action-btn-view">상세</button>
-                  <button class="action-btn action-btn-block">해제</button>
+                  <button class="action-btn action-btn-view" onclick="event.stopPropagation(); alert('회원 상세 정보를 표시합니다.')">상세</button>
+                  <button class="action-btn action-btn-block" onclick="event.stopPropagation(); alert('차단을 해제합니다.')">해제</button>
                 </div>
               </td>
             </tr>
-            <tr>
+            <tr style="cursor: pointer;" onclick="alert('회원 상세 정보를 표시합니다.')">
               <td>
                 <div class="user-cell">
                   <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100" alt="" class="user-avatar">
@@ -536,12 +546,12 @@
               <td>1시간 전</td>
               <td>
                 <div class="action-buttons">
-                  <button class="action-btn action-btn-view">상세</button>
-                  <button class="action-btn action-btn-block">차단</button>
+                  <button class="action-btn action-btn-view" onclick="event.stopPropagation(); alert('회원 상세 정보를 표시합니다.')">상세</button>
+                  <button class="action-btn action-btn-block" onclick="event.stopPropagation(); alert('회원을 차단 처리합니다.')">차단</button>
                 </div>
               </td>
             </tr>
-            <tr>
+            <tr style="cursor: pointer;" onclick="alert('회원 상세 정보를 표시합니다.')">
               <td>
                 <div class="user-cell">
                   <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100" alt="" class="user-avatar">
@@ -557,8 +567,8 @@
               <td>5시간 전</td>
               <td>
                 <div class="action-buttons">
-                  <button class="action-btn action-btn-view">상세</button>
-                  <button class="action-btn action-btn-block">차단</button>
+                  <button class="action-btn action-btn-view" onclick="event.stopPropagation(); alert('회원 상세 정보를 표시합니다.')">상세</button>
+                  <button class="action-btn action-btn-block" onclick="event.stopPropagation(); alert('회원을 차단 처리합니다.')">차단</button>
                 </div>
               </td>
             </tr>

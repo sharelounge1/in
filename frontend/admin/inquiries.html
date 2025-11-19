@@ -423,8 +423,10 @@
     <!-- Sidebar -->
     <aside class="sidebar">
       <div class="sidebar-logo">
-        <div class="sidebar-logo-text">인플루언서 여행</div>
-        <div class="sidebar-logo-sub">관리자 시스템</div>
+        <a href="./dashboard.html" style="text-decoration: none;">
+          <div class="sidebar-logo-text">인플루언서 여행</div>
+          <div class="sidebar-logo-sub">관리자 시스템</div>
+        </a>
       </div>
       <ul class="sidebar-menu">
         <li class="sidebar-item">
@@ -476,6 +478,14 @@
             </svg>
             문의 관리
             <span class="sidebar-badge">12</span>
+          </a>
+        </li>
+        <li class="sidebar-item" style="margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--border-light);">
+          <a href="./login.html" class="sidebar-link">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+            </svg>
+            로그아웃
           </a>
         </li>
       </ul>
@@ -561,7 +571,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr class="urgent">
+            <tr class="urgent" style="cursor: pointer;" onclick="window.location.href='./inquiry-detail.html'">
               <td><span class="inquiry-id">INQ-2024011500001</span></td>
               <td>
                 <div class="user-cell">
@@ -569,14 +579,14 @@
                   <span class="user-name">김서연</span>
                 </div>
               </td>
-              <td class="inquiry-title"><a href="inquiry-detail.html">결제 완료 후 예약 확인이 안됩니다</a></td>
+              <td class="inquiry-title"><a href="./inquiry-detail.html" onclick="event.stopPropagation();">결제 완료 후 예약 확인이 안됩니다</a></td>
               <td><span class="category-badge payment">결제</span></td>
               <td><span class="priority-badge high">높음</span></td>
               <td><span class="status-badge pending">대기중</span></td>
               <td>2024-01-15 14:32</td>
-              <td><a href="inquiry-detail.html" class="action-btn">답변</a></td>
+              <td><a href="./inquiry-detail.html" class="action-btn" onclick="event.stopPropagation();">답변</a></td>
             </tr>
-            <tr class="urgent">
+            <tr class="urgent" style="cursor: pointer;" onclick="window.location.href='./inquiry-detail.html'">
               <td><span class="inquiry-id">INQ-2024011500002</span></td>
               <td>
                 <div class="user-cell">
@@ -584,14 +594,14 @@
                   <span class="user-name">이민수</span>
                 </div>
               </td>
-              <td class="inquiry-title"><a href="inquiry-detail.html">환불 요청드립니다 - 개인 사정</a></td>
+              <td class="inquiry-title"><a href="./inquiry-detail.html" onclick="event.stopPropagation();">환불 요청드립니다 - 개인 사정</a></td>
               <td><span class="category-badge refund">환불</span></td>
               <td><span class="priority-badge high">높음</span></td>
               <td><span class="status-badge pending">대기중</span></td>
               <td>2024-01-15 13:20</td>
-              <td><a href="inquiry-detail.html" class="action-btn">답변</a></td>
+              <td><a href="./inquiry-detail.html" class="action-btn" onclick="event.stopPropagation();">답변</a></td>
             </tr>
-            <tr class="urgent">
+            <tr class="urgent" style="cursor: pointer;" onclick="window.location.href='./inquiry-detail.html'">
               <td><span class="inquiry-id">INQ-2024011500003</span></td>
               <td>
                 <div class="user-cell">
@@ -599,14 +609,14 @@
                   <span class="user-name">박지현</span>
                 </div>
               </td>
-              <td class="inquiry-title"><a href="inquiry-detail.html">부분 환불이 가능한가요?</a></td>
+              <td class="inquiry-title"><a href="./inquiry-detail.html" onclick="event.stopPropagation();">부분 환불이 가능한가요?</a></td>
               <td><span class="category-badge refund">환불</span></td>
               <td><span class="priority-badge high">높음</span></td>
               <td><span class="status-badge pending">대기중</span></td>
               <td>2024-01-15 11:45</td>
-              <td><a href="inquiry-detail.html" class="action-btn">답변</a></td>
+              <td><a href="./inquiry-detail.html" class="action-btn" onclick="event.stopPropagation();">답변</a></td>
             </tr>
-            <tr>
+            <tr style="cursor: pointer;" onclick="window.location.href='./inquiry-detail.html'">
               <td><span class="inquiry-id">INQ-2024011500004</span></td>
               <td>
                 <div class="user-cell">
@@ -614,14 +624,14 @@
                   <span class="user-name">최준혁</span>
                 </div>
               </td>
-              <td class="inquiry-title"><a href="inquiry-detail.html">코스 일정 변경 문의</a></td>
+              <td class="inquiry-title"><a href="./inquiry-detail.html" onclick="event.stopPropagation();">코스 일정 변경 문의</a></td>
               <td><span class="category-badge course">코스</span></td>
               <td><span class="priority-badge medium">보통</span></td>
               <td><span class="status-badge pending">대기중</span></td>
               <td>2024-01-15 10:30</td>
-              <td><a href="inquiry-detail.html" class="action-btn">답변</a></td>
+              <td><a href="./inquiry-detail.html" class="action-btn" onclick="event.stopPropagation();">답변</a></td>
             </tr>
-            <tr>
+            <tr style="cursor: pointer;" onclick="window.location.href='./inquiry-detail.html'">
               <td><span class="inquiry-id">INQ-2024011500005</span></td>
               <td>
                 <div class="user-cell">
@@ -629,14 +639,14 @@
                   <span class="user-name">정다영</span>
                 </div>
               </td>
-              <td class="inquiry-title"><a href="inquiry-detail.html">계정 이메일 변경 요청</a></td>
+              <td class="inquiry-title"><a href="./inquiry-detail.html" onclick="event.stopPropagation();">계정 이메일 변경 요청</a></td>
               <td><span class="category-badge account">계정</span></td>
               <td><span class="priority-badge low">낮음</span></td>
               <td><span class="status-badge pending">대기중</span></td>
               <td>2024-01-15 09:15</td>
-              <td><a href="inquiry-detail.html" class="action-btn">답변</a></td>
+              <td><a href="./inquiry-detail.html" class="action-btn" onclick="event.stopPropagation();">답변</a></td>
             </tr>
-            <tr>
+            <tr style="cursor: pointer;" onclick="window.location.href='./inquiry-detail.html'">
               <td><span class="inquiry-id">INQ-2024011400001</span></td>
               <td>
                 <div class="user-cell">
@@ -644,14 +654,14 @@
                   <span class="user-name">강현우</span>
                 </div>
               </td>
-              <td class="inquiry-title"><a href="inquiry-detail.html">인플루언서 연락처 문의</a></td>
+              <td class="inquiry-title"><a href="./inquiry-detail.html" onclick="event.stopPropagation();">인플루언서 연락처 문의</a></td>
               <td><span class="category-badge other">기타</span></td>
               <td><span class="priority-badge low">낮음</span></td>
               <td><span class="status-badge in-progress">처리중</span></td>
               <td>2024-01-14 16:42</td>
-              <td><a href="inquiry-detail.html" class="action-btn">상세</a></td>
+              <td><a href="./inquiry-detail.html" class="action-btn" onclick="event.stopPropagation();">상세</a></td>
             </tr>
-            <tr>
+            <tr style="cursor: pointer;" onclick="window.location.href='./inquiry-detail.html'">
               <td><span class="inquiry-id">INQ-2024011400002</span></td>
               <td>
                 <div class="user-cell">
@@ -659,12 +669,12 @@
                   <span class="user-name">윤소희</span>
                 </div>
               </td>
-              <td class="inquiry-title"><a href="inquiry-detail.html">예약 확인서 발급 요청</a></td>
+              <td class="inquiry-title"><a href="./inquiry-detail.html" onclick="event.stopPropagation();">예약 확인서 발급 요청</a></td>
               <td><span class="category-badge course">코스</span></td>
               <td><span class="priority-badge medium">보통</span></td>
               <td><span class="status-badge completed">완료</span></td>
               <td>2024-01-14 14:20</td>
-              <td><a href="inquiry-detail.html" class="action-btn">상세</a></td>
+              <td><a href="./inquiry-detail.html" class="action-btn" onclick="event.stopPropagation();">상세</a></td>
             </tr>
           </tbody>
         </table>

@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>코스 상세 - 인플루언서</title>
+  <link rel="stylesheet" href="../shared/clean-style.css">
+  <style>
+    /* PC Layout Styles */
+    .pc-layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 250px;
+      background: var(--bg-white);
+      border-right: 1px solid var(--border-light);
+      position: fixed;
+      height: 100vh;
+      overflow-y: auto;
+      z-index: 1000;
+      transition: transform 0.3s ease;
+    }
+
+    .sidebar-header {
+      padding: 24px 20px;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .sidebar-logo {
+      font-size: 20px;
+      font-weight: 700;
+      background: var(--primary-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .sidebar-nav {
+      padding: 16px 0;
+    }
+
+    .sidebar-menu-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 20px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+
+    .sidebar-menu-item:hover {
+      background: var(--bg-light);
+      color: var(--text-primary);
+    }
+
+    .sidebar-menu-item.active {
+      background: rgba(124, 58, 237, 0.1);
+      color: var(--primary-start);
+    }
+
+    .sidebar-menu-item svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      margin-left: 250px;
+      background: var(--bg-light);
+      min-height: 100vh;
+    }
+
+    .main-wrapper {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    /* Top Header */
+    .top-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 24px;
+      background: var(--bg-white);
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    .breadcrumb a {
+      color: var(--text-secondary);
+      text-decoration: none;
+    }
+
+    .breadcrumb a:hover {
+      color: var(--primary-start);
+    }
+
+    .breadcrumb-current {
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .mobile-link {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 12px;
+      background: var(--bg-light);
+      border-radius: var(--radius-sm);
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 13px;
+    }
+
+    .mobile-link:hover {
+      background: var(--bg-gray);
+    }
+
+    .mobile-link svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .menu-toggle {
+      display: none;
+      padding: 8px;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+
+    .menu-toggle svg {
+      width: 24px;
+      height: 24px;
+      color: var(--text-primary);
+    }
+
+    /* Page Header */
+    .page-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+
+    .page-title-section {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .page-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .status-badge {
+      display: inline-flex;
+      padding: 6px 12px;
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .status-badge.recruiting {
+      background: rgba(124, 58, 237, 0.1);
+      color: var(--primary-start);
+    }
+
+    .header-buttons {
+      display: flex;
+      gap: 12px;
+    }
+
+    /* Detail Layout */
+    .detail-layout {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 24px;
+    }
+
+    /* Course Image */
+    .course-image-card {
+      background: var(--bg-white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+    }
+
+    .course-image {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+    }
+
+    /* Tabs */
+    .tabs-card {
+      background: var(--bg-white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      margin-top: 24px;
+    }
+
+    .tabs-header {
+      display: flex;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 16px;
+      text-align: center;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-muted);
+      border: none;
+      background: none;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .tab-btn.active {
+      color: var(--primary-start);
+      border-bottom-color: var(--primary-start);
+    }
+
+    .tab-btn:hover:not(.active) {
+      color: var(--text-primary);
+    }
+
+    .tab-content {
+      padding: 24px;
+    }
+
+    .tab-panel {
+      display: none;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    /* Info Card */
+    .info-card {
+      background: var(--bg-white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      padding: 24px;
+    }
+
+    .info-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .info-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .info-item:last-child {
+      border-bottom: none;
+    }
+
+    .info-label {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    .info-value {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    .info-value.price {
+      color: var(--primary-start);
+      font-weight: 700;
+    }
+
+    /* Progress */
+    .progress-section {
+      margin-top: 20px;
+    }
+
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .progress-label {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .progress-value {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--primary-start);
+    }
+
+    .progress-bar {
+      height: 8px;
+      background: var(--bg-gray);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--primary-gradient);
+      border-radius: 4px;
+    }
+
+    /* Quick Actions */
+    .quick-actions-card {
+      background: var(--bg-white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      padding: 24px;
+      margin-top: 24px;
+    }
+
+    .quick-action-btn {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      padding: 12px;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-sm);
+      background: var(--bg-white);
+      text-decoration: none;
+      color: var(--text-primary);
+      font-size: 14px;
+      margin-bottom: 8px;
+      transition: all 0.2s;
+    }
+
+    .quick-action-btn:last-child {
+      margin-bottom: 0;
+    }
+
+    .quick-action-btn:hover {
+      background: var(--bg-light);
+      border-color: var(--primary-start);
+    }
+
+    .quick-action-btn svg {
+      width: 18px;
+      height: 18px;
+      color: var(--primary-start);
+    }
+
+    /* Content Styles */
+    .content-text {
+      font-size: 14px;
+      line-height: 1.8;
+      color: var(--text-primary);
+    }
+
+    .content-text p {
+      margin-bottom: 16px;
+    }
+
+    .schedule-list {
+      list-style: none;
+    }
+
+    .schedule-item {
+      display: flex;
+      gap: 16px;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .schedule-item:last-child {
+      border-bottom: none;
+    }
+
+    .schedule-day {
+      flex-shrink: 0;
+      width: 60px;
+      font-weight: 600;
+      color: var(--primary-start);
+    }
+
+    .schedule-content {
+      flex: 1;
+    }
+
+    .schedule-title {
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+
+    .schedule-desc {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .detail-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .main-content {
+        margin-left: 0;
+      }
+
+      .menu-toggle {
+        display: block;
+      }
+
+      .page-header {
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .header-buttons {
+        width: 100%;
+      }
+
+      .header-buttons .btn {
+        flex: 1;
+      }
+    }
+
+    /* Overlay for mobile */
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+    }
+
+    .sidebar-overlay.open {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="pc-layout">
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">INFLTRIP</div>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="dashboard-pc.html" class="sidebar-menu-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7" rx="1"/>
+            <rect x="14" y="3" width="7" height="7" rx="1"/>
+            <rect x="3" y="14" width="7" height="7" rx="1"/>
+            <rect x="14" y="14" width="7" height="7" rx="1"/>
+          </svg>
+          대시보드
+        </a>
+        <a href="course-list-pc.html" class="sidebar-menu-item active">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+          </svg>
+          코스 관리
+        </a>
+        <a href="active-course-pc.html" class="sidebar-menu-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12,6 12,12 16,14"/>
+          </svg>
+          진행중 코스
+        </a>
+        <a href="#" class="sidebar-menu-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+          파티 관리
+        </a>
+        <a href="#" class="sidebar-menu-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+            <line x1="1" y1="10" x2="23" y2="10"/>
+          </svg>
+          정산 관리
+        </a>
+        <a href="#" class="sidebar-menu-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+          </svg>
+          메시지
+        </a>
+        <a href="#" class="sidebar-menu-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+          </svg>
+          알림
+        </a>
+        <a href="#" class="sidebar-menu-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+          설정
+        </a>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Top Header -->
+      <header class="top-header">
+        <div class="flex items-center gap-3">
+          <button class="menu-toggle" id="menuToggle">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="3" y1="12" x2="21" y2="12"/>
+              <line x1="3" y1="6" x2="21" y2="6"/>
+              <line x1="3" y1="18" x2="21" y2="18"/>
+            </svg>
+          </button>
+          <nav class="breadcrumb">
+            <a href="dashboard-pc.html">홈</a>
+            <span>/</span>
+            <a href="course-list-pc.html">코스 관리</a>
+            <span>/</span>
+            <span class="breadcrumb-current">코스 상세</span>
+          </nav>
+        </div>
+        <div class="header-actions">
+          <a href="#" class="mobile-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
+              <line x1="12" y1="18" x2="12.01" y2="18"/>
+            </svg>
+            모바일 버전
+          </a>
+        </div>
+      </header>
+
+      <div class="main-wrapper">
+        <!-- Page Header -->
+        <div class="page-header">
+          <div class="page-title-section">
+            <h1 class="page-title">제주 힐링 여행 3박 4일</h1>
+            <span class="status-badge recruiting">모집중</span>
+          </div>
+          <div class="header-buttons">
+            <a href="course-edit-pc.html" class="btn btn-outline">수정</a>
+            <a href="applications-pc.html" class="btn btn-primary">신청자 관리</a>
+          </div>
+        </div>
+
+        <!-- Detail Layout -->
+        <div class="detail-layout">
+          <!-- Main Content -->
+          <div>
+            <!-- Course Image -->
+            <div class="course-image-card">
+              <img src="https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?w=800&h=400&fit=crop" alt="제주 힐링 여행" class="course-image">
+            </div>
+
+            <!-- Tabs -->
+            <div class="tabs-card">
+              <div class="tabs-header">
+                <button class="tab-btn active" data-tab="overview">개요</button>
+                <button class="tab-btn" data-tab="schedule">일정</button>
+                <button class="tab-btn" data-tab="includes">포함사항</button>
+                <button class="tab-btn" data-tab="notice">유의사항</button>
+              </div>
+              <div class="tab-content">
+                <div class="tab-panel active" id="overview">
+                  <div class="content-text">
+                    <p>제주의 아름다운 자연 속에서 힐링하는 3박 4일 여행입니다. 성산일출봉에서 일출을 보고, 우도에서 자전거를 타며, 카페 투어와 맛집 탐방까지!</p>
+                    <p>이번 여행에서는 제가 직접 선별한 숨은 명소들과 로컬 맛집들을 함께 방문할 예정입니다. 사진 촬영 팁도 드리고, 인스타그래머블한 스팟들도 많이 준비했어요.</p>
+                    <p>소수 정예로 진행되어 더욱 특별한 경험이 될 것입니다. 함께 제주의 매력에 빠져보아요!</p>
+                  </div>
+                </div>
+                <div class="tab-panel" id="schedule">
+                  <ul class="schedule-list">
+                    <li class="schedule-item">
+                      <div class="schedule-day">Day 1</div>
+                      <div class="schedule-content">
+                        <div class="schedule-title">제주 도착 & 동쪽 투어</div>
+                        <div class="schedule-desc">공항 미팅 - 성산일출봉 - 우도 - 월정리 해변 - 숙소 체크인</div>
+                      </div>
+                    </li>
+                    <li class="schedule-item">
+                      <div class="schedule-day">Day 2</div>
+                      <div class="schedule-content">
+                        <div class="schedule-title">서쪽 해안 투어</div>
+                        <div class="schedule-desc">애월 카페거리 - 협재 해변 - 한림공원 - 저녁 BBQ</div>
+                      </div>
+                    </li>
+                    <li class="schedule-item">
+                      <div class="schedule-day">Day 3</div>
+                      <div class="schedule-content">
+                        <div class="schedule-title">중산간 자연 투어</div>
+                        <div class="schedule-desc">사려니숲길 트레킹 - 비자림 - 선녀와 나무꾼 촬영지</div>
+                      </div>
+                    </li>
+                    <li class="schedule-item">
+                      <div class="schedule-day">Day 4</div>
+                      <div class="schedule-content">
+                        <div class="schedule-title">마무리 & 출발</div>
+                        <div class="schedule-desc">동문시장 쇼핑 - 점심식사 - 공항 이동</div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+                <div class="tab-panel" id="includes">
+                  <div class="content-text">
+                    <p><strong>포함 사항</strong></p>
+                    <ul style="margin-left: 20px; margin-bottom: 16px;">
+                      <li>3박 숙박 (4성급 호텔)</li>
+                      <li>전 일정 전용 차량</li>
+                      <li>조식 3회, 중식 2회, 석식 3회</li>
+                      <li>주요 관광지 입장료</li>
+                      <li>여행자 보험</li>
+                    </ul>
+                    <p><strong>불포함 사항</strong></p>
+                    <ul style="margin-left: 20px;">
+                      <li>왕복 항공권</li>
+                      <li>개인 경비</li>
+                      <li>선택 액티비티 비용</li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="tab-panel" id="notice">
+                  <div class="content-text">
+                    <p><strong>예약 및 취소</strong></p>
+                    <ul style="margin-left: 20px; margin-bottom: 16px;">
+                      <li>출발 7일 전: 100% 환불</li>
+                      <li>출발 3-6일 전: 50% 환불</li>
+                      <li>출발 2일 전 이후: 환불 불가</li>
+                    </ul>
+                    <p><strong>준비물</strong></p>
+                    <ul style="margin-left: 20px;">
+                      <li>편한 운동화</li>
+                      <li>자외선 차단제</li>
+                      <li>우천시 우비/우산</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sidebar Info -->
+          <div>
+            <div class="info-card">
+              <h3 class="info-title">코스 정보</h3>
+              <div class="info-item">
+                <span class="info-label">여행 일정</span>
+                <span class="info-value">2024.02.15 - 02.18</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">모집 마감</span>
+                <span class="info-value">2024.02.10</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">목적지</span>
+                <span class="info-value">제주도</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">카테고리</span>
+                <span class="info-value">힐링</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">참가비</span>
+                <span class="info-value price">890,000원</span>
+              </div>
+              <div class="progress-section">
+                <div class="progress-header">
+                  <span class="progress-label">모집 현황</span>
+                  <span class="progress-value">12/20명</span>
+                </div>
+                <div class="progress-bar">
+                  <div class="progress-fill" style="width: 60%;"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="quick-actions-card">
+              <h3 class="info-title">빠른 작업</h3>
+              <a href="applications-pc.html" class="quick-action-btn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+                  <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
+                </svg>
+                신청자 목록 보기
+              </a>
+              <a href="participants-pc.html" class="quick-action-btn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                  <circle cx="9" cy="7" r="4"/>
+                </svg>
+                참가자 관리
+              </a>
+              <a href="announcements-manage-pc.html" class="quick-action-btn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M22 17H2a3 3 0 0 0 3-3V9a7 7 0 0 1 14 0v5a3 3 0 0 0 3 3zm-8.27 4a2 2 0 0 1-3.46 0"/>
+                </svg>
+                공지사항 작성
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Mobile menu toggle
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebar = document.getElementById('sidebar');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+    menuToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('open');
+      sidebarOverlay.classList.toggle('open');
+    });
+
+    sidebarOverlay.addEventListener('click', () => {
+      sidebar.classList.remove('open');
+      sidebarOverlay.classList.remove('open');
+    });
+
+    // Tab switching
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const tabPanels = document.querySelectorAll('.tab-panel');
+
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const tabId = btn.dataset.tab;
+
+        tabBtns.forEach(b => b.classList.remove('active'));
+        tabPanels.forEach(p => p.classList.remove('active'));
+
+        btn.classList.add('active');
+        document.getElementById(tabId).classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>
