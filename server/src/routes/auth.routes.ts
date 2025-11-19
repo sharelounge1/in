@@ -1,6 +1,7 @@
-import { Router, Response } from 'express';
-import { successResponse, errorResponse } from '../utils/response';
+import { Router, Response, Request } from 'express';
+import { authController } from '../controllers/authController';
 import { authenticate, AuthenticatedRequest } from '../middlewares/auth.middleware';
+import { successResponse, errorResponse } from '../utils/response';
 
 const router = Router();
 
@@ -11,10 +12,26 @@ const ErrorCodes = {
 } as const;
 
 /**
- * POST /auth/kakao
- * 카카오 OAuth 로그인
+ * POST /auth/register
+ * Register a new user
  */
-router.post('/kakao', async (req, res: Response) => {
+router.post('/register', (req, res) => {
+  authController.register(req as AuthenticatedRequest, res);
+});
+
+/**
+ * POST /auth/login
+ * Login user
+ */
+router.post('/login', (req, res) => {
+  authController.login(req as AuthenticatedRequest, res);
+});
+
+/**
+ * POST /auth/kakao
+ * Kakao OAuth login
+ */
+router.post('/kakao', async (req: Request, res: Response) => {
   try {
     const { access_token } = req.body;
 
@@ -47,69 +64,26 @@ router.post('/kakao', async (req, res: Response) => {
 
 /**
  * POST /auth/refresh
- * 토큰 갱신
+ * Refresh access token
  */
-router.post('/refresh', async (req, res: Response) => {
-  try {
-    const { refresh_token } = req.body;
-
-    if (!refresh_token) {
-      return errorResponse(res, ErrorCodes.VALIDATION_ERROR, '리프레시 토큰이 필요합니다', 400);
-    }
-
-    // TODO: Implement token refresh logic
-    // 1. Verify refresh token
-    // 2. Generate new access token
-
-    // Placeholder response
-    successResponse(res, {
-      access_token: 'new_jwt_access_token',
-      expires_in: 900,
-    });
-  } catch (error) {
-    errorResponse(res, ErrorCodes.SERVER_ERROR, '토큰 갱신 중 오류가 발생했습니다', 500);
-  }
+router.post('/refresh', (req, res) => {
+  authController.refresh(req as AuthenticatedRequest, res);
 });
 
 /**
  * POST /auth/identity-verification
- * 본인인증 완료 처리
+ * Identity verification via phone
  */
-router.post('/identity-verification', authenticate, async (req: AuthenticatedRequest, res: Response) => {
-  try {
-    const { imp_uid, name, phone, birth_date, gender } = req.body;
-
-    if (!imp_uid || !name || !phone || !birth_date || !gender) {
-      return errorResponse(res, ErrorCodes.VALIDATION_ERROR, '필수 정보가 누락되었습니다', 400);
-    }
-
-    // TODO: Implement identity verification
-    // 1. Verify imp_uid with Iamport API
-    // 2. Update user's verified status in database
-    // 3. Store verification info
-
-    successResponse(res, {
-      verified: true,
-    });
-  } catch (error) {
-    errorResponse(res, ErrorCodes.SERVER_ERROR, '본인인증 처리 중 오류가 발생했습니다', 500);
-  }
+router.post('/identity-verification', authenticate, (req, res) => {
+  authController.verifyIdentity(req as AuthenticatedRequest, res);
 });
 
 /**
  * POST /auth/logout
- * 로그아웃 (토큰 무효화)
+ * Logout user
  */
-router.post('/logout', authenticate, async (req: AuthenticatedRequest, res: Response) => {
-  try {
-    // TODO: Implement logout logic
-    // 1. Invalidate refresh token in database
-    // 2. Add access token to blacklist (if using blacklist approach)
-
-    successResponse(res, null, '로그아웃 되었습니다');
-  } catch (error) {
-    errorResponse(res, ErrorCodes.SERVER_ERROR, '로그아웃 처리 중 오류가 발생했습니다', 500);
-  }
+router.post('/logout', authenticate, (req, res) => {
+  authController.logout(req as AuthenticatedRequest, res);
 });
 
 export default router;

@@ -149,3 +149,127 @@ export interface Announcement {
   createdAt: string;
   updatedAt: string;
 }
+
+// Profile types
+export interface Profile {
+  id: string;
+  email: string;
+  phone?: string;
+  phoneVerified: boolean;
+  name?: string;
+  nickname?: string;
+  avatarUrl?: string;
+  instagramUrl?: string;
+  gender?: string;
+  birthDate?: string;
+  bio?: string;
+  role: UserRole;
+  status: 'active' | 'suspended' | 'deleted';
+  notificationSettings: NotificationSettings;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface NotificationSettings {
+  push: boolean;
+  email: boolean;
+  sms: boolean;
+}
+
+// Auth types
+export interface RegisterRequest {
+  email: string;
+  password: string;
+  name: string;
+  phone?: string;
+}
+
+export interface LoginRequest {
+  email: string;
+  password: string;
+}
+
+export interface AuthTokens {
+  accessToken: string;
+  refreshToken: string;
+  expiresIn: number;
+}
+
+export interface RefreshTokenPayload {
+  sub: string;
+  type: 'refresh';
+  iat: number;
+  exp: number;
+}
+
+// User profile update types
+export interface UpdateProfileRequest {
+  nickname?: string;
+  avatarUrl?: string;
+  instagramUrl?: string;
+  bio?: string;
+  gender?: string;
+  birthDate?: string;
+}
+
+// Application types
+export interface CourseApplication {
+  id: string;
+  courseId: string;
+  userId: string;
+  applicantName: string;
+  phone: string;
+  instagramUrl: string;
+  age?: number;
+  gender?: string;
+  introduction?: string;
+  status: 'pending' | 'confirmed' | 'rejected' | 'cancelled';
+  statusReason?: string;
+  paymentId?: string;
+  paidAmount?: number;
+  appliedAt: string;
+  confirmedAt?: string;
+  rejectedAt?: string;
+  cancelledAt?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// Active travel types
+export interface ActiveTravel {
+  id: string;
+  course: {
+    id: string;
+    title: string;
+    thumbnailUrl?: string;
+    startDate: string;
+    endDate: string;
+  };
+  hasNewAnnouncement: boolean;
+  expenseBalance: number;
+}
+
+// Notification types
+export interface Notification {
+  id: string;
+  userId: string;
+  type: string;
+  title: string;
+  message: string;
+  data?: Record<string, unknown>;
+  isRead: boolean;
+  readAt?: string;
+  sentPush: boolean;
+  sentEmail: boolean;
+  sentSms: boolean;
+  createdAt: string;
+}
+
+// Refresh token storage
+export interface RefreshTokenRecord {
+  id: string;
+  userId: string;
+  token: string;
+  expiresAt: string;
+  createdAt: string;
+}
