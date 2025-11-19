@@ -1,489 +1,309 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>일정 - TRAVELY</title>
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
-    <link rel="stylesheet" href="../shared/aurora-style.css">
-    <style>
-        .schedule-container {
-            padding-bottom: 90px;
-        }
-
-        /* Travel Header */
-        .travel-header {
-            padding: 16px 20px;
-            background: var(--bg-glass);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            margin-bottom: 16px;
-        }
-
-        .travel-mini {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .travel-mini-image {
-            width: 48px;
-            height: 48px;
-            border-radius: var(--radius-md);
-            object-fit: cover;
-        }
-
-        .travel-mini-info {
-            flex: 1;
-        }
-
-        .travel-mini-title {
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 2px;
-        }
-
-        .travel-mini-date {
-            font-size: 11px;
-            color: var(--text-muted);
-        }
-
-        /* Tabs */
-        .detail-tabs {
-            display: flex;
-            padding: 0 20px;
-            gap: 8px;
-            margin-bottom: 20px;
-            overflow-x: auto;
-        }
-
-        .detail-tabs::-webkit-scrollbar {
-            display: none;
-        }
-
-        .detail-tab {
-            padding: 10px 18px;
-            border-radius: var(--radius-full);
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--text-secondary);
-            background: var(--bg-glass);
-            border: none;
-            cursor: pointer;
-            white-space: nowrap;
-            transition: all 0.3s ease;
-            text-decoration: none;
-        }
-
-        .detail-tab.active {
-            background: var(--gradient-primary);
-            color: white;
-        }
-
-        /* Day Tabs */
-        .day-tabs {
-            display: flex;
-            gap: 8px;
-            padding: 0 20px;
-            margin-bottom: 20px;
-            overflow-x: auto;
-        }
-
-        .day-tabs::-webkit-scrollbar {
-            display: none;
-        }
-
-        .day-tab {
-            flex: 0 0 auto;
-            padding: 12px 16px;
-            background: var(--bg-glass);
-            border-radius: var(--radius-md);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-            min-width: 70px;
-        }
-
-        .day-tab.active {
-            background: var(--gradient-primary);
-            border-color: transparent;
-        }
-
-        .day-tab.today {
-            border-color: var(--aurora-cyan);
-        }
-
-        .day-tab-num {
-            font-size: 11px;
-            color: var(--text-muted);
-            margin-bottom: 4px;
-        }
-
-        .day-tab.active .day-tab-num {
-            color: rgba(255, 255, 255, 0.8);
-        }
-
-        .day-tab-date {
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        .day-tab-badge {
-            font-size: 9px;
-            color: var(--aurora-cyan);
-            margin-top: 4px;
-        }
-
-        .day-tab.active .day-tab-badge {
-            color: white;
-        }
-
-        /* Schedule Content */
-        .schedule-content {
-            padding: 0 20px;
-        }
-
-        .schedule-day-header {
-            margin-bottom: 16px;
-        }
-
-        .schedule-day-title {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 4px;
-        }
-
-        .schedule-day-subtitle {
-            font-size: 13px;
-            color: var(--text-secondary);
-        }
-
-        /* Timeline */
-        .timeline {
-            position: relative;
-            padding-left: 24px;
-        }
-
-        .timeline::before {
-            content: '';
-            position: absolute;
-            left: 6px;
-            top: 8px;
-            bottom: 8px;
-            width: 2px;
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .timeline-item {
-            position: relative;
-            padding-bottom: 24px;
-        }
-
-        .timeline-item:last-child {
-            padding-bottom: 0;
-        }
-
-        .timeline-dot {
-            position: absolute;
-            left: -24px;
-            top: 4px;
-            width: 14px;
-            height: 14px;
-            border-radius: 50%;
-            background: var(--bg-secondary);
-            border: 2px solid var(--aurora-purple);
-        }
-
-        .timeline-item.current .timeline-dot {
-            background: var(--aurora-purple);
-            box-shadow: 0 0 10px var(--aurora-purple);
-        }
-
-        .timeline-item.completed .timeline-dot {
-            background: var(--success);
-            border-color: var(--success);
-        }
-
-        .timeline-card {
-            padding: 16px;
-            background: var(--bg-glass);
-            border-radius: var(--radius-lg);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .timeline-item.current .timeline-card {
-            border-color: var(--aurora-purple);
-            background: rgba(102, 126, 234, 0.1);
-        }
-
-        .timeline-time {
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--aurora-purple);
-            margin-bottom: 8px;
-        }
-
-        .timeline-title {
-            font-size: 15px;
-            font-weight: 600;
-            margin-bottom: 6px;
-        }
-
-        .timeline-desc {
-            font-size: 13px;
-            color: var(--text-secondary);
-            line-height: 1.5;
-            margin-bottom: 10px;
-        }
-
-        .timeline-location {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 12px;
-            color: var(--text-muted);
-        }
-
-        .timeline-location i {
-            color: var(--aurora-cyan);
-        }
-
-        .timeline-image {
-            width: 100%;
-            height: 120px;
-            border-radius: var(--radius-md);
-            object-fit: cover;
-            margin-top: 12px;
-        }
-
-        /* Current Badge */
-        .current-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            padding: 4px 8px;
-            background: var(--aurora-purple);
-            border-radius: var(--radius-full);
-            font-size: 10px;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>여행 일정 - TRAVELY</title>
+  <link rel="stylesheet" href="../shared/clean-style.css">
+  <style>
+    .content {
+      padding-bottom: 20px;
+    }
+    .day-tabs {
+      display: flex;
+      gap: 8px;
+      padding: 16px 20px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .day-tabs::-webkit-scrollbar {
+      display: none;
+    }
+    .day-tab {
+      flex-shrink: 0;
+      padding: 12px 20px;
+      border-radius: var(--radius-md);
+      font-size: 14px;
+      font-weight: 500;
+      background: var(--bg-gray);
+      color: var(--text-secondary);
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .day-tab.active {
+      background: var(--primary-gradient);
+      color: white;
+    }
+    .day-tab.current {
+      position: relative;
+    }
+    .day-tab.current::after {
+      content: '';
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      width: 6px;
+      height: 6px;
+      background: #10B981;
+      border-radius: 50%;
+    }
+    .schedule-header {
+      padding: 0 20px 16px;
+    }
+    .schedule-date {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .schedule-subtitle {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+    .timeline {
+      padding: 0 20px;
+    }
+    .timeline-item {
+      display: flex;
+      gap: 16px;
+      position: relative;
+      padding-bottom: 24px;
+    }
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: 11px;
+      top: 24px;
+      bottom: 0;
+      width: 2px;
+      background: var(--border-light);
+    }
+    .timeline-item:last-child::before {
+      display: none;
+    }
+    .timeline-dot {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--primary-gradient);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .timeline-dot svg {
+      width: 12px;
+      height: 12px;
+      color: white;
+    }
+    .timeline-dot.completed {
+      background: #10B981;
+    }
+    .timeline-dot.upcoming {
+      background: var(--bg-gray);
+    }
+    .timeline-dot.upcoming svg {
+      color: var(--text-muted);
+    }
+    .timeline-content {
+      flex: 1;
+      padding-top: 2px;
+    }
+    .timeline-time {
+      font-size: 12px;
+      color: var(--primary-start);
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .timeline-title {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .timeline-desc {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      margin-bottom: 8px;
+    }
+    .timeline-location {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .timeline-location svg {
+      width: 14px;
+      height: 14px;
+    }
+    .timeline-image {
+      width: 100%;
+      height: 120px;
+      border-radius: var(--radius-md);
+      object-fit: cover;
+      margin-top: 8px;
+    }
+    .current-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      background: rgba(16, 185, 129, 0.1);
+      color: #10B981;
+      border-radius: 100px;
+      font-size: 11px;
+      font-weight: 500;
+      margin-left: 8px;
+    }
+  </style>
 </head>
 <body>
-    <div class="aurora-bg">
-        <div class="aurora-orb aurora-orb-1"></div>
-        <div class="aurora-orb aurora-orb-2"></div>
-        <div class="aurora-orb aurora-orb-3"></div>
+  <div class="mobile-container">
+    <!-- Header -->
+    <header class="header">
+      <button onclick="history.back()" style="background: none; border: none; cursor: pointer;">
+        <svg class="header-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+        </svg>
+      </button>
+      <span class="header-title">여행 일정</span>
+      <div style="width: 24px;"></div>
+    </header>
+
+    <!-- Content -->
+    <div class="content">
+      <!-- Day Tabs -->
+      <div class="day-tabs">
+        <button class="day-tab">1일차</button>
+        <button class="day-tab active current">2일차</button>
+        <button class="day-tab">3일차</button>
+        <button class="day-tab">4일차</button>
+      </div>
+
+      <!-- Schedule Header -->
+      <div class="schedule-header">
+        <h2 class="schedule-date">1월 26일 (일)</h2>
+        <p class="schedule-subtitle">한라산 트레킹 & 산방산 일몰</p>
+      </div>
+
+      <!-- Timeline -->
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-dot completed">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+            </svg>
+          </div>
+          <div class="timeline-content">
+            <p class="timeline-time">07:00</p>
+            <h3 class="timeline-title">조식 및 출발 준비</h3>
+            <p class="timeline-desc">호텔에서 든든한 아침 식사 후 트레킹 준비</p>
+            <p class="timeline-location">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+              </svg>
+              제주 그랜드 호텔
+            </p>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot completed">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+            </svg>
+          </div>
+          <div class="timeline-content">
+            <p class="timeline-time">08:30</p>
+            <h3 class="timeline-title">한라산 영실코스 등반</h3>
+            <p class="timeline-desc">약 5.8km 코스로 윗세오름까지 등반합니다. 중간중간 인증샷 타임!</p>
+            <p class="timeline-location">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+              </svg>
+              한라산 영실탐방로
+            </p>
+            <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600" alt="한라산" class="timeline-image">
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </div>
+          <div class="timeline-content">
+            <p class="timeline-time">13:00</p>
+            <h3 class="timeline-title">중식<span class="current-badge">현재</span></h3>
+            <p class="timeline-desc">1100고지 휴게소에서 제주 특선 도시락으로 점심 식사</p>
+            <p class="timeline-location">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+              </svg>
+              1100고지 휴게소
+            </p>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot upcoming">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </div>
+          <div class="timeline-content">
+            <p class="timeline-time">15:00</p>
+            <h3 class="timeline-title">산방산 둘레길</h3>
+            <p class="timeline-desc">산방산 주변 둘레길 산책 및 산방굴사 방문</p>
+            <p class="timeline-location">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+              </svg>
+              산방산
+            </p>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot upcoming">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </div>
+          <div class="timeline-content">
+            <p class="timeline-time">17:30</p>
+            <h3 class="timeline-title">산방산 일몰 감상</h3>
+            <p class="timeline-desc">산방산에서 바라보는 아름다운 일몰과 함께 사진 촬영</p>
+            <p class="timeline-location">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+              </svg>
+              산방산 전망대
+            </p>
+            <img src="https://images.unsplash.com/photo-1507400492013-162706c8c05e?w=600" alt="일몰" class="timeline-image">
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot upcoming">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </div>
+          <div class="timeline-content">
+            <p class="timeline-time">19:00</p>
+            <h3 class="timeline-title">석식 (흑돼지 구이)</h3>
+            <p class="timeline-desc">제주 흑돼지 맛집에서 풍성한 저녁 식사</p>
+            <p class="timeline-location">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+              </svg>
+              돈사돈 본점
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
-
-    <div class="mobile-container schedule-container">
-        <!-- Header -->
-        <header class="header">
-            <a href="travel-detail.html" class="header-back">
-                <i class="ri-arrow-left-line"></i>
-            </a>
-            <h1 class="header-title">일정</h1>
-            <div style="width: 40px;"></div>
-        </header>
-
-        <!-- Travel Header -->
-        <div class="travel-header">
-            <div class="travel-mini">
-                <img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=200" class="travel-mini-image" alt="여행">
-                <div class="travel-mini-info">
-                    <div class="travel-mini-title">발리 럭셔리 힐링 7일</div>
-                    <div class="travel-mini-date">2025.02.20 - 02.26</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Tabs -->
-        <div class="detail-tabs">
-            <a href="travel-detail.html" class="detail-tab">
-                요약
-            </a>
-            <a href="travel-announcements.html" class="detail-tab">
-                공지사항
-            </a>
-            <a href="travel-schedule.html" class="detail-tab active">
-                일정
-            </a>
-            <a href="travel-expenses.html" class="detail-tab">
-                경비
-            </a>
-            <a href="travel-participants.html" class="detail-tab">
-                참가자
-            </a>
-        </div>
-
-        <!-- Day Tabs -->
-        <div class="day-tabs">
-            <div class="day-tab active today">
-                <div class="day-tab-num">DAY 1</div>
-                <div class="day-tab-date">2/20</div>
-                <div class="day-tab-badge">TODAY</div>
-            </div>
-            <div class="day-tab">
-                <div class="day-tab-num">DAY 2</div>
-                <div class="day-tab-date">2/21</div>
-            </div>
-            <div class="day-tab">
-                <div class="day-tab-num">DAY 3</div>
-                <div class="day-tab-date">2/22</div>
-            </div>
-            <div class="day-tab">
-                <div class="day-tab-num">DAY 4</div>
-                <div class="day-tab-date">2/23</div>
-            </div>
-            <div class="day-tab">
-                <div class="day-tab-num">DAY 5</div>
-                <div class="day-tab-date">2/24</div>
-            </div>
-            <div class="day-tab">
-                <div class="day-tab-num">DAY 6</div>
-                <div class="day-tab-date">2/25</div>
-            </div>
-            <div class="day-tab">
-                <div class="day-tab-num">DAY 7</div>
-                <div class="day-tab-date">2/26</div>
-            </div>
-        </div>
-
-        <!-- Schedule Content -->
-        <div class="schedule-content">
-            <div class="schedule-day-header">
-                <h2 class="schedule-day-title">DAY 1 - 출발 & 도착</h2>
-                <p class="schedule-day-subtitle">2025년 2월 20일 (목)</p>
-            </div>
-
-            <div class="timeline">
-                <!-- Completed Item -->
-                <div class="timeline-item completed">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-card">
-                        <div class="timeline-time">06:00</div>
-                        <div class="timeline-title">인천국제공항 집합</div>
-                        <div class="timeline-desc">
-                            제2터미널 3층 출국장 H카운터 앞에서 만나요!
-                        </div>
-                        <div class="timeline-location">
-                            <i class="ri-map-pin-line"></i>
-                            인천국제공항 제2터미널
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Completed Item -->
-                <div class="timeline-item completed">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-card">
-                        <div class="timeline-time">08:30</div>
-                        <div class="timeline-title">출국 수속 및 탑승</div>
-                        <div class="timeline-desc">
-                            GA879편 인천 → 발리 (비행시간 약 7시간)
-                        </div>
-                        <div class="timeline-location">
-                            <i class="ri-flight-takeoff-line"></i>
-                            가루다인도네시아항공
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Current Item -->
-                <div class="timeline-item current">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-card">
-                        <span class="current-badge">
-                            <i class="ri-time-line"></i>
-                            진행 중
-                        </span>
-                        <div class="timeline-time">14:30</div>
-                        <div class="timeline-title">발리 응우라라이 국제공항 도착</div>
-                        <div class="timeline-desc">
-                            입국 심사 및 짐 수령 후 현지 가이드와 미팅
-                        </div>
-                        <div class="timeline-location">
-                            <i class="ri-map-pin-line"></i>
-                            Ngurah Rai International Airport
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Upcoming Item -->
-                <div class="timeline-item">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-card">
-                        <div class="timeline-time">16:00</div>
-                        <div class="timeline-title">숙소 이동 및 체크인</div>
-                        <div class="timeline-desc">
-                            우붓의 럭셔리 풀빌라에서 휴식을 취해요
-                        </div>
-                        <div class="timeline-location">
-                            <i class="ri-hotel-line"></i>
-                            Hanging Gardens of Bali
-                        </div>
-                        <img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=600" class="timeline-image" alt="숙소">
-                    </div>
-                </div>
-
-                <!-- Upcoming Item -->
-                <div class="timeline-item">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-card">
-                        <div class="timeline-time">19:00</div>
-                        <div class="timeline-title">웰컴 디너</div>
-                        <div class="timeline-desc">
-                            참가자 전원이 함께하는 첫 만남의 시간. 발리 전통 요리를 즐겨요!
-                        </div>
-                        <div class="timeline-location">
-                            <i class="ri-restaurant-line"></i>
-                            Mozaic Restaurant
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Upcoming Item -->
-                <div class="timeline-item">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-card">
-                        <div class="timeline-time">21:00</div>
-                        <div class="timeline-title">자유 시간 & 취침</div>
-                        <div class="timeline-desc">
-                            내일 일정을 위해 푹 쉬세요!
-                        </div>
-                        <div class="timeline-location">
-                            <i class="ri-moon-line"></i>
-                            숙소
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Bottom Navigation -->
-        <nav class="bottom-nav">
-            <a href="home.html" class="nav-item">
-                <i class="ri-home-5-line"></i>
-                <span>홈</span>
-            </a>
-            <a href="#" class="nav-item">
-                <i class="ri-sparkling-line"></i>
-                <span>파티</span>
-            </a>
-            <a href="my-applications.html" class="nav-item">
-                <i class="ri-file-list-3-line"></i>
-                <span>내신청</span>
-            </a>
-            <a href="active-travels.html" class="nav-item active">
-                <i class="ri-suitcase-3-fill"></i>
-                <span>진행중</span>
-            </a>
-            <a href="mypage.html" class="nav-item">
-                <i class="ri-user-line"></i>
-                <span>마이</span>
-            </a>
-        </nav>
-    </div>
+  </div>
 </body>
 </html>

@@ -1,500 +1,320 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>참가자 - TRAVELY</title>
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
-    <link rel="stylesheet" href="../shared/aurora-style.css">
-    <style>
-        .participants-container {
-            padding-bottom: 90px;
-        }
-
-        /* Travel Header */
-        .travel-header {
-            padding: 16px 20px;
-            background: var(--bg-glass);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            margin-bottom: 16px;
-        }
-
-        .travel-mini {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .travel-mini-image {
-            width: 48px;
-            height: 48px;
-            border-radius: var(--radius-md);
-            object-fit: cover;
-        }
-
-        .travel-mini-info {
-            flex: 1;
-        }
-
-        .travel-mini-title {
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 2px;
-        }
-
-        .travel-mini-date {
-            font-size: 11px;
-            color: var(--text-muted);
-        }
-
-        /* Tabs */
-        .detail-tabs {
-            display: flex;
-            padding: 0 20px;
-            gap: 8px;
-            margin-bottom: 20px;
-            overflow-x: auto;
-        }
-
-        .detail-tabs::-webkit-scrollbar {
-            display: none;
-        }
-
-        .detail-tab {
-            padding: 10px 18px;
-            border-radius: var(--radius-full);
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--text-secondary);
-            background: var(--bg-glass);
-            border: none;
-            cursor: pointer;
-            white-space: nowrap;
-            transition: all 0.3s ease;
-            text-decoration: none;
-        }
-
-        .detail-tab.active {
-            background: var(--gradient-primary);
-            color: white;
-        }
-
-        /* Participants Header */
-        .participants-header {
-            padding: 0 20px;
-            margin-bottom: 16px;
-        }
-
-        .participants-count {
-            font-size: 14px;
-            color: var(--text-secondary);
-        }
-
-        .participants-count strong {
-            color: var(--aurora-purple);
-        }
-
-        /* Participant List */
-        .participant-list {
-            padding: 0 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        /* Host Card */
-        .host-card {
-            padding: 20px;
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(240, 147, 251, 0.1) 100%);
-            border: 1px solid var(--aurora-purple);
-            border-radius: var(--radius-xl);
-            margin-bottom: 8px;
-        }
-
-        .host-label {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            padding: 4px 10px;
-            background: var(--gradient-primary);
-            border-radius: var(--radius-full);
-            font-size: 10px;
-            font-weight: 600;
-            margin-bottom: 12px;
-        }
-
-        .host-content {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .host-avatar {
-            width: 64px;
-            height: 64px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid var(--aurora-purple);
-        }
-
-        .host-info {
-            flex: 1;
-        }
-
-        .host-name {
-            font-size: 16px;
-            font-weight: 700;
-            margin-bottom: 4px;
-        }
-
-        .host-handle {
-            font-size: 13px;
-            color: var(--aurora-purple);
-            margin-bottom: 8px;
-        }
-
-        .host-bio {
-            font-size: 12px;
-            color: var(--text-secondary);
-            line-height: 1.4;
-        }
-
-        .host-social {
-            display: flex;
-            gap: 8px;
-            margin-top: 12px;
-        }
-
-        .social-btn {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: var(--bg-glass);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-primary);
-            font-size: 16px;
-            text-decoration: none;
-            transition: all 0.3s;
-        }
-
-        .social-btn:hover {
-            background: var(--aurora-purple);
-        }
-
-        /* Participant Card */
-        .participant-card {
-            padding: 16px;
-            background: var(--bg-glass);
-            border-radius: var(--radius-lg);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .participant-content {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .participant-avatar {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .participant-info {
-            flex: 1;
-        }
-
-        .participant-name {
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .participant-handle {
-            font-size: 12px;
-            color: var(--aurora-purple);
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .participant-handle i {
-            font-size: 14px;
-        }
-
-        .participant-bio {
-            font-size: 12px;
-            color: var(--text-secondary);
-            margin-top: 10px;
-            padding-top: 10px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            line-height: 1.4;
-        }
-
-        .participant-badge {
-            padding: 4px 8px;
-            border-radius: var(--radius-full);
-            font-size: 10px;
-            font-weight: 600;
-        }
-
-        .badge-me {
-            background: rgba(102, 126, 234, 0.2);
-            color: var(--aurora-purple);
-        }
-
-        /* Message Button */
-        .message-btn {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: var(--bg-glass);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-primary);
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .message-btn:hover {
-            background: var(--aurora-purple);
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>참여자 목록 - TRAVELY</title>
+  <link rel="stylesheet" href="../shared/clean-style.css">
+  <style>
+    .content {
+      padding-bottom: 20px;
+    }
+    .summary-card {
+      margin: 16px 20px;
+      padding: 16px;
+      background: var(--primary-gradient);
+      border-radius: var(--radius-md);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .summary-label {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+    .summary-value {
+      font-size: 24px;
+      font-weight: 700;
+    }
+    .search-box {
+      margin: 0 20px 16px;
+      display: flex;
+      align-items: center;
+      background: var(--bg-light);
+      border-radius: var(--radius-md);
+      padding: 12px 16px;
+    }
+    .search-box input {
+      flex: 1;
+      border: none;
+      outline: none;
+      background: transparent;
+      font-size: 14px;
+      font-family: inherit;
+    }
+    .search-box svg {
+      width: 20px;
+      height: 20px;
+      color: var(--text-muted);
+      margin-right: 8px;
+    }
+    .participant-section {
+      padding: 0 20px;
+    }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .section-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    .section-count {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .participant-card {
+      display: flex;
+      align-items: center;
+      padding: 12px;
+      background: var(--bg-white);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-card);
+      margin-bottom: 8px;
+    }
+    .participant-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 12px;
+    }
+    .participant-info {
+      flex: 1;
+    }
+    .participant-name {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 2px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .host-badge {
+      padding: 2px 6px;
+      background: var(--primary-gradient);
+      color: white;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 600;
+    }
+    .me-badge {
+      padding: 2px 6px;
+      background: rgba(16, 185, 129, 0.1);
+      color: #10B981;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 600;
+    }
+    .participant-desc {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+    .participant-actions {
+      display: flex;
+      gap: 8px;
+    }
+    .action-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--bg-light);
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .action-btn:hover {
+      background: var(--bg-gray);
+    }
+    .action-btn svg {
+      width: 18px;
+      height: 18px;
+      color: var(--text-secondary);
+    }
+    .divider {
+      height: 8px;
+      background: var(--bg-light);
+      margin: 16px 0;
+    }
+  </style>
 </head>
 <body>
-    <div class="aurora-bg">
-        <div class="aurora-orb aurora-orb-1"></div>
-        <div class="aurora-orb aurora-orb-2"></div>
-        <div class="aurora-orb aurora-orb-3"></div>
+  <div class="mobile-container">
+    <!-- Header -->
+    <header class="header">
+      <button onclick="history.back()" style="background: none; border: none; cursor: pointer;">
+        <svg class="header-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+        </svg>
+      </button>
+      <span class="header-title">참여자 목록</span>
+      <div style="width: 24px;"></div>
+    </header>
+
+    <!-- Content -->
+    <div class="content">
+      <!-- Summary Card -->
+      <div class="summary-card">
+        <div>
+          <p class="summary-label">총 참여자</p>
+          <p class="summary-value">18명</p>
+        </div>
+        <svg width="48" height="48" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="opacity: 0.5;">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+        </svg>
+      </div>
+
+      <!-- Search Box -->
+      <div class="search-box">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+        </svg>
+        <input type="text" placeholder="참여자 검색">
+      </div>
+
+      <!-- Host Section -->
+      <div class="participant-section">
+        <div class="section-header">
+          <span class="section-label">호스트</span>
+          <span class="section-count">1명</span>
+        </div>
+        <div class="participant-card">
+          <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100" alt="여행하는 지민" class="participant-avatar">
+          <div class="participant-info">
+            <p class="participant-name">
+              여행하는 지민
+              <span class="host-badge">호스트</span>
+            </p>
+            <p class="participant-desc">인플루언서 / 여행 가이드</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Participants Section -->
+      <div class="participant-section">
+        <div class="section-header">
+          <span class="section-label">참여자</span>
+          <span class="section-count">17명</span>
+        </div>
+
+        <div class="participant-card">
+          <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100" alt="김민수" class="participant-avatar">
+          <div class="participant-info">
+            <p class="participant-name">
+              김민수
+              <span class="me-badge">나</span>
+            </p>
+            <p class="participant-desc">서울시 강남구</p>
+          </div>
+          <div class="participant-actions">
+            <button class="action-btn">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="participant-card">
+          <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100" alt="이서연" class="participant-avatar">
+          <div class="participant-info">
+            <p class="participant-name">이서연</p>
+            <p class="participant-desc">서울시 마포구</p>
+          </div>
+          <div class="participant-actions">
+            <button class="action-btn">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="participant-card">
+          <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100" alt="박준혁" class="participant-avatar">
+          <div class="participant-info">
+            <p class="participant-name">박준혁</p>
+            <p class="participant-desc">경기도 성남시</p>
+          </div>
+          <div class="participant-actions">
+            <button class="action-btn">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="participant-card">
+          <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100" alt="최유진" class="participant-avatar">
+          <div class="participant-info">
+            <p class="participant-name">최유진</p>
+            <p class="participant-desc">부산시 해운대구</p>
+          </div>
+          <div class="participant-actions">
+            <button class="action-btn">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="participant-card">
+          <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100" alt="정태영" class="participant-avatar">
+          <div class="participant-info">
+            <p class="participant-name">정태영</p>
+            <p class="participant-desc">인천시 남동구</p>
+          </div>
+          <div class="participant-actions">
+            <button class="action-btn">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="participant-card">
+          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100" alt="한소희" class="participant-avatar">
+          <div class="participant-info">
+            <p class="participant-name">한소희</p>
+            <p class="participant-desc">대전시 유성구</p>
+          </div>
+          <div class="participant-actions">
+            <button class="action-btn">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="participant-card">
+          <img src="https://images.unsplash.com/photo-1552058544-f2b08422138a?w=100" alt="오지훈" class="participant-avatar">
+          <div class="participant-info">
+            <p class="participant-name">오지훈</p>
+            <p class="participant-desc">대구시 수성구</p>
+          </div>
+          <div class="participant-actions">
+            <button class="action-btn">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
-
-    <div class="mobile-container participants-container">
-        <!-- Header -->
-        <header class="header">
-            <a href="travel-detail.html" class="header-back">
-                <i class="ri-arrow-left-line"></i>
-            </a>
-            <h1 class="header-title">참가자</h1>
-            <div style="width: 40px;"></div>
-        </header>
-
-        <!-- Travel Header -->
-        <div class="travel-header">
-            <div class="travel-mini">
-                <img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=200" class="travel-mini-image" alt="여행">
-                <div class="travel-mini-info">
-                    <div class="travel-mini-title">발리 럭셔리 힐링 7일</div>
-                    <div class="travel-mini-date">2025.02.20 - 02.26</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Tabs -->
-        <div class="detail-tabs">
-            <a href="travel-detail.html" class="detail-tab">
-                요약
-            </a>
-            <a href="travel-announcements.html" class="detail-tab">
-                공지사항
-            </a>
-            <a href="travel-schedule.html" class="detail-tab">
-                일정
-            </a>
-            <a href="travel-expenses.html" class="detail-tab">
-                경비
-            </a>
-            <a href="travel-participants.html" class="detail-tab active">
-                참가자
-            </a>
-        </div>
-
-        <!-- Participants Header -->
-        <div class="participants-header">
-            <p class="participants-count">총 <strong>12명</strong>이 함께합니다</p>
-        </div>
-
-        <!-- Participant List -->
-        <div class="participant-list">
-            <!-- Host -->
-            <div class="host-card">
-                <span class="host-label">
-                    <i class="ri-star-fill"></i>
-                    HOST
-                </span>
-                <div class="host-content">
-                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200" class="host-avatar" alt="호스트">
-                    <div class="host-info">
-                        <div class="host-name">여행하는 지나</div>
-                        <div class="host-handle">@travel_jina</div>
-                        <div class="host-bio">
-                            10년차 여행 크리에이터. 발리는 20번째 방문!
-                            여러분과 함께 특별한 추억 만들어요.
-                        </div>
-                        <div class="host-social">
-                            <a href="#" class="social-btn">
-                                <i class="ri-instagram-line"></i>
-                            </a>
-                            <a href="#" class="social-btn">
-                                <i class="ri-youtube-line"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Me -->
-            <div class="participant-card">
-                <div class="participant-content">
-                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100" class="participant-avatar" alt="참가자">
-                    <div class="participant-info">
-                        <div class="participant-name">박준혁</div>
-                        <a href="#" class="participant-handle">
-                            <i class="ri-instagram-line"></i>
-                            @junhyuk_p
-                        </a>
-                    </div>
-                    <span class="participant-badge badge-me">나</span>
-                </div>
-                <div class="participant-bio">
-                    여행과 맛집 탐방을 좋아하는 직장인입니다. 발리 첫 방문이라 기대가 됩니다!
-                </div>
-            </div>
-
-            <!-- Participant 1 -->
-            <div class="participant-card">
-                <div class="participant-content">
-                    <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100" class="participant-avatar" alt="참가자">
-                    <div class="participant-info">
-                        <div class="participant-name">김민지</div>
-                        <a href="#" class="participant-handle">
-                            <i class="ri-instagram-line"></i>
-                            @minji.k
-                        </a>
-                    </div>
-                    <button class="message-btn">
-                        <i class="ri-chat-3-line"></i>
-                    </button>
-                </div>
-                <div class="participant-bio">
-                    힐링이 필요한 마케터. 요가와 명상에 관심이 많아요.
-                </div>
-            </div>
-
-            <!-- Participant 2 -->
-            <div class="participant-card">
-                <div class="participant-content">
-                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100" class="participant-avatar" alt="참가자">
-                    <div class="participant-info">
-                        <div class="participant-name">이수현</div>
-                        <a href="#" class="participant-handle">
-                            <i class="ri-instagram-line"></i>
-                            @suhyun.lee
-                        </a>
-                    </div>
-                    <button class="message-btn">
-                        <i class="ri-chat-3-line"></i>
-                    </button>
-                </div>
-                <div class="participant-bio">
-                    사진 찍는 걸 좋아하는 프리랜서. 인생샷 많이 남기고 싶어요!
-                </div>
-            </div>
-
-            <!-- Participant 3 -->
-            <div class="participant-card">
-                <div class="participant-content">
-                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100" class="participant-avatar" alt="참가자">
-                    <div class="participant-info">
-                        <div class="participant-name">정다은</div>
-                        <a href="#" class="participant-handle">
-                            <i class="ri-instagram-line"></i>
-                            @daeun_j
-                        </a>
-                    </div>
-                    <button class="message-btn">
-                        <i class="ri-chat-3-line"></i>
-                    </button>
-                </div>
-                <div class="participant-bio">
-                    발리 3번째 방문! 맛있는 거 많이 먹고 싶어요.
-                </div>
-            </div>
-
-            <!-- Participant 4 -->
-            <div class="participant-card">
-                <div class="participant-content">
-                    <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100" class="participant-avatar" alt="참가자">
-                    <div class="participant-info">
-                        <div class="participant-name">최영호</div>
-                        <a href="#" class="participant-handle">
-                            <i class="ri-instagram-line"></i>
-                            @youngho.c
-                        </a>
-                    </div>
-                    <button class="message-btn">
-                        <i class="ri-chat-3-line"></i>
-                    </button>
-                </div>
-                <div class="participant-bio">
-                    스쿠버 다이빙 자격증 보유. 발리 바다가 기대됩니다.
-                </div>
-            </div>
-
-            <!-- Participant 5 -->
-            <div class="participant-card">
-                <div class="participant-content">
-                    <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100" class="participant-avatar" alt="참가자">
-                    <div class="participant-info">
-                        <div class="participant-name">한소희</div>
-                        <a href="#" class="participant-handle">
-                            <i class="ri-instagram-line"></i>
-                            @sohee.han
-                        </a>
-                    </div>
-                    <button class="message-btn">
-                        <i class="ri-chat-3-line"></i>
-                    </button>
-                </div>
-                <div class="participant-bio">
-                    신혼여행으로 왔어요! 남편과 함께 참가합니다.
-                </div>
-            </div>
-
-            <!-- More participants would be listed similarly -->
-        </div>
-
-        <!-- Bottom Navigation -->
-        <nav class="bottom-nav">
-            <a href="home.html" class="nav-item">
-                <i class="ri-home-5-line"></i>
-                <span>홈</span>
-            </a>
-            <a href="#" class="nav-item">
-                <i class="ri-sparkling-line"></i>
-                <span>파티</span>
-            </a>
-            <a href="my-applications.html" class="nav-item">
-                <i class="ri-file-list-3-line"></i>
-                <span>내신청</span>
-            </a>
-            <a href="active-travels.html" class="nav-item active">
-                <i class="ri-suitcase-3-fill"></i>
-                <span>진행중</span>
-            </a>
-            <a href="mypage.html" class="nav-item">
-                <i class="ri-user-line"></i>
-                <span>마이</span>
-            </a>
-        </nav>
-    </div>
+  </div>
 </body>
 </html>

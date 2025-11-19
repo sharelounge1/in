@@ -1,828 +1,670 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>정산 관리 - 관리자 센터</title>
-    <link rel="stylesheet" href="../shared/aurora-style.css">
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
-    <style>
-        .admin-layout {
-            display: flex;
-            min-height: 100vh;
-        }
-
-        /* Sidebar */
-        .sidebar {
-            width: 260px;
-            background: var(--bg-secondary);
-            border-right: 1px solid rgba(255, 255, 255, 0.1);
-            padding: var(--spacing-lg);
-            position: fixed;
-            height: 100vh;
-            overflow-y: auto;
-        }
-
-        .sidebar-logo {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-md);
-            padding-bottom: var(--spacing-lg);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            margin-bottom: var(--spacing-lg);
-        }
-
-        .sidebar-logo-icon {
-            width: 40px;
-            height: 40px;
-            background: var(--gradient-primary);
-            border-radius: var(--radius-md);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .sidebar-logo-icon i {
-            font-size: 20px;
-            color: white;
-        }
-
-        .sidebar-logo-text {
-            font-size: 16px;
-            font-weight: 700;
-        }
-
-        .sidebar-menu {
-            list-style: none;
-        }
-
-        .sidebar-menu-item {
-            margin-bottom: var(--spacing-xs);
-        }
-
-        .sidebar-menu-link {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-md);
-            padding: 12px 16px;
-            border-radius: var(--radius-md);
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 14px;
-            transition: all 0.3s ease;
-        }
-
-        .sidebar-menu-link:hover {
-            background: var(--bg-glass);
-            color: var(--text-primary);
-        }
-
-        .sidebar-menu-link.active {
-            background: var(--gradient-primary);
-            color: white;
-        }
-
-        .sidebar-menu-link i {
-            font-size: 18px;
-        }
-
-        .sidebar-divider {
-            height: 1px;
-            background: rgba(255, 255, 255, 0.1);
-            margin: var(--spacing-md) 0;
-        }
-
-        .sidebar-section-title {
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--text-muted);
-            padding: 0 16px;
-            margin-bottom: var(--spacing-sm);
-        }
-
-        /* Main Content */
-        .main-content {
-            flex: 1;
-            margin-left: 260px;
-            padding: var(--spacing-lg);
-        }
-
-        /* Top Bar */
-        .top-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: var(--spacing-xl);
-        }
-
-        .page-title {
-            font-size: 24px;
-            font-weight: 700;
-        }
-
-        .top-bar-actions {
-            display: flex;
-            gap: var(--spacing-sm);
-        }
-
-        /* Summary Cards */
-        .summary-cards {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: var(--spacing-md);
-            margin-bottom: var(--spacing-lg);
-        }
-
-        .summary-card {
-            padding: var(--spacing-md);
-        }
-
-        .summary-card-value {
-            font-size: 20px;
-            font-weight: 700;
-            margin-bottom: var(--spacing-xs);
-        }
-
-        .summary-card-label {
-            font-size: 12px;
-            color: var(--text-secondary);
-        }
-
-        /* Status Tabs */
-        .status-tabs {
-            display: flex;
-            gap: var(--spacing-sm);
-            margin-bottom: var(--spacing-lg);
-        }
-
-        .status-tab {
-            padding: 10px 20px;
-            border-radius: var(--radius-full);
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--text-secondary);
-            background: var(--bg-glass);
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .status-tab.active {
-            background: var(--gradient-primary);
-            color: white;
-        }
-
-        .status-tab .count {
-            margin-left: var(--spacing-xs);
-            padding: 2px 6px;
-            border-radius: var(--radius-full);
-            background: rgba(255, 255, 255, 0.2);
-            font-size: 11px;
-        }
-
-        /* Filter Bar */
-        .filter-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: var(--spacing-lg);
-            gap: var(--spacing-md);
-            flex-wrap: wrap;
-        }
-
-        .search-box {
-            position: relative;
-            flex: 1;
-            max-width: 400px;
-        }
-
-        .search-box i {
-            position: absolute;
-            left: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-muted);
-        }
-
-        .search-box input {
-            width: 100%;
-            padding: 12px 16px 12px 44px;
-            background: var(--bg-glass);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: var(--radius-md);
-            color: var(--text-primary);
-            font-size: 14px;
-        }
-
-        .search-box input:focus {
-            outline: none;
-            border-color: var(--aurora-purple);
-        }
-
-        .filter-actions {
-            display: flex;
-            gap: var(--spacing-sm);
-        }
-
-        .filter-select {
-            padding: 12px 16px;
-            background: var(--bg-glass);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: var(--radius-md);
-            color: var(--text-primary);
-            font-size: 14px;
-            cursor: pointer;
-        }
-
-        /* Table */
-        .table-card {
-            padding: var(--spacing-lg);
-        }
-
-        .table-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: var(--spacing-md);
-        }
-
-        .table-title {
-            font-size: 16px;
-            font-weight: 600;
-        }
-
-        .bulk-actions {
-            display: flex;
-            gap: var(--spacing-sm);
-        }
-
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .data-table th,
-        .data-table td {
-            padding: var(--spacing-md);
-            text-align: left;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .data-table th {
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .data-table td {
-            font-size: 14px;
-        }
-
-        .data-table tbody tr:hover {
-            background: rgba(255, 255, 255, 0.02);
-        }
-
-        .checkbox-cell {
-            width: 40px;
-        }
-
-        .checkbox-cell input {
-            width: 16px;
-            height: 16px;
-            accent-color: var(--aurora-purple);
-        }
-
-        .settlement-id {
-            font-family: monospace;
-            font-size: 12px;
-            color: var(--text-muted);
-        }
-
-        .user-cell {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-sm);
-        }
-
-        .user-info {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .user-name {
-            font-weight: 500;
-        }
-
-        .user-handle {
-            font-size: 11px;
-            color: var(--aurora-purple);
-        }
-
-        .amount-cell {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-        }
-
-        .amount-gross {
-            font-weight: 600;
-        }
-
-        .amount-fee {
-            font-size: 11px;
-            color: var(--text-muted);
-        }
-
-        .amount-net {
-            font-weight: 600;
-            color: var(--aurora-cyan);
-        }
-
-        .bank-info {
-            font-size: 12px;
-            color: var(--text-secondary);
-        }
-
-        .action-btns {
-            display: flex;
-            gap: var(--spacing-sm);
-        }
-
-        .action-btn {
-            padding: 8px 12px;
-            border-radius: var(--radius-sm);
-            background: var(--bg-glass);
-            border: none;
-            color: var(--text-secondary);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-xs);
-            font-size: 12px;
-            transition: all 0.3s ease;
-        }
-
-        .action-btn:hover {
-            background: var(--aurora-purple);
-            color: white;
-        }
-
-        .action-btn.process {
-            background: rgba(72, 187, 120, 0.2);
-            color: var(--success);
-        }
-
-        .action-btn.process:hover {
-            background: var(--success);
-            color: white;
-        }
-
-        /* Pagination */
-        .pagination {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: var(--spacing-lg);
-            padding-top: var(--spacing-lg);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .pagination-info {
-            font-size: 13px;
-            color: var(--text-secondary);
-        }
-
-        .pagination-btns {
-            display: flex;
-            gap: var(--spacing-sm);
-        }
-
-        .pagination-btn {
-            width: 36px;
-            height: 36px;
-            border-radius: var(--radius-sm);
-            background: var(--bg-glass);
-            border: none;
-            color: var(--text-secondary);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            transition: all 0.3s ease;
-        }
-
-        .pagination-btn:hover,
-        .pagination-btn.active {
-            background: var(--gradient-primary);
-            color: white;
-        }
-
-        @media (max-width: 1200px) {
-            .summary-cards {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>정산 관리 - 관리자</title>
+  <link rel="stylesheet" href="../shared/clean-style.css">
+  <style>
+    body {
+      background: var(--bg-light);
+    }
+    .admin-layout {
+      display: flex;
+      min-height: 100vh;
+    }
+    /* Sidebar */
+    .sidebar {
+      width: 260px;
+      background: var(--bg-white);
+      border-right: 1px solid var(--border-light);
+      padding: 24px 0;
+      position: fixed;
+      height: 100vh;
+      overflow-y: auto;
+    }
+    .sidebar-logo {
+      padding: 0 24px 24px;
+      border-bottom: 1px solid var(--border-light);
+      margin-bottom: 24px;
+    }
+    .sidebar-logo-text {
+      font-size: 18px;
+      font-weight: 700;
+      background: var(--primary-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .sidebar-logo-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+    .sidebar-menu {
+      list-style: none;
+    }
+    .sidebar-item {
+      margin-bottom: 4px;
+    }
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 24px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    .sidebar-link:hover {
+      background: var(--bg-light);
+      color: var(--text-primary);
+    }
+    .sidebar-link.active {
+      background: rgba(124, 58, 237, 0.1);
+      color: var(--primary-start);
+      border-right: 3px solid var(--primary-start);
+    }
+    .sidebar-link svg {
+      width: 20px;
+      height: 20px;
+    }
+    .sidebar-badge {
+      margin-left: auto;
+      background: var(--primary-gradient);
+      color: white;
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 100px;
+    }
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      margin-left: 260px;
+      padding: 32px;
+    }
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 32px;
+    }
+    .page-title {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+    .page-subtitle {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+    .header-actions {
+      display: flex;
+      gap: 12px;
+    }
+    /* Stats Cards */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+    .stat-card {
+      background: var(--bg-white);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      box-shadow: var(--shadow-card);
+    }
+    .stat-card.highlight {
+      background: var(--primary-gradient);
+      color: white;
+    }
+    .stat-card.highlight .stat-label {
+      color: rgba(255, 255, 255, 0.9);
+    }
+    .stat-card.highlight .stat-value {
+      color: white;
+    }
+    .stat-label {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+    .stat-value {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+    /* Tabs */
+    .tabs-container {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+    .tab-btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: var(--radius-md);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: var(--bg-white);
+      color: var(--text-secondary);
+    }
+    .tab-btn:hover {
+      background: var(--bg-gray);
+    }
+    .tab-btn.active {
+      background: var(--primary-gradient);
+      color: white;
+    }
+    .tab-btn .count {
+      margin-left: 6px;
+      padding: 2px 6px;
+      border-radius: 100px;
+      font-size: 11px;
+      background: rgba(255, 255, 255, 0.2);
+    }
+    .tab-btn:not(.active) .count {
+      background: var(--bg-light);
+      color: var(--text-muted);
+    }
+    /* Table Card */
+    .table-card {
+      background: var(--bg-white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+    }
+    .table-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .table-title {
+      font-size: 16px;
+      font-weight: 600;
+    }
+    .table-actions {
+      display: flex;
+      gap: 8px;
+    }
+    /* Data Table */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .data-table th,
+    .data-table td {
+      padding: 14px 24px;
+      text-align: left;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .data-table th {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      background: var(--bg-light);
+    }
+    .data-table td {
+      font-size: 14px;
+      color: var(--text-primary);
+    }
+    .data-table tr:last-child td {
+      border-bottom: none;
+    }
+    .data-table tr:hover {
+      background: var(--bg-light);
+    }
+    .settlement-id {
+      font-family: monospace;
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+    .user-cell {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .user-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    .user-info {
+      display: flex;
+      flex-direction: column;
+    }
+    .user-name {
+      font-weight: 500;
+    }
+    .user-handle {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+    .amount-cell {
+      text-align: right;
+    }
+    .gross-amount {
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    .net-amount {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+    .fee-rate {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .status-badge {
+      padding: 4px 10px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .status-badge.pending {
+      background: rgba(245, 158, 11, 0.1);
+      color: #F59E0B;
+    }
+    .status-badge.approved {
+      background: rgba(59, 130, 246, 0.1);
+      color: #3B82F6;
+    }
+    .status-badge.completed {
+      background: rgba(16, 185, 129, 0.1);
+      color: #10B981;
+    }
+    .status-badge.rejected {
+      background: rgba(239, 68, 68, 0.1);
+      color: #EF4444;
+    }
+    .action-buttons {
+      display: flex;
+      gap: 8px;
+    }
+    .action-btn {
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 12px;
+      font-weight: 500;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .action-btn-approve {
+      background: var(--primary-gradient);
+      color: white;
+    }
+    .action-btn-approve:hover {
+      opacity: 0.9;
+    }
+    .action-btn-reject {
+      background: var(--bg-light);
+      color: var(--text-primary);
+    }
+    .action-btn-reject:hover {
+      background: var(--border-light);
+    }
+    .action-btn-view {
+      background: var(--bg-light);
+      color: var(--text-primary);
+    }
+    .action-btn-view:hover {
+      background: var(--border-light);
+    }
+    /* Pagination */
+    .pagination {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 24px;
+      border-top: 1px solid var(--border-light);
+    }
+    .pagination-info {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+    .pagination-buttons {
+      display: flex;
+      gap: 8px;
+    }
+    .pagination-btn {
+      padding: 8px 12px;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      background: var(--bg-white);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .pagination-btn:hover {
+      border-color: var(--primary-start);
+      color: var(--primary-start);
+    }
+    .pagination-btn.active {
+      background: var(--primary-gradient);
+      color: white;
+      border-color: transparent;
+    }
+    .pagination-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .checkbox-cell {
+      width: 40px;
+    }
+    .checkbox-cell input {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--primary-start);
+    }
+  </style>
 </head>
 <body>
-    <!-- Aurora Background -->
-    <div class="aurora-bg">
-        <div class="aurora-orb aurora-orb-1"></div>
-        <div class="aurora-orb aurora-orb-2"></div>
-        <div class="aurora-orb aurora-orb-3"></div>
-    </div>
+  <div class="admin-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <div class="sidebar-logo-text">인플루언서 여행</div>
+        <div class="sidebar-logo-sub">관리자 시스템</div>
+      </div>
+      <ul class="sidebar-menu">
+        <li class="sidebar-item">
+          <a href="dashboard.html" class="sidebar-link">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+            </svg>
+            대시보드
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a href="users.html" class="sidebar-link">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+            </svg>
+            회원 관리
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a href="influencers.html" class="sidebar-link">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
+            </svg>
+            인플루언서 관리
+            <span class="sidebar-badge">5</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a href="payments.html" class="sidebar-link">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+            </svg>
+            결제 관리
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a href="settlements.html" class="sidebar-link active">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+            </svg>
+            정산 관리
+            <span class="sidebar-badge">3</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a href="inquiries.html" class="sidebar-link">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
+            </svg>
+            문의 관리
+            <span class="sidebar-badge">12</span>
+          </a>
+        </li>
+      </ul>
+    </aside>
 
-    <div class="admin-layout">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="sidebar-logo">
-                <div class="sidebar-logo-icon">
-                    <i class="ri-plane-line"></i>
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">정산 관리</h1>
+          <p class="page-subtitle">인플루언서 정산을 검토하고 처리합니다</p>
+        </div>
+        <div class="header-actions">
+          <button class="btn btn-primary">
+            <svg style="width:16px;height:16px;margin-right:8px" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            일괄 정산
+          </button>
+        </div>
+      </div>
+
+      <!-- Stats Cards -->
+      <div class="stats-row">
+        <div class="stat-card highlight">
+          <div class="stat-label">대기중 정산</div>
+          <div class="stat-value">3건</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">대기중 금액</div>
+          <div class="stat-value">7,840,000원</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">이번 달 정산</div>
+          <div class="stat-value">45,230,000원</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">총 정산 완료</div>
+          <div class="stat-value">1.8억</div>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs-container">
+        <button class="tab-btn active">승인 대기<span class="count">3</span></button>
+        <button class="tab-btn">승인완료<span class="count">12</span></button>
+        <button class="tab-btn">정산완료<span class="count">156</span></button>
+        <button class="tab-btn">반려<span class="count">2</span></button>
+      </div>
+
+      <!-- Table -->
+      <div class="table-card">
+        <div class="table-header">
+          <span class="table-title">정산 요청 목록</span>
+          <div class="table-actions">
+            <button class="btn btn-outline" style="padding: 8px 16px; font-size: 13px;">선택 승인</button>
+          </div>
+        </div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th class="checkbox-cell"><input type="checkbox"></th>
+              <th>정산번호</th>
+              <th>인플루언서</th>
+              <th>정산기간</th>
+              <th>총 매출</th>
+              <th>수수료</th>
+              <th>정산금액</th>
+              <th>상태</th>
+              <th>작업</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="checkbox-cell"><input type="checkbox"></td>
+              <td><span class="settlement-id">STL-2024011500001</span></td>
+              <td>
+                <div class="user-cell">
+                  <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100" alt="" class="user-avatar">
+                  <div class="user-info">
+                    <span class="user-name">김지민</span>
+                    <span class="user-handle">@travel_jimin</span>
+                  </div>
                 </div>
-                <span class="sidebar-logo-text">관리자 센터</span>
-            </div>
-
-            <ul class="sidebar-menu">
-                <li class="sidebar-menu-item">
-                    <a href="dashboard.html" class="sidebar-menu-link">
-                        <i class="ri-dashboard-line"></i>
-                        대시보드
-                    </a>
-                </li>
-            </ul>
-
-            <div class="sidebar-divider"></div>
-            <div class="sidebar-section-title">유저 관리</div>
-
-            <ul class="sidebar-menu">
-                <li class="sidebar-menu-item">
-                    <a href="users.html" class="sidebar-menu-link">
-                        <i class="ri-user-line"></i>
-                        유저 목록
-                    </a>
-                </li>
-                <li class="sidebar-menu-item">
-                    <a href="influencers.html" class="sidebar-menu-link">
-                        <i class="ri-star-line"></i>
-                        인플루언서
-                    </a>
-                </li>
-            </ul>
-
-            <div class="sidebar-divider"></div>
-            <div class="sidebar-section-title">재정 관리</div>
-
-            <ul class="sidebar-menu">
-                <li class="sidebar-menu-item">
-                    <a href="payments.html" class="sidebar-menu-link">
-                        <i class="ri-bank-card-line"></i>
-                        결제 내역
-                    </a>
-                </li>
-                <li class="sidebar-menu-item">
-                    <a href="settlements.html" class="sidebar-menu-link active">
-                        <i class="ri-exchange-dollar-line"></i>
-                        정산 관리
-                    </a>
-                </li>
-            </ul>
-
-            <div class="sidebar-divider"></div>
-            <div class="sidebar-section-title">설정</div>
-
-            <ul class="sidebar-menu">
-                <li class="sidebar-menu-item">
-                    <a href="#" class="sidebar-menu-link">
-                        <i class="ri-settings-3-line"></i>
-                        시스템 설정
-                    </a>
-                </li>
-                <li class="sidebar-menu-item">
-                    <a href="login.html" class="sidebar-menu-link">
-                        <i class="ri-logout-box-line"></i>
-                        로그아웃
-                    </a>
-                </li>
-            </ul>
-        </aside>
-
-        <!-- Main Content -->
-        <main class="main-content">
-            <!-- Top Bar -->
-            <div class="top-bar">
-                <h1 class="page-title">정산 관리</h1>
-                <div class="top-bar-actions">
-                    <button class="btn btn-secondary">
-                        <i class="ri-download-line"></i>
-                        내보내기
-                    </button>
-                    <button class="btn btn-primary">
-                        <i class="ri-send-plane-line"></i>
-                        일괄 정산
-                    </button>
+              </td>
+              <td>2024-01-01 ~ 01-15</td>
+              <td class="amount-cell">
+                <div class="gross-amount">3,250,000원</div>
+              </td>
+              <td>
+                <span class="fee-rate">10% (325,000원)</span>
+              </td>
+              <td class="amount-cell">
+                <div class="gross-amount">2,925,000원</div>
+              </td>
+              <td><span class="status-badge pending">승인대기</span></td>
+              <td>
+                <div class="action-buttons">
+                  <button class="action-btn action-btn-approve">승인</button>
+                  <button class="action-btn action-btn-reject">반려</button>
                 </div>
-            </div>
-
-            <!-- Summary Cards -->
-            <div class="summary-cards">
-                <div class="card summary-card">
-                    <div class="summary-card-value text-gradient">₩456,780,000</div>
-                    <div class="summary-card-label">총 정산 금액</div>
+              </td>
+            </tr>
+            <tr>
+              <td class="checkbox-cell"><input type="checkbox"></td>
+              <td><span class="settlement-id">STL-2024011500002</span></td>
+              <td>
+                <div class="user-cell">
+                  <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100" alt="" class="user-avatar">
+                  <div class="user-info">
+                    <span class="user-name">이수진</span>
+                    <span class="user-handle">@sujin_adventure</span>
+                  </div>
                 </div>
-                <div class="card summary-card">
-                    <div class="summary-card-value" style="color: var(--warning);">₩45,600,000</div>
-                    <div class="summary-card-label">정산 대기</div>
+              </td>
+              <td>2024-01-01 ~ 01-15</td>
+              <td class="amount-cell">
+                <div class="gross-amount">2,890,000원</div>
+              </td>
+              <td>
+                <span class="fee-rate">10% (289,000원)</span>
+              </td>
+              <td class="amount-cell">
+                <div class="gross-amount">2,601,000원</div>
+              </td>
+              <td><span class="status-badge pending">승인대기</span></td>
+              <td>
+                <div class="action-buttons">
+                  <button class="action-btn action-btn-approve">승인</button>
+                  <button class="action-btn action-btn-reject">반려</button>
                 </div>
-                <div class="card summary-card">
-                    <div class="summary-card-value" style="color: var(--success);">₩398,500,000</div>
-                    <div class="summary-card-label">정산 완료</div>
+              </td>
+            </tr>
+            <tr>
+              <td class="checkbox-cell"><input type="checkbox"></td>
+              <td><span class="settlement-id">STL-2024011500003</span></td>
+              <td>
+                <div class="user-cell">
+                  <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100" alt="" class="user-avatar">
+                  <div class="user-info">
+                    <span class="user-name">박서윤</span>
+                    <span class="user-handle">@seoyun_travel</span>
+                  </div>
                 </div>
-                <div class="card summary-card">
-                    <div class="summary-card-value">₩12,680,000</div>
-                    <div class="summary-card-label">이번 주 예정</div>
+              </td>
+              <td>2024-01-01 ~ 01-15</td>
+              <td class="amount-cell">
+                <div class="gross-amount">2,570,000원</div>
+              </td>
+              <td>
+                <span class="fee-rate">10% (257,000원)</span>
+              </td>
+              <td class="amount-cell">
+                <div class="gross-amount">2,313,000원</div>
+              </td>
+              <td><span class="status-badge pending">승인대기</span></td>
+              <td>
+                <div class="action-buttons">
+                  <button class="action-btn action-btn-approve">승인</button>
+                  <button class="action-btn action-btn-reject">반려</button>
                 </div>
-            </div>
-
-            <!-- Status Tabs -->
-            <div class="status-tabs">
-                <button class="status-tab active">
-                    전체
-                    <span class="count">1,234</span>
-                </button>
-                <button class="status-tab">
-                    대기
-                    <span class="count">28</span>
-                </button>
-                <button class="status-tab">
-                    처리중
-                    <span class="count">5</span>
-                </button>
-                <button class="status-tab">
-                    완료
-                    <span class="count">1,189</span>
-                </button>
-                <button class="status-tab">
-                    보류
-                    <span class="count">12</span>
-                </button>
-            </div>
-
-            <!-- Filter Bar -->
-            <div class="filter-bar">
-                <div class="search-box">
-                    <i class="ri-search-line"></i>
-                    <input type="text" placeholder="정산 ID, 인플루언서명으로 검색...">
+              </td>
+            </tr>
+            <tr>
+              <td class="checkbox-cell"><input type="checkbox" disabled></td>
+              <td><span class="settlement-id">STL-2024011400001</span></td>
+              <td>
+                <div class="user-cell">
+                  <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100" alt="" class="user-avatar">
+                  <div class="user-info">
+                    <span class="user-name">정민재</span>
+                    <span class="user-handle">@minjae_trip</span>
+                  </div>
                 </div>
-                <div class="filter-actions">
-                    <select class="filter-select">
-                        <option value="">정산 주기</option>
-                        <option value="weekly">주간</option>
-                        <option value="biweekly">격주</option>
-                        <option value="monthly">월간</option>
-                    </select>
-                    <select class="filter-select">
-                        <option value="">금액순</option>
-                        <option value="date">날짜순</option>
-                        <option value="name">이름순</option>
-                    </select>
+              </td>
+              <td>2024-01-01 ~ 01-14</td>
+              <td class="amount-cell">
+                <div class="gross-amount">1,850,000원</div>
+              </td>
+              <td>
+                <span class="fee-rate">10% (185,000원)</span>
+              </td>
+              <td class="amount-cell">
+                <div class="gross-amount">1,665,000원</div>
+              </td>
+              <td><span class="status-badge approved">승인완료</span></td>
+              <td>
+                <div class="action-buttons">
+                  <button class="action-btn action-btn-view">상세</button>
                 </div>
-            </div>
-
-            <!-- Table -->
-            <div class="card table-card">
-                <div class="table-header">
-                    <h3 class="table-title">정산 내역</h3>
-                    <div class="bulk-actions">
-                        <button class="btn btn-sm btn-secondary">
-                            <i class="ri-check-double-line"></i>
-                            선택 항목 승인
-                        </button>
-                    </div>
+              </td>
+            </tr>
+            <tr>
+              <td class="checkbox-cell"><input type="checkbox" disabled></td>
+              <td><span class="settlement-id">STL-2024011300001</span></td>
+              <td>
+                <div class="user-cell">
+                  <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100" alt="" class="user-avatar">
+                  <div class="user-info">
+                    <span class="user-name">최동현</span>
+                    <span class="user-handle">@donghyun_travel</span>
+                  </div>
                 </div>
-
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th class="checkbox-cell">
-                                <input type="checkbox">
-                            </th>
-                            <th>정산 ID</th>
-                            <th>인플루언서</th>
-                            <th>기간</th>
-                            <th>금액</th>
-                            <th>계좌 정보</th>
-                            <th>상태</th>
-                            <th>관리</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="checkbox-cell">
-                                <input type="checkbox">
-                            </td>
-                            <td><span class="settlement-id">SET-2024031500001</span></td>
-                            <td>
-                                <div class="user-cell">
-                                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100" alt="User" class="avatar avatar-sm">
-                                    <div class="user-info">
-                                        <span class="user-name">김지은</span>
-                                        <span class="user-handle">@jieun_travel</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>03.01 ~ 03.15</td>
-                            <td>
-                                <div class="amount-cell">
-                                    <span class="amount-gross">₩5,200,000</span>
-                                    <span class="amount-fee">수수료: ₩520,000</span>
-                                    <span class="amount-net">실지급: ₩4,680,000</span>
-                                </div>
-                            </td>
-                            <td>
-                                <span class="bank-info">신한은행<br>110-***-******</span>
-                            </td>
-                            <td><span class="badge badge-warning">대기</span></td>
-                            <td>
-                                <div class="action-btns">
-                                    <button class="action-btn process">
-                                        <i class="ri-send-plane-line"></i>
-                                        정산
-                                    </button>
-                                    <button class="action-btn">
-                                        <i class="ri-eye-line"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="checkbox-cell">
-                                <input type="checkbox">
-                            </td>
-                            <td><span class="settlement-id">SET-2024031500002</span></td>
-                            <td>
-                                <div class="user-cell">
-                                    <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100" alt="User" class="avatar avatar-sm">
-                                    <div class="user-info">
-                                        <span class="user-name">이수진</span>
-                                        <span class="user-handle">@sujin_lifestyle</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>03.01 ~ 03.15</td>
-                            <td>
-                                <div class="amount-cell">
-                                    <span class="amount-gross">₩8,900,000</span>
-                                    <span class="amount-fee">수수료: ₩890,000</span>
-                                    <span class="amount-net">실지급: ₩8,010,000</span>
-                                </div>
-                            </td>
-                            <td>
-                                <span class="bank-info">국민은행<br>123-***-******</span>
-                            </td>
-                            <td><span class="badge badge-warning">대기</span></td>
-                            <td>
-                                <div class="action-btns">
-                                    <button class="action-btn process">
-                                        <i class="ri-send-plane-line"></i>
-                                        정산
-                                    </button>
-                                    <button class="action-btn">
-                                        <i class="ri-eye-line"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="checkbox-cell">
-                                <input type="checkbox">
-                            </td>
-                            <td><span class="settlement-id">SET-2024030100003</span></td>
-                            <td>
-                                <div class="user-cell">
-                                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100" alt="User" class="avatar avatar-sm">
-                                    <div class="user-info">
-                                        <span class="user-name">박현우</span>
-                                        <span class="user-handle">@hyunwoo_adventure</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>02.15 ~ 02.28</td>
-                            <td>
-                                <div class="amount-cell">
-                                    <span class="amount-gross">₩3,450,000</span>
-                                    <span class="amount-fee">수수료: ₩345,000</span>
-                                    <span class="amount-net">실지급: ₩3,105,000</span>
-                                </div>
-                            </td>
-                            <td>
-                                <span class="bank-info">하나은행<br>456-***-******</span>
-                            </td>
-                            <td><span class="badge badge-success">완료</span></td>
-                            <td>
-                                <div class="action-btns">
-                                    <button class="action-btn">
-                                        <i class="ri-eye-line"></i>
-                                        상세
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="checkbox-cell">
-                                <input type="checkbox">
-                            </td>
-                            <td><span class="settlement-id">SET-2024030100004</span></td>
-                            <td>
-                                <div class="user-cell">
-                                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100" alt="User" class="avatar avatar-sm">
-                                    <div class="user-info">
-                                        <span class="user-name">정다은</span>
-                                        <span class="user-handle">@daeun_beauty</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>02.15 ~ 02.28</td>
-                            <td>
-                                <div class="amount-cell">
-                                    <span class="amount-gross">₩6,780,000</span>
-                                    <span class="amount-fee">수수료: ₩678,000</span>
-                                    <span class="amount-net">실지급: ₩6,102,000</span>
-                                </div>
-                            </td>
-                            <td>
-                                <span class="bank-info">우리은행<br>789-***-******</span>
-                            </td>
-                            <td><span class="badge badge-info">처리중</span></td>
-                            <td>
-                                <div class="action-btns">
-                                    <button class="action-btn">
-                                        <i class="ri-eye-line"></i>
-                                        상세
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="checkbox-cell">
-                                <input type="checkbox">
-                            </td>
-                            <td><span class="settlement-id">SET-2024030100005</span></td>
-                            <td>
-                                <div class="user-cell">
-                                    <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100" alt="User" class="avatar avatar-sm">
-                                    <div class="user-info">
-                                        <span class="user-name">최민준</span>
-                                        <span class="user-handle">@minjun_food</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>02.15 ~ 02.28</td>
-                            <td>
-                                <div class="amount-cell">
-                                    <span class="amount-gross">₩2,100,000</span>
-                                    <span class="amount-fee">수수료: ₩210,000</span>
-                                    <span class="amount-net">실지급: ₩1,890,000</span>
-                                </div>
-                            </td>
-                            <td>
-                                <span class="bank-info">카카오뱅크<br>333-***-******</span>
-                            </td>
-                            <td><span class="badge badge-error">보류</span></td>
-                            <td>
-                                <div class="action-btns">
-                                    <button class="action-btn">
-                                        <i class="ri-eye-line"></i>
-                                        상세
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <!-- Pagination -->
-                <div class="pagination">
-                    <span class="pagination-info">총 1,234건 중 1-5 표시</span>
-                    <div class="pagination-btns">
-                        <button class="pagination-btn" disabled>
-                            <i class="ri-arrow-left-s-line"></i>
-                        </button>
-                        <button class="pagination-btn active">1</button>
-                        <button class="pagination-btn">2</button>
-                        <button class="pagination-btn">3</button>
-                        <button class="pagination-btn">...</button>
-                        <button class="pagination-btn">247</button>
-                        <button class="pagination-btn">
-                            <i class="ri-arrow-right-s-line"></i>
-                        </button>
-                    </div>
+              </td>
+              <td>2024-01-01 ~ 01-13</td>
+              <td class="amount-cell">
+                <div class="gross-amount">4,120,000원</div>
+              </td>
+              <td>
+                <span class="fee-rate">10% (412,000원)</span>
+              </td>
+              <td class="amount-cell">
+                <div class="gross-amount">3,708,000원</div>
+              </td>
+              <td><span class="status-badge completed">정산완료</span></td>
+              <td>
+                <div class="action-buttons">
+                  <button class="action-btn action-btn-view">상세</button>
                 </div>
-            </div>
-        </main>
-    </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="pagination">
+          <span class="pagination-info">1 - 5 / 173 건</span>
+          <div class="pagination-buttons">
+            <button class="pagination-btn" disabled>&lt;</button>
+            <button class="pagination-btn active">1</button>
+            <button class="pagination-btn">2</button>
+            <button class="pagination-btn">3</button>
+            <button class="pagination-btn">...</button>
+            <button class="pagination-btn">35</button>
+            <button class="pagination-btn">&gt;</button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
 </body>
 </html>

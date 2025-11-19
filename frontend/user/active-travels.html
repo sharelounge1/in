@@ -1,461 +1,348 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>진행 중인 여행 - TRAVELY</title>
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
-    <link rel="stylesheet" href="../shared/aurora-style.css">
-    <style>
-        .travels-container {
-            padding-bottom: 90px;
-        }
-
-        /* Summary Card */
-        .summary-card {
-            margin: 20px;
-            padding: 20px;
-            background: var(--gradient-primary);
-            border-radius: var(--radius-xl);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .summary-card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -30%;
-            width: 200px;
-            height: 200px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-        }
-
-        .summary-title {
-            font-size: 14px;
-            opacity: 0.9;
-            margin-bottom: 4px;
-        }
-
-        .summary-count {
-            font-size: 32px;
-            font-weight: 800;
-        }
-
-        .summary-subtitle {
-            font-size: 13px;
-            opacity: 0.85;
-        }
-
-        /* Travel Card */
-        .travel-list {
-            padding: 0 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .travel-card {
-            background: var(--bg-glass);
-            border-radius: var(--radius-xl);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            overflow: hidden;
-        }
-
-        .travel-image-wrap {
-            position: relative;
-            height: 160px;
-        }
-
-        .travel-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .travel-dday {
-            position: absolute;
-            top: 12px;
-            left: 12px;
-            padding: 6px 12px;
-            background: var(--gradient-primary);
-            border-radius: var(--radius-full);
-            font-size: 12px;
-            font-weight: 700;
-        }
-
-        .travel-status {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            padding: 6px 12px;
-            border-radius: var(--radius-full);
-            font-size: 11px;
-            font-weight: 600;
-        }
-
-        .status-upcoming {
-            background: rgba(66, 153, 225, 0.9);
-        }
-
-        .status-ongoing {
-            background: rgba(72, 187, 120, 0.9);
-        }
-
-        .travel-content {
-            padding: 16px;
-        }
-
-        .travel-name {
-            font-size: 16px;
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-
-        .travel-meta {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-bottom: 12px;
-        }
-
-        .travel-meta-item {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            font-size: 12px;
-            color: var(--text-secondary);
-        }
-
-        .travel-meta-item i {
-            color: var(--aurora-purple);
-            font-size: 14px;
-        }
-
-        .travel-influencer {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding-top: 12px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .travel-influencer-avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid var(--aurora-purple);
-        }
-
-        .travel-influencer-info {
-            flex: 1;
-        }
-
-        .travel-influencer-name {
-            font-size: 13px;
-            font-weight: 600;
-        }
-
-        .travel-influencer-handle {
-            font-size: 11px;
-            color: var(--aurora-purple);
-        }
-
-        .travel-actions {
-            display: flex;
-            gap: 8px;
-            padding: 12px 16px;
-            background: rgba(0, 0, 0, 0.2);
-        }
-
-        .travel-action-btn {
-            flex: 1;
-            padding: 10px;
-            border-radius: var(--radius-md);
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            transition: all 0.3s;
-        }
-
-        .travel-action-btn.primary {
-            background: var(--gradient-primary);
-            border: none;
-            color: white;
-        }
-
-        .travel-action-btn.secondary {
-            background: var(--bg-glass);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: var(--text-primary);
-        }
-
-        /* Progress Section */
-        .progress-section {
-            padding: 12px 16px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .progress-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-        }
-
-        .progress-label {
-            font-size: 12px;
-            color: var(--text-secondary);
-        }
-
-        .progress-value {
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--aurora-purple);
-        }
-
-        .progress-bar {
-            height: 4px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 2px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: var(--gradient-primary);
-            border-radius: 2px;
-        }
-
-        /* New Notice Badge */
-        .notice-badge {
-            position: absolute;
-            bottom: 12px;
-            left: 12px;
-            padding: 6px 10px;
-            background: rgba(245, 101, 101, 0.9);
-            border-radius: var(--radius-full);
-            font-size: 10px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .notice-badge i {
-            font-size: 12px;
-        }
-
-        /* Empty State */
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-        }
-
-        .empty-state-icon {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: var(--bg-glass);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 20px;
-        }
-
-        .empty-state-icon i {
-            font-size: 32px;
-            color: var(--text-muted);
-        }
-
-        .empty-state-title {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-
-        .empty-state-desc {
-            font-size: 13px;
-            color: var(--text-secondary);
-            margin-bottom: 20px;
-        }
-
-        .empty-state-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 12px 24px;
-            background: var(--gradient-primary);
-            border-radius: var(--radius-md);
-            color: white;
-            font-size: 14px;
-            font-weight: 600;
-            text-decoration: none;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>진행중인 여행 - TRAVELY</title>
+  <link rel="stylesheet" href="../shared/clean-style.css">
+  <style>
+    .content {
+      padding: 20px;
+      padding-bottom: 80px;
+    }
+    .travel-card {
+      background: var(--bg-white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+    .travel-image {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+    }
+    .travel-content {
+      padding: 16px;
+    }
+    .travel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+    .travel-info {
+      flex: 1;
+    }
+    .travel-dday {
+      padding: 6px 10px;
+      background: var(--primary-gradient);
+      color: white;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .travel-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .travel-date {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+    .travel-meta {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      padding: 12px;
+      background: var(--bg-light);
+      border-radius: var(--radius-md);
+      margin-bottom: 16px;
+    }
+    .travel-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .travel-meta-item svg {
+      width: 16px;
+      height: 16px;
+      color: var(--text-muted);
+    }
+    .travel-meta-text {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+    .travel-actions {
+      display: flex;
+      gap: 8px;
+    }
+    .travel-action-btn {
+      flex: 1;
+      padding: 12px;
+      border-radius: var(--radius-md);
+      font-size: 14px;
+      font-weight: 500;
+      text-align: center;
+      cursor: pointer;
+      border: none;
+      text-decoration: none;
+    }
+    .btn-primary {
+      background: var(--primary-gradient);
+      color: white;
+    }
+    .btn-secondary {
+      background: var(--bg-gray);
+      color: var(--text-primary);
+    }
+    .notice-card {
+      background: rgba(124, 58, 237, 0.05);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    .notice-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .notice-header svg {
+      width: 18px;
+      height: 18px;
+      color: var(--primary-start);
+    }
+    .notice-title {
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .notice-text {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+    .participants-section {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border-light);
+    }
+    .participants-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .participants-title {
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .participants-count {
+      font-size: 13px;
+      color: var(--primary-start);
+    }
+    .participants-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .participant-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background: var(--bg-light);
+      border-radius: 100px;
+    }
+    .participant-avatar {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    .participant-name {
+      font-size: 13px;
+      font-weight: 500;
+    }
+    .section-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+  </style>
 </head>
 <body>
-    <div class="aurora-bg">
-        <div class="aurora-orb aurora-orb-1"></div>
-        <div class="aurora-orb aurora-orb-2"></div>
-        <div class="aurora-orb aurora-orb-3"></div>
+  <div class="mobile-container">
+    <!-- Header -->
+    <header class="header">
+      <a href="mypage.html" style="text-decoration: none;">
+        <svg class="header-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+        </svg>
+      </a>
+      <span class="header-title">진행중인 여행</span>
+      <div style="width: 24px;"></div>
+    </header>
+
+    <!-- Content -->
+    <div class="content">
+      <!-- Notice Card -->
+      <div class="notice-card">
+        <div class="notice-header">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+          </svg>
+          <span class="notice-title">새 공지사항</span>
+        </div>
+        <p class="notice-text">제주 힐링 3박 4일 여행의 상세 일정이 업데이트되었습니다. 확인해주세요!</p>
+      </div>
+
+      <!-- Travel Card 1 -->
+      <div class="travel-card">
+        <img src="https://images.unsplash.com/photo-1590523741831-ab7e8b8f9c7f?w=800" alt="제주" class="travel-image">
+        <div class="travel-content">
+          <div class="travel-header">
+            <div class="travel-info">
+              <h2 class="travel-title">제주 힐링 3박 4일</h2>
+              <p class="travel-date">2025.01.25 (토) - 01.28 (화)</p>
+            </div>
+            <span class="travel-dday">D-35</span>
+          </div>
+
+          <div class="travel-meta">
+            <div class="travel-meta-item">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+              </svg>
+              <span class="travel-meta-text">제주도</span>
+            </div>
+            <div class="travel-meta-item">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+              <span class="travel-meta-text">3박 4일</span>
+            </div>
+            <div class="travel-meta-item">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+              </svg>
+              <span class="travel-meta-text">여행하는 지민</span>
+            </div>
+            <div class="travel-meta-item">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+              </svg>
+              <span class="travel-meta-text">12명 참가</span>
+            </div>
+          </div>
+
+          <!-- Participants -->
+          <div class="participants-section">
+            <div class="participants-header">
+              <span class="participants-title">함께하는 참가자</span>
+              <span class="participants-count">12명</span>
+            </div>
+            <div class="participants-list">
+              <div class="participant-item">
+                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=60" alt="참가자" class="participant-avatar">
+                <span class="participant-name">지민</span>
+              </div>
+              <div class="participant-item">
+                <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=60" alt="참가자" class="participant-avatar">
+                <span class="participant-name">민수</span>
+              </div>
+              <div class="participant-item">
+                <img src="https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=60" alt="참가자" class="participant-avatar">
+                <span class="participant-name">서연</span>
+              </div>
+              <div class="participant-item">
+                <span class="participant-name">+9명</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="travel-actions" style="margin-top: 16px;">
+            <a href="#" class="travel-action-btn btn-primary">채팅방 입장</a>
+            <a href="course-landing.html" class="travel-action-btn btn-secondary">상세일정</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Travel Card 2 -->
+      <div class="travel-card">
+        <img src="https://images.unsplash.com/photo-1519046904884-53103b34b206?w=800" alt="서핑" class="travel-image">
+        <div class="travel-content">
+          <div class="travel-header">
+            <div class="travel-info">
+              <h2 class="travel-title">부산 송정 서핑 파티</h2>
+              <p class="travel-date">2024.12.28 (토) 10:00</p>
+            </div>
+            <span class="travel-dday">D-7</span>
+          </div>
+
+          <div class="travel-meta">
+            <div class="travel-meta-item">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+              </svg>
+              <span class="travel-meta-text">부산 송정</span>
+            </div>
+            <div class="travel-meta-item">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+              <span class="travel-meta-text">당일</span>
+            </div>
+            <div class="travel-meta-item">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+              </svg>
+              <span class="travel-meta-text">서핑마스터 태현</span>
+            </div>
+            <div class="travel-meta-item">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+              </svg>
+              <span class="travel-meta-text">8명 참가</span>
+            </div>
+          </div>
+
+          <div class="travel-actions">
+            <a href="#" class="travel-action-btn btn-primary">채팅방 입장</a>
+            <a href="party-detail.html" class="travel-action-btn btn-secondary">상세보기</a>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div class="mobile-container travels-container">
-        <!-- Header -->
-        <header class="header">
-            <div style="width: 40px;"></div>
-            <h1 class="header-title">진행 중인 여행</h1>
-            <div style="width: 40px;"></div>
-        </header>
-
-        <!-- Summary Card -->
-        <div class="summary-card">
-            <div class="summary-title">다가오는 여행</div>
-            <div class="summary-count">2개</div>
-            <div class="summary-subtitle">가장 빠른 출발까지 D-23</div>
-        </div>
-
-        <!-- Travel List -->
-        <div class="travel-list">
-            <!-- Travel Card 1 - Upcoming -->
-            <div class="travel-card">
-                <div class="travel-image-wrap">
-                    <img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=800" class="travel-image" alt="여행">
-                    <div class="travel-dday">D-23</div>
-                    <div class="travel-status status-upcoming">출발 예정</div>
-                    <div class="notice-badge">
-                        <i class="ri-notification-3-fill"></i>
-                        새 공지 2개
-                    </div>
-                </div>
-                <div class="travel-content">
-                    <h3 class="travel-name">발리 럭셔리 힐링 7일</h3>
-                    <div class="travel-meta">
-                        <div class="travel-meta-item">
-                            <i class="ri-calendar-line"></i>
-                            2025.02.20 - 02.26
-                        </div>
-                        <div class="travel-meta-item">
-                            <i class="ri-map-pin-line"></i>
-                            인도네시아, 발리
-                        </div>
-                    </div>
-                    <div class="travel-influencer">
-                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100" class="travel-influencer-avatar" alt="프로필">
-                        <div class="travel-influencer-info">
-                            <div class="travel-influencer-name">여행하는 지나</div>
-                            <div class="travel-influencer-handle">@travel_jina</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="progress-section">
-                    <div class="progress-header">
-                        <span class="progress-label">준비 현황</span>
-                        <span class="progress-value">3/5 완료</span>
-                    </div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: 60%"></div>
-                    </div>
-                </div>
-                <div class="travel-actions">
-                    <button class="travel-action-btn primary">
-                        <i class="ri-megaphone-line"></i>
-                        공지사항
-                    </button>
-                    <button class="travel-action-btn secondary">
-                        <i class="ri-group-line"></i>
-                        참가자
-                    </button>
-                    <button class="travel-action-btn secondary">
-                        <i class="ri-chat-3-line"></i>
-                        채팅
-                    </button>
-                </div>
-            </div>
-
-            <!-- Travel Card 2 - Upcoming -->
-            <div class="travel-card">
-                <div class="travel-image-wrap">
-                    <img src="https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=800" class="travel-image" alt="여행">
-                    <div class="travel-dday">D-51</div>
-                    <div class="travel-status status-upcoming">출발 예정</div>
-                </div>
-                <div class="travel-content">
-                    <h3 class="travel-name">도쿄 맛집 & 카페 투어 5일</h3>
-                    <div class="travel-meta">
-                        <div class="travel-meta-item">
-                            <i class="ri-calendar-line"></i>
-                            2025.03.10 - 03.14
-                        </div>
-                        <div class="travel-meta-item">
-                            <i class="ri-map-pin-line"></i>
-                            일본, 도쿄
-                        </div>
-                    </div>
-                    <div class="travel-influencer">
-                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100" class="travel-influencer-avatar" alt="프로필">
-                        <div class="travel-influencer-info">
-                            <div class="travel-influencer-name">도쿄 라이프</div>
-                            <div class="travel-influencer-handle">@tokyo_life</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="progress-section">
-                    <div class="progress-header">
-                        <span class="progress-label">준비 현황</span>
-                        <span class="progress-value">1/5 완료</span>
-                    </div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: 20%"></div>
-                    </div>
-                </div>
-                <div class="travel-actions">
-                    <button class="travel-action-btn primary">
-                        <i class="ri-megaphone-line"></i>
-                        공지사항
-                    </button>
-                    <button class="travel-action-btn secondary">
-                        <i class="ri-group-line"></i>
-                        참가자
-                    </button>
-                    <button class="travel-action-btn secondary">
-                        <i class="ri-chat-3-line"></i>
-                        채팅
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Bottom Navigation -->
-        <nav class="bottom-nav">
-            <a href="home.html" class="nav-item">
-                <i class="ri-home-5-line"></i>
-                <span>홈</span>
-            </a>
-            <a href="parties.html" class="nav-item">
-                <i class="ri-goblet-line"></i>
-                <span>파티</span>
-            </a>
-            <a href="my-applications.html" class="nav-item">
-                <i class="ri-file-list-3-line"></i>
-                <span>내신청</span>
-            </a>
-            <a href="active-travels.html" class="nav-item active">
-                <i class="ri-suitcase-3-fill"></i>
-                <span>진행중</span>
-            </a>
-            <a href="mypage.html" class="nav-item">
-                <i class="ri-user-line"></i>
-                <span>마이</span>
-            </a>
-        </nav>
-    </div>
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+      <a href="home.html" class="nav-item">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+        </svg>
+        <span>홈</span>
+      </a>
+      <a href="parties.html" class="nav-item">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+        </svg>
+        <span>파티</span>
+      </a>
+      <a href="my-applications.html" class="nav-item">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+        </svg>
+        <span>신청</span>
+      </a>
+      <a href="mypage.html" class="nav-item">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+        </svg>
+        <span>마이</span>
+      </a>
+    </nav>
+  </div>
 </body>
 </html>

@@ -1,958 +1,468 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>N빵 정산 관리 - TRAVELY 인플루언서</title>
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
-    <link rel="stylesheet" href="../shared/aurora-style.css">
-    <style>
-        .app-layout {
-            display: flex;
-            min-height: 100vh;
-        }
-
-        /* Sidebar */
-        .sidebar {
-            width: 260px;
-            background: var(--bg-secondary);
-            border-right: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 24px;
-            position: fixed;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            overflow-y: auto;
-            z-index: 100;
-        }
-
-        .sidebar-logo {
-            font-size: 24px;
-            font-weight: 800;
-            background: var(--gradient-primary);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 32px;
-        }
-
-        .sidebar-profile {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 16px;
-            background: var(--bg-glass);
-            border-radius: var(--radius-lg);
-            margin-bottom: 24px;
-        }
-
-        .profile-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid var(--aurora-purple);
-        }
-
-        .profile-info {
-            flex: 1;
-        }
-
-        .profile-name {
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        .profile-handle {
-            font-size: 12px;
-            color: var(--aurora-purple);
-        }
-
-        .sidebar-nav {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .nav-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 16px;
-            border-radius: var(--radius-md);
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.3s;
-        }
-
-        .nav-item:hover {
-            background: var(--bg-glass);
-            color: var(--text-primary);
-        }
-
-        .nav-item.active {
-            background: var(--gradient-primary);
-            color: white;
-        }
-
-        .nav-item i {
-            font-size: 18px;
-        }
-
-        .nav-divider {
-            height: 1px;
-            background: rgba(255, 255, 255, 0.1);
-            margin: 16px 0;
-        }
-
-        .nav-label {
-            font-size: 11px;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            padding: 8px 16px;
-        }
-
-        /* Main Content */
-        .main-content {
-            flex: 1;
-            margin-left: 260px;
-            padding: 32px;
-        }
-
-        .main-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 32px;
-        }
-
-        .page-title-area {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .back-btn {
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: var(--radius-md);
-            background: var(--bg-glass);
-            color: var(--text-primary);
-            text-decoration: none;
-            border: none;
-            cursor: pointer;
-        }
-
-        .page-title {
-            font-size: 28px;
-            font-weight: 800;
-        }
-
-        .page-subtitle {
-            font-size: 14px;
-            color: var(--text-secondary);
-            margin-top: 4px;
-        }
-
-        .header-actions {
-            display: flex;
-            gap: 12px;
-        }
-
-        /* Content Card */
-        .content-card {
-            background: var(--bg-glass);
-            border-radius: var(--radius-lg);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            overflow: hidden;
-            margin-bottom: 24px;
-        }
-
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 24px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .card-title {
-            font-size: 16px;
-            font-weight: 700;
-        }
-
-        .card-body {
-            padding: 24px;
-        }
-
-        /* Charge Request Section */
-        .charge-request {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            margin-bottom: 24px;
-        }
-
-        .charge-input-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .charge-label {
-            font-size: 13px;
-            color: var(--text-secondary);
-        }
-
-        .charge-input {
-            padding: 12px 16px;
-            background: var(--bg-glass);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: var(--radius-md);
-            color: var(--text-primary);
-            font-size: 14px;
-        }
-
-        .charge-input:focus {
-            outline: none;
-            border-color: var(--aurora-purple);
-        }
-
-        /* Charge Status */
-        .charge-status-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 12px;
-        }
-
-        .charge-status-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: var(--radius-md);
-        }
-
-        .charge-avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .charge-info {
-            flex: 1;
-        }
-
-        .charge-name {
-            font-size: 13px;
-            font-weight: 600;
-        }
-
-        .charge-amount {
-            font-size: 12px;
-            color: var(--text-secondary);
-        }
-
-        .charge-badge {
-            padding: 4px 8px;
-            border-radius: var(--radius-full);
-            font-size: 10px;
-            font-weight: 600;
-        }
-
-        .charge-badge.completed {
-            background: rgba(72, 187, 120, 0.2);
-            color: var(--success);
-        }
-
-        .charge-badge.pending {
-            background: rgba(236, 201, 75, 0.2);
-            color: var(--warning);
-        }
-
-        /* N-bang List */
-        .nbang-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .nbang-item {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: var(--radius-md);
-            transition: all 0.3s;
-        }
-
-        .nbang-item:hover {
-            background: rgba(255, 255, 255, 0.06);
-        }
-
-        .nbang-info {
-            flex: 1;
-        }
-
-        .nbang-name {
-            font-size: 15px;
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .nbang-meta {
-            display: flex;
-            gap: 16px;
-            font-size: 12px;
-            color: var(--text-secondary);
-        }
-
-        .nbang-amounts {
-            text-align: right;
-            min-width: 120px;
-        }
-
-        .nbang-total {
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--aurora-purple);
-        }
-
-        .nbang-perperson {
-            font-size: 12px;
-            color: var(--text-secondary);
-        }
-
-        .nbang-status {
-            padding: 6px 12px;
-            border-radius: var(--radius-full);
-            font-size: 11px;
-            font-weight: 600;
-        }
-
-        .nbang-status.completed {
-            background: rgba(72, 187, 120, 0.2);
-            color: var(--success);
-        }
-
-        .nbang-status.pending {
-            background: rgba(236, 201, 75, 0.2);
-            color: var(--warning);
-        }
-
-        .nbang-status.processing {
-            background: rgba(66, 153, 225, 0.2);
-            color: var(--info);
-        }
-
-        .nbang-actions {
-            display: flex;
-            gap: 8px;
-        }
-
-        .action-btn {
-            padding: 8px 12px;
-            border-radius: var(--radius-md);
-            font-size: 12px;
-            font-weight: 600;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .action-btn.detail {
-            background: rgba(255, 255, 255, 0.1);
-            color: var(--text-primary);
-        }
-
-        .action-btn.detail:hover {
-            background: rgba(255, 255, 255, 0.15);
-        }
-
-        .action-btn.complete {
-            background: rgba(72, 187, 120, 0.2);
-            color: var(--success);
-        }
-
-        .action-btn.complete:hover {
-            background: rgba(72, 187, 120, 0.3);
-        }
-
-        /* Modal */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.7);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-        }
-
-        .modal-overlay.active {
-            display: flex;
-        }
-
-        .modal {
-            background: var(--bg-secondary);
-            border-radius: var(--radius-lg);
-            width: 100%;
-            max-width: 600px;
-            max-height: 90vh;
-            overflow-y: auto;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 24px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .modal-title {
-            font-size: 18px;
-            font-weight: 700;
-        }
-
-        .modal-close {
-            width: 32px;
-            height: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: var(--radius-md);
-            background: var(--bg-glass);
-            border: none;
-            color: var(--text-primary);
-            cursor: pointer;
-        }
-
-        .modal-body {
-            padding: 24px;
-        }
-
-        .modal-footer {
-            display: flex;
-            justify-content: flex-end;
-            gap: 12px;
-            padding: 24px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        /* Form */
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-label {
-            display: block;
-            font-size: 13px;
-            font-weight: 500;
-            color: var(--text-secondary);
-            margin-bottom: 8px;
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 14px 16px;
-            background: var(--bg-glass);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: var(--radius-md);
-            color: var(--text-primary);
-            font-size: 14px;
-            transition: all 0.3s;
-        }
-
-        .form-input:focus {
-            outline: none;
-            border-color: var(--aurora-purple);
-        }
-
-        /* Participant Selection */
-        .participant-selection {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 8px;
-            max-height: 200px;
-            overflow-y: auto;
-        }
-
-        .participant-checkbox {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: var(--radius-md);
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .participant-checkbox:hover {
-            background: rgba(255, 255, 255, 0.06);
-        }
-
-        .participant-checkbox input {
-            width: 16px;
-            height: 16px;
-            accent-color: var(--aurora-purple);
-        }
-
-        .participant-checkbox img {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .participant-checkbox span {
-            font-size: 13px;
-        }
-
-        .select-all-btn {
-            padding: 8px 12px;
-            background: var(--bg-glass);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: var(--radius-md);
-            color: var(--text-secondary);
-            font-size: 12px;
-            cursor: pointer;
-            margin-bottom: 12px;
-        }
-
-        .select-all-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        /* Calculation Preview */
-        .calculation-preview {
-            padding: 16px;
-            background: rgba(102, 126, 234, 0.1);
-            border-radius: var(--radius-md);
-            border-left: 3px solid var(--aurora-purple);
-            margin-top: 16px;
-        }
-
-        .calc-row {
-            display: flex;
-            justify-content: space-between;
-            font-size: 13px;
-            margin-bottom: 8px;
-        }
-
-        .calc-row:last-child {
-            margin-bottom: 0;
-            padding-top: 8px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            font-weight: 600;
-        }
-
-        .calc-value {
-            color: var(--aurora-purple);
-        }
-
-        /* Responsive */
-        @media (max-width: 1200px) {
-            .charge-request {
-                grid-template-columns: 1fr;
-            }
-
-            .charge-status-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .sidebar {
-                transform: translateX(-100%);
-            }
-
-            .main-content {
-                margin-left: 0;
-                padding: 20px;
-            }
-
-            .nbang-item {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .nbang-amounts {
-                text-align: left;
-                margin-top: 12px;
-            }
-
-            .nbang-actions {
-                margin-top: 12px;
-            }
-
-            .participant-selection {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>N빵 관리 - 인플루언서</title>
+  <link rel="stylesheet" href="../shared/clean-style.css">
+  <style>
+    .content {
+      padding-bottom: 80px;
+    }
+    .course-selector {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .selector-label {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+    .selector-dropdown {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+      font-size: 14px;
+      font-family: inherit;
+      background: var(--bg-white);
+      cursor: pointer;
+    }
+    .nbang-summary {
+      margin: 20px;
+      background: var(--primary-gradient);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      color: white;
+      box-shadow: 0 10px 30px rgba(124, 58, 237, 0.3);
+    }
+    .nbang-summary-title {
+      font-size: 14px;
+      opacity: 0.9;
+      margin-bottom: 12px;
+    }
+    .nbang-total {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .nbang-per-person {
+      font-size: 13px;
+      opacity: 0.9;
+    }
+    .nbang-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .nbang-stat {
+      text-align: center;
+    }
+    .nbang-stat-value {
+      font-size: 16px;
+      font-weight: 600;
+    }
+    .nbang-stat-label {
+      font-size: 11px;
+      opacity: 0.8;
+    }
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 20px;
+    }
+    .section-title {
+      font-size: 16px;
+      font-weight: 600;
+    }
+    .add-btn {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 8px 12px;
+      background: var(--primary-gradient);
+      color: white;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    .add-btn svg {
+      width: 14px;
+      height: 14px;
+    }
+    .expense-list {
+      padding: 0 20px;
+    }
+    .expense-item {
+      background: var(--bg-white);
+      border-radius: var(--radius-md);
+      margin-bottom: 12px;
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+    }
+    .expense-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .expense-category {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .expense-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .expense-icon svg {
+      width: 16px;
+      height: 16px;
+    }
+    .expense-icon.food {
+      background: rgba(245, 158, 11, 0.1);
+      color: #F59E0B;
+    }
+    .expense-icon.transport {
+      background: rgba(59, 130, 246, 0.1);
+      color: #3B82F6;
+    }
+    .expense-icon.accommodation {
+      background: rgba(124, 58, 237, 0.1);
+      color: #7C3AED;
+    }
+    .expense-icon.activity {
+      background: rgba(16, 185, 129, 0.1);
+      color: #10B981;
+    }
+    .expense-icon.other {
+      background: rgba(100, 116, 139, 0.1);
+      color: #64748B;
+    }
+    .expense-title {
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .expense-amount {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--primary-start);
+    }
+    .expense-body {
+      padding: 14px 16px;
+    }
+    .expense-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+    .expense-row:last-child {
+      margin-bottom: 0;
+    }
+    .expense-label {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+    .expense-value {
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .expense-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border-light);
+    }
+    .expense-action-btn {
+      flex: 1;
+      padding: 8px;
+      border-radius: var(--radius-sm);
+      font-size: 12px;
+      font-weight: 500;
+      text-align: center;
+      border: none;
+      cursor: pointer;
+    }
+    .expense-action-btn.edit {
+      background: var(--bg-light);
+      color: var(--text-primary);
+    }
+    .expense-action-btn.delete {
+      background: rgba(239, 68, 68, 0.1);
+      color: #EF4444;
+    }
+    .info-banner {
+      margin: 20px;
+      padding: 14px 16px;
+      background: rgba(59, 130, 246, 0.1);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .info-banner svg {
+      width: 20px;
+      height: 20px;
+      color: #3B82F6;
+      flex-shrink: 0;
+    }
+    .info-banner-text {
+      font-size: 13px;
+      color: #3B82F6;
+    }
+    .back-btn {
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+    }
+    .back-btn svg {
+      width: 24px;
+      height: 24px;
+      color: var(--text-primary);
+    }
+  </style>
 </head>
 <body>
-    <div class="aurora-bg">
-        <div class="aurora-orb aurora-orb-1"></div>
-        <div class="aurora-orb aurora-orb-2"></div>
-        <div class="aurora-orb aurora-orb-3"></div>
-    </div>
+  <div class="mobile-container">
+    <!-- Header -->
+    <header class="header">
+      <button class="back-btn" onclick="history.back()">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+        </svg>
+      </button>
+      <span class="header-title">N빵 관리</span>
+      <div style="width: 24px;"></div>
+    </header>
 
-    <div class="app-layout">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="sidebar-logo">TRAVELY</div>
+    <!-- Content -->
+    <div class="content">
+      <!-- Course Selector -->
+      <div class="course-selector">
+        <p class="selector-label">코스 선택</p>
+        <select class="selector-dropdown">
+          <option>제주 힐링 3박 4일</option>
+          <option>도쿄 맛집 투어 4박 5일</option>
+          <option>방콕 럭셔리 5박 6일</option>
+        </select>
+      </div>
 
-            <div class="sidebar-profile">
-                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200" class="profile-avatar" alt="프로필">
-                <div class="profile-info">
-                    <div class="profile-name">여행하는 지나</div>
-                    <div class="profile-handle">@travel_jina</div>
-                </div>
-            </div>
-
-            <nav class="sidebar-nav">
-                <a href="dashboard.html" class="nav-item">
-                    <i class="ri-dashboard-line"></i>
-                    대시보드
-                </a>
-                <a href="course-list.html" class="nav-item active">
-                    <i class="ri-map-pin-line"></i>
-                    내 코스
-                </a>
-                <a href="applications.html" class="nav-item">
-                    <i class="ri-user-follow-line"></i>
-                    신청자 관리
-                </a>
-                <a href="settlements.html" class="nav-item">
-                    <i class="ri-money-dollar-circle-line"></i>
-                    정산 내역
-                </a>
-
-                <div class="nav-divider"></div>
-                <div class="nav-label">설정</div>
-
-                <a href="profile.html" class="nav-item">
-                    <i class="ri-user-settings-line"></i>
-                    프로필 설정
-                </a>
-                <a href="account.html" class="nav-item">
-                    <i class="ri-bank-card-line"></i>
-                    계좌 관리
-                </a>
-                <a href="notifications.html" class="nav-item">
-                    <i class="ri-notification-3-line"></i>
-                    알림 설정
-                </a>
-
-                <div class="nav-divider"></div>
-
-                <a href="help.html" class="nav-item">
-                    <i class="ri-question-line"></i>
-                    도움말
-                </a>
-                <a href="logout.html" class="nav-item">
-                    <i class="ri-logout-box-line"></i>
-                    로그아웃
-                </a>
-            </nav>
-        </aside>
-
-        <!-- Main Content -->
-        <main class="main-content">
-            <div class="main-header">
-                <div class="page-title-area">
-                    <a href="course-detail.html" class="back-btn">
-                        <i class="ri-arrow-left-line"></i>
-                    </a>
-                    <div>
-                        <h1 class="page-title">N빵 정산 관리</h1>
-                        <p class="page-subtitle">발리 럭셔리 힐링 7일</p>
-                    </div>
-                </div>
-                <div class="header-actions">
-                    <button class="btn btn-primary" onclick="openModal()">
-                        <i class="ri-add-line"></i>
-                        N빵 추가
-                    </button>
-                </div>
-            </div>
-
-            <!-- Charge Request Card -->
-            <div class="content-card">
-                <div class="card-header">
-                    <h3 class="card-title">경비 충전 요청</h3>
-                    <button class="btn btn-sm btn-secondary">
-                        <i class="ri-send-plane-line"></i>
-                        충전 요청 보내기
-                    </button>
-                </div>
-                <div class="card-body">
-                    <div class="charge-request">
-                        <div class="charge-input-group">
-                            <label class="charge-label">충전 요청 금액</label>
-                            <input type="text" class="charge-input" value="500,000원">
-                        </div>
-                        <div class="charge-input-group">
-                            <label class="charge-label">충전 마감일</label>
-                            <input type="date" class="charge-input" value="2024-02-15">
-                        </div>
-                    </div>
-
-                    <div style="margin-bottom: 12px; font-size: 13px; color: var(--text-secondary);">
-                        충전 현황 (4/6명 완료)
-                    </div>
-
-                    <div class="charge-status-grid">
-                        <div class="charge-status-item">
-                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100" class="charge-avatar" alt="">
-                            <div class="charge-info">
-                                <div class="charge-name">박준혁</div>
-                                <div class="charge-amount">500,000원</div>
-                            </div>
-                            <span class="charge-badge completed">완료</span>
-                        </div>
-                        <div class="charge-status-item">
-                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100" class="charge-avatar" alt="">
-                            <div class="charge-info">
-                                <div class="charge-name">정다은</div>
-                                <div class="charge-amount">500,000원</div>
-                            </div>
-                            <span class="charge-badge completed">완료</span>
-                        </div>
-                        <div class="charge-status-item">
-                            <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100" class="charge-avatar" alt="">
-                            <div class="charge-info">
-                                <div class="charge-name">김민지</div>
-                                <div class="charge-amount">500,000원</div>
-                            </div>
-                            <span class="charge-badge completed">완료</span>
-                        </div>
-                        <div class="charge-status-item">
-                            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100" class="charge-avatar" alt="">
-                            <div class="charge-info">
-                                <div class="charge-name">이수현</div>
-                                <div class="charge-amount">500,000원</div>
-                            </div>
-                            <span class="charge-badge completed">완료</span>
-                        </div>
-                        <div class="charge-status-item">
-                            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100" class="charge-avatar" alt="">
-                            <div class="charge-info">
-                                <div class="charge-name">최영호</div>
-                                <div class="charge-amount">0원</div>
-                            </div>
-                            <span class="charge-badge pending">대기</span>
-                        </div>
-                        <div class="charge-status-item">
-                            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100" class="charge-avatar" alt="">
-                            <div class="charge-info">
-                                <div class="charge-name">한소희</div>
-                                <div class="charge-amount">0원</div>
-                            </div>
-                            <span class="charge-badge pending">대기</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- N-bang List Card -->
-            <div class="content-card">
-                <div class="card-header">
-                    <h3 class="card-title">N빵 항목</h3>
-                    <span style="font-size: 13px; color: var(--text-secondary);">총 3개</span>
-                </div>
-                <div class="card-body">
-                    <div class="nbang-list">
-                        <div class="nbang-item">
-                            <div class="nbang-info">
-                                <div class="nbang-name">현지 식사비</div>
-                                <div class="nbang-meta">
-                                    <span>6명 참여</span>
-                                    <span>2024.01.22</span>
-                                </div>
-                            </div>
-                            <div class="nbang-amounts">
-                                <div class="nbang-total">750,000원</div>
-                                <div class="nbang-perperson">1인당 125,000원</div>
-                            </div>
-                            <span class="nbang-status completed">정산완료</span>
-                            <div class="nbang-actions">
-                                <button class="action-btn detail">상세</button>
-                            </div>
-                        </div>
-
-                        <div class="nbang-item">
-                            <div class="nbang-info">
-                                <div class="nbang-name">액티비티 비용</div>
-                                <div class="nbang-meta">
-                                    <span>6명 참여</span>
-                                    <span>2024.01.23</span>
-                                </div>
-                            </div>
-                            <div class="nbang-amounts">
-                                <div class="nbang-total">1,100,000원</div>
-                                <div class="nbang-perperson">1인당 183,333원</div>
-                            </div>
-                            <span class="nbang-status completed">정산완료</span>
-                            <div class="nbang-actions">
-                                <button class="action-btn detail">상세</button>
-                            </div>
-                        </div>
-
-                        <div class="nbang-item">
-                            <div class="nbang-info">
-                                <div class="nbang-name">교통비</div>
-                                <div class="nbang-meta">
-                                    <span>4명 참여</span>
-                                    <span>2024.01.24</span>
-                                </div>
-                            </div>
-                            <div class="nbang-amounts">
-                                <div class="nbang-total">200,000원</div>
-                                <div class="nbang-perperson">1인당 50,000원</div>
-                            </div>
-                            <span class="nbang-status processing">정산중</span>
-                            <div class="nbang-actions">
-                                <button class="action-btn complete">정산 완료</button>
-                                <button class="action-btn detail">상세</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </main>
-    </div>
-
-    <!-- N-bang Add Modal -->
-    <div class="modal-overlay" id="nbangModal">
-        <div class="modal">
-            <div class="modal-header">
-                <h3 class="modal-title">N빵 추가</h3>
-                <button class="modal-close" onclick="closeModal()">
-                    <i class="ri-close-line"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label class="form-label">항목명 *</label>
-                    <input type="text" class="form-input" id="itemName" placeholder="예: 점심 식사비, 액티비티 비용" oninput="updateCalculation()">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">총 금액 *</label>
-                    <input type="text" class="form-input" id="totalAmount" placeholder="0" oninput="updateCalculation()">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">참여자 선택 *</label>
-                    <button class="select-all-btn" onclick="selectAll()">전체 선택</button>
-                    <div class="participant-selection">
-                        <label class="participant-checkbox">
-                            <input type="checkbox" checked onchange="updateCalculation()">
-                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100" alt="">
-                            <span>박준혁</span>
-                        </label>
-                        <label class="participant-checkbox">
-                            <input type="checkbox" checked onchange="updateCalculation()">
-                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100" alt="">
-                            <span>정다은</span>
-                        </label>
-                        <label class="participant-checkbox">
-                            <input type="checkbox" checked onchange="updateCalculation()">
-                            <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100" alt="">
-                            <span>김민지</span>
-                        </label>
-                        <label class="participant-checkbox">
-                            <input type="checkbox" checked onchange="updateCalculation()">
-                            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100" alt="">
-                            <span>이수현</span>
-                        </label>
-                        <label class="participant-checkbox">
-                            <input type="checkbox" onchange="updateCalculation()">
-                            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100" alt="">
-                            <span>최영호</span>
-                        </label>
-                        <label class="participant-checkbox">
-                            <input type="checkbox" onchange="updateCalculation()">
-                            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100" alt="">
-                            <span>한소희</span>
-                        </label>
-                    </div>
-                </div>
-
-                <div class="calculation-preview">
-                    <div class="calc-row">
-                        <span>총 금액</span>
-                        <span class="calc-value" id="calcTotal">0원</span>
-                    </div>
-                    <div class="calc-row">
-                        <span>참여자 수</span>
-                        <span class="calc-value" id="calcParticipants">4명</span>
-                    </div>
-                    <div class="calc-row">
-                        <span>1인당 금액</span>
-                        <span class="calc-value" id="calcPerPerson">0원</span>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" onclick="closeModal()">취소</button>
-                <button class="btn btn-primary">
-                    <i class="ri-check-line"></i>
-                    추가
-                </button>
-            </div>
+      <!-- N-Bang Summary -->
+      <div class="nbang-summary">
+        <p class="nbang-summary-title">총 공동 비용</p>
+        <p class="nbang-total">1,560,000원</p>
+        <p class="nbang-per-person">1인당 130,000원 (12명 기준)</p>
+        <div class="nbang-stats">
+          <div class="nbang-stat">
+            <p class="nbang-stat-value">8</p>
+            <p class="nbang-stat-label">등록 항목</p>
+          </div>
+          <div class="nbang-stat">
+            <p class="nbang-stat-value">12</p>
+            <p class="nbang-stat-label">참가자</p>
+          </div>
+          <div class="nbang-stat">
+            <p class="nbang-stat-value">5</p>
+            <p class="nbang-stat-label">정산 완료</p>
+          </div>
         </div>
+      </div>
+
+      <!-- Info Banner -->
+      <div class="info-banner">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+        <p class="info-banner-text">비용 등록 후 참가자에게 자동으로 알림이 발송됩니다</p>
+      </div>
+
+      <!-- Expense List -->
+      <div class="section-header">
+        <h3 class="section-title">비용 항목</h3>
+        <button class="add-btn">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+          </svg>
+          비용 추가
+        </button>
+      </div>
+
+      <div class="expense-list">
+        <!-- Expense 1 - Food -->
+        <div class="expense-item">
+          <div class="expense-header">
+            <div class="expense-category">
+              <div class="expense-icon food">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+              </div>
+              <span class="expense-title">1일차 점심 식사</span>
+            </div>
+            <span class="expense-amount">360,000원</span>
+          </div>
+          <div class="expense-body">
+            <div class="expense-row">
+              <span class="expense-label">카테고리</span>
+              <span class="expense-value">식비</span>
+            </div>
+            <div class="expense-row">
+              <span class="expense-label">1인당 금액</span>
+              <span class="expense-value">30,000원</span>
+            </div>
+            <div class="expense-row">
+              <span class="expense-label">등록일</span>
+              <span class="expense-value">2025.01.28</span>
+            </div>
+            <div class="expense-actions">
+              <button class="expense-action-btn edit">수정</button>
+              <button class="expense-action-btn delete">삭제</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Expense 2 - Transport -->
+        <div class="expense-item">
+          <div class="expense-header">
+            <div class="expense-category">
+              <div class="expense-icon transport">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>
+                </svg>
+              </div>
+              <span class="expense-title">공항-호텔 버스</span>
+            </div>
+            <span class="expense-amount">240,000원</span>
+          </div>
+          <div class="expense-body">
+            <div class="expense-row">
+              <span class="expense-label">카테고리</span>
+              <span class="expense-value">교통</span>
+            </div>
+            <div class="expense-row">
+              <span class="expense-label">1인당 금액</span>
+              <span class="expense-value">20,000원</span>
+            </div>
+            <div class="expense-row">
+              <span class="expense-label">등록일</span>
+              <span class="expense-value">2025.01.28</span>
+            </div>
+            <div class="expense-actions">
+              <button class="expense-action-btn edit">수정</button>
+              <button class="expense-action-btn delete">삭제</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Expense 3 - Activity -->
+        <div class="expense-item">
+          <div class="expense-header">
+            <div class="expense-category">
+              <div class="expense-icon activity">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+              </div>
+              <span class="expense-title">한라산 트레킹</span>
+            </div>
+            <span class="expense-amount">480,000원</span>
+          </div>
+          <div class="expense-body">
+            <div class="expense-row">
+              <span class="expense-label">카테고리</span>
+              <span class="expense-value">액티비티</span>
+            </div>
+            <div class="expense-row">
+              <span class="expense-label">1인당 금액</span>
+              <span class="expense-value">40,000원</span>
+            </div>
+            <div class="expense-row">
+              <span class="expense-label">등록일</span>
+              <span class="expense-value">2025.01.29</span>
+            </div>
+            <div class="expense-actions">
+              <button class="expense-action-btn edit">수정</button>
+              <button class="expense-action-btn delete">삭제</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Expense 4 - Other -->
+        <div class="expense-item">
+          <div class="expense-header">
+            <div class="expense-category">
+              <div class="expense-icon other">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/>
+                </svg>
+              </div>
+              <span class="expense-title">단체 사진 촬영</span>
+            </div>
+            <span class="expense-amount">480,000원</span>
+          </div>
+          <div class="expense-body">
+            <div class="expense-row">
+              <span class="expense-label">카테고리</span>
+              <span class="expense-value">기타</span>
+            </div>
+            <div class="expense-row">
+              <span class="expense-label">1인당 금액</span>
+              <span class="expense-value">40,000원</span>
+            </div>
+            <div class="expense-row">
+              <span class="expense-label">등록일</span>
+              <span class="expense-value">2025.01.30</span>
+            </div>
+            <div class="expense-actions">
+              <button class="expense-action-btn edit">수정</button>
+              <button class="expense-action-btn delete">삭제</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <script>
-        function openModal() {
-            document.getElementById('nbangModal').classList.add('active');
-            updateCalculation();
-        }
-
-        function closeModal() {
-            document.getElementById('nbangModal').classList.remove('active');
-        }
-
-        function selectAll() {
-            const checkboxes = document.querySelectorAll('.participant-selection input[type="checkbox"]');
-            const allChecked = Array.from(checkboxes).every(cb => cb.checked);
-            checkboxes.forEach(cb => cb.checked = !allChecked);
-            updateCalculation();
-        }
-
-        function updateCalculation() {
-            const totalInput = document.getElementById('totalAmount').value.replace(/[^0-9]/g, '');
-            const total = parseInt(totalInput) || 0;
-            const participantCount = document.querySelectorAll('.participant-selection input[type="checkbox"]:checked').length;
-            const perPerson = participantCount > 0 ? Math.floor(total / participantCount) : 0;
-
-            document.getElementById('calcTotal').textContent = total.toLocaleString() + '원';
-            document.getElementById('calcParticipants').textContent = participantCount + '명';
-            document.getElementById('calcPerPerson').textContent = perPerson.toLocaleString() + '원';
-        }
-
-        // Close modal on overlay click
-        document.getElementById('nbangModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeModal();
-            }
-        });
-    </script>
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+      <a href="dashboard.html" class="nav-item">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+        </svg>
+        <span>홈</span>
+      </a>
+      <a href="course-list.html" class="nav-item active">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+        </svg>
+        <span>코스</span>
+      </a>
+      <a href="settlements.html" class="nav-item">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+        </svg>
+        <span>정산</span>
+      </a>
+      <a href="settings.html" class="nav-item">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+        </svg>
+        <span>설정</span>
+      </a>
+    </nav>
+  </div>
 </body>
 </html>

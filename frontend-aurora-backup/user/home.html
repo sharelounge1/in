@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>TRAVELY - 인플루언서와 함께하는 특별한 여행</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="../shared/aurora-style.css">
+    <style>
+        .home-container {
+            padding-bottom: 90px;
+        }
+
+        /* Header */
+        .home-header {
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(15, 15, 26, 0.9);
+            backdrop-filter: blur(20px);
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .header-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: var(--bg-glass);
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-primary);
+            font-size: 18px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .header-btn .badge-dot {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 8px;
+            height: 8px;
+            background: var(--error);
+            border-radius: 50%;
+        }
+
+        /* Hero Banner */
+        .hero-banner {
+            margin: 0 20px 24px;
+            padding: 28px 24px;
+            background: var(--gradient-primary);
+            border-radius: var(--radius-xl);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-banner::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -30%;
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+        }
+
+        .hero-greeting {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 8px;
+        }
+
+        .hero-title {
+            font-size: 22px;
+            font-weight: 800;
+            line-height: 1.3;
+            margin-bottom: 16px;
+        }
+
+        .hero-subtitle {
+            font-size: 13px;
+            opacity: 0.85;
+            line-height: 1.5;
+        }
+
+        /* My Influencers Section */
+        .my-influencers {
+            margin-bottom: 32px;
+        }
+
+        .influencer-scroll {
+            display: flex;
+            gap: 16px;
+            overflow-x: auto;
+            padding: 0 20px;
+            scroll-snap-type: x mandatory;
+        }
+
+        .influencer-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        .influencer-item {
+            flex: 0 0 auto;
+            text-align: center;
+            scroll-snap-align: start;
+        }
+
+        .influencer-avatar-wrap {
+            position: relative;
+            margin-bottom: 8px;
+        }
+
+        .influencer-avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid transparent;
+            background: linear-gradient(var(--bg-primary), var(--bg-primary)) padding-box,
+                        var(--gradient-primary) border-box;
+        }
+
+        .influencer-avatar.has-course::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 16px;
+            height: 16px;
+            background: var(--aurora-cyan);
+            border-radius: 50%;
+            border: 2px solid var(--bg-primary);
+        }
+
+        .influencer-name {
+            font-size: 11px;
+            color: var(--text-secondary);
+            max-width: 64px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .add-influencer {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: var(--bg-glass);
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        /* Service Introduction */
+        .service-intro {
+            padding: 0 20px;
+            margin-bottom: 32px;
+        }
+
+        .intro-card {
+            background: var(--bg-glass);
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .intro-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .intro-content {
+            padding: 20px;
+        }
+
+        .intro-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .intro-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .intro-features {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .intro-feature {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .intro-feature i {
+            color: var(--aurora-cyan);
+            font-size: 16px;
+        }
+
+        /* How It Works */
+        .how-it-works {
+            padding: 0 20px;
+            margin-bottom: 32px;
+        }
+
+        .steps {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .step-item {
+            display: flex;
+            gap: 16px;
+            padding: 16px;
+            background: var(--bg-glass);
+            border-radius: var(--radius-lg);
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .step-desc {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* Reviews Section */
+        .reviews-section {
+            padding: 0 20px;
+            margin-bottom: 32px;
+        }
+
+        .review-scroll {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            margin: 0 -20px;
+            padding: 0 20px;
+        }
+
+        .review-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        .review-card {
+            flex: 0 0 280px;
+            padding: 16px;
+            background: var(--bg-glass);
+            border-radius: var(--radius-lg);
+            scroll-snap-align: start;
+        }
+
+        .review-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .review-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .review-info {
+            flex: 1;
+        }
+
+        .review-name {
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .review-trip {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .review-stars {
+            color: #fbbf24;
+            font-size: 12px;
+        }
+
+        .review-text {
+            font-size: 12px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* Stats Section */
+        .stats-section {
+            padding: 0 20px;
+            margin-bottom: 32px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .stat-card {
+            padding: 16px;
+            background: var(--bg-glass);
+            border-radius: var(--radius-md);
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            padding: 0 20px;
+            margin-bottom: 32px;
+        }
+
+        .faq-item {
+            padding: 16px;
+            background: var(--bg-glass);
+            border-radius: var(--radius-md);
+            margin-bottom: 8px;
+        }
+
+        .faq-question {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .faq-question i {
+            color: var(--text-muted);
+            transition: transform 0.3s;
+        }
+
+        .faq-answer {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: none;
+        }
+
+        .faq-item.open .faq-answer {
+            display: block;
+        }
+
+        .faq-item.open .faq-question i {
+            transform: rotate(180deg);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 0 20px;
+            margin-bottom: 32px;
+        }
+
+        .cta-card {
+            padding: 24px;
+            background: var(--gradient-primary);
+            border-radius: var(--radius-xl);
+            text-align: center;
+        }
+
+        .cta-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .cta-desc {
+            font-size: 13px;
+            opacity: 0.9;
+            margin-bottom: 16px;
+        }
+
+        .cta-btn {
+            display: inline-block;
+            padding: 12px 32px;
+            background: white;
+            color: var(--aurora-purple);
+            border-radius: var(--radius-full);
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        /* Empty State for My Influencers */
+        .empty-influencers {
+            padding: 24px;
+            text-align: center;
+            background: var(--bg-glass);
+            border-radius: var(--radius-lg);
+            margin: 0 20px;
+        }
+
+        .empty-influencers-icon {
+            font-size: 32px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        .empty-influencers-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .empty-influencers-desc {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+    <div class="aurora-bg">
+        <div class="aurora-orb aurora-orb-1"></div>
+        <div class="aurora-orb aurora-orb-2"></div>
+        <div class="aurora-orb aurora-orb-3"></div>
+    </div>
+
+    <div class="mobile-container home-container">
+        <!-- Header -->
+        <header class="home-header">
+            <div class="logo">TRAVELY</div>
+            <div class="header-actions">
+                <button class="header-btn">
+                    <i class="ri-search-line"></i>
+                </button>
+                <button class="header-btn">
+                    <i class="ri-notification-3-line"></i>
+                    <span class="badge-dot"></span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Hero Banner -->
+        <div class="hero-banner">
+            <p class="hero-greeting">안녕하세요, 여행자님 👋</p>
+            <h1 class="hero-title">좋아하는 인플루언서와<br>특별한 여행을 떠나세요</h1>
+            <p class="hero-subtitle">인플루언서의 모집 링크를 통해<br>함께하는 여행에 참여해보세요</p>
+        </div>
+
+        <!-- My Influencers -->
+        <section class="my-influencers">
+            <div class="section-header" style="padding: 0 20px; margin-bottom: 16px;">
+                <h2 class="section-title">내 인플루언서</h2>
+                <a href="#" class="section-more">전체보기</a>
+            </div>
+            <div class="influencer-scroll">
+                <div class="influencer-item">
+                    <div class="influencer-avatar-wrap">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200" class="influencer-avatar has-course" alt="프로필">
+                    </div>
+                    <div class="influencer-name">travel_jina</div>
+                </div>
+                <div class="influencer-item">
+                    <div class="influencer-avatar-wrap">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200" class="influencer-avatar" alt="프로필">
+                    </div>
+                    <div class="influencer-name">tokyo_life</div>
+                </div>
+                <div class="influencer-item">
+                    <div class="influencer-avatar-wrap">
+                        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200" class="influencer-avatar has-course" alt="프로필">
+                    </div>
+                    <div class="influencer-name">paris_mood</div>
+                </div>
+                <div class="influencer-item">
+                    <div class="influencer-avatar-wrap">
+                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200" class="influencer-avatar" alt="프로필">
+                    </div>
+                    <div class="influencer-name">euro_travel</div>
+                </div>
+                <div class="influencer-item">
+                    <div class="influencer-avatar-wrap">
+                        <div class="add-influencer">
+                            <i class="ri-add-line"></i>
+                        </div>
+                    </div>
+                    <div class="influencer-name">추가하기</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Service Introduction -->
+        <section class="service-intro">
+            <div class="section-header" style="margin-bottom: 16px;">
+                <h2 class="section-title">TRAVELY는?</h2>
+            </div>
+            <div class="intro-card">
+                <img src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=800" class="intro-image" alt="여행">
+                <div class="intro-content">
+                    <h3 class="intro-title">인플루언서와 함께하는<br>안전한 여행 플랫폼</h3>
+                    <p class="intro-desc">
+                        좋아하는 인플루언서가 기획한 여행에 참여하세요.
+                        결제부터 환불까지 모든 과정이 안전하게 보호됩니다.
+                    </p>
+                    <div class="intro-features">
+                        <div class="intro-feature">
+                            <i class="ri-shield-check-line"></i>
+                            네이버페이 안전 결제
+                        </div>
+                        <div class="intro-feature">
+                            <i class="ri-refund-2-line"></i>
+                            미선정 시 100% 자동 환불
+                        </div>
+                        <div class="intro-feature">
+                            <i class="ri-customer-service-2-line"></i>
+                            24시간 고객 지원
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- How It Works -->
+        <section class="how-it-works">
+            <div class="section-header" style="margin-bottom: 16px;">
+                <h2 class="section-title">이용 방법</h2>
+            </div>
+            <div class="steps">
+                <div class="step-item">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <div class="step-title">모집 링크 접속</div>
+                        <div class="step-desc">인플루언서가 SNS에 공유한 모집 링크를 클릭하세요</div>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <div class="step-title">코스 확인 & 신청</div>
+                        <div class="step-desc">일정과 포함사항을 확인하고 신청서를 작성하세요</div>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <div class="step-title">결제 & 선정 대기</div>
+                        <div class="step-desc">안전하게 결제하고 선정 결과를 기다리세요</div>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <div class="step-title">여행 출발!</div>
+                        <div class="step-desc">선정되면 공지사항을 확인하고 여행을 즐기세요</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats -->
+        <section class="stats-section">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value">500+</div>
+                    <div class="stat-label">인플루언서</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">2,000+</div>
+                    <div class="stat-label">진행 여행</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">98%</div>
+                    <div class="stat-label">만족도</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Reviews -->
+        <section class="reviews-section">
+            <div class="section-header" style="margin-bottom: 16px;">
+                <h2 class="section-title">참가 후기</h2>
+                <a href="#" class="section-more">더보기</a>
+            </div>
+            <div class="review-scroll">
+                <div class="review-card">
+                    <div class="review-header">
+                        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100" class="review-avatar" alt="리뷰어">
+                        <div class="review-info">
+                            <div class="review-name">김민지</div>
+                            <div class="review-trip">발리 힐링 여행</div>
+                        </div>
+                        <div class="review-stars">
+                            <i class="ri-star-fill"></i>
+                            <i class="ri-star-fill"></i>
+                            <i class="ri-star-fill"></i>
+                            <i class="ri-star-fill"></i>
+                            <i class="ri-star-fill"></i>
+                        </div>
+                    </div>
+                    <div class="review-text">
+                        지나님과 함께한 여행 정말 최고였어요! 혼자서는 못 가봤을 곳들을 가이드해주시고 사진도 잘 찍어주셨어요.
+                    </div>
+                </div>
+                <div class="review-card">
+                    <div class="review-header">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100" class="review-avatar" alt="리뷰어">
+                        <div class="review-info">
+                            <div class="review-name">박준혁</div>
+                            <div class="review-trip">도쿄 맛집 투어</div>
+                        </div>
+                        <div class="review-stars">
+                            <i class="ri-star-fill"></i>
+                            <i class="ri-star-fill"></i>
+                            <i class="ri-star-fill"></i>
+                            <i class="ri-star-fill"></i>
+                            <i class="ri-star-fill"></i>
+                        </div>
+                    </div>
+                    <div class="review-text">
+                        진짜 현지인만 아는 맛집들! 줄 서서 먹을 가치가 있었어요. 다음에도 꼭 참여하고 싶어요.
+                    </div>
+                </div>
+                <div class="review-card">
+                    <div class="review-header">
+                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100" class="review-avatar" alt="리뷰어">
+                        <div class="review-info">
+                            <div class="review-name">이수현</div>
+                            <div class="review-trip">파리 아트 투어</div>
+                        </div>
+                        <div class="review-stars">
+                            <i class="ri-star-fill"></i>
+                            <i class="ri-star-fill"></i>
+                            <i class="ri-star-fill"></i>
+                            <i class="ri-star-fill"></i>
+                            <i class="ri-star-fill"></i>
+                        </div>
+                    </div>
+                    <div class="review-text">
+                        미술관 투어가 정말 알찼어요. 전문적인 설명과 함께 보니 작품이 다르게 보이더라고요!
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ -->
+        <section class="faq-section">
+            <div class="section-header" style="margin-bottom: 16px;">
+                <h2 class="section-title">자주 묻는 질문</h2>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>선정되지 않으면 어떻게 되나요?</span>
+                    <i class="ri-arrow-down-s-line"></i>
+                </div>
+                <div class="faq-answer">
+                    미선정 시 결제하신 참가비는 영업일 기준 3-5일 내에 전액 자동 환불됩니다.
+                    별도의 환불 신청이 필요 없습니다.
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>결제는 안전한가요?</span>
+                    <i class="ri-arrow-down-s-line"></i>
+                </div>
+                <div class="faq-answer">
+                    네이버페이를 통한 안전한 결제 시스템을 사용하며,
+                    모든 거래는 에스크로로 보호됩니다.
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>취소/환불 정책은 어떻게 되나요?</span>
+                    <i class="ri-arrow-down-s-line"></i>
+                </div>
+                <div class="faq-answer">
+                    출발 30일 전까지 100% 환불, 14일 전까지 50% 환불이 가능합니다.
+                    자세한 내용은 각 코스의 환불 정책을 확인해주세요.
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="cta-section">
+            <div class="cta-card">
+                <h3 class="cta-title">인플루언서이신가요?</h3>
+                <p class="cta-desc">팬들과 함께하는 여행을 기획해보세요</p>
+                <a href="../influencer/landing.html" class="cta-btn">인플루언서 등록</a>
+            </div>
+        </section>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <a href="home.html" class="nav-item active">
+                <i class="ri-home-5-fill"></i>
+                <span>홈</span>
+            </a>
+            <a href="parties.html" class="nav-item">
+                <i class="ri-goblet-line"></i>
+                <span>파티</span>
+            </a>
+            <a href="my-applications.html" class="nav-item">
+                <i class="ri-file-list-3-line"></i>
+                <span>내신청</span>
+            </a>
+            <a href="active-travels.html" class="nav-item">
+                <i class="ri-suitcase-3-line"></i>
+                <span>진행중</span>
+            </a>
+            <a href="mypage.html" class="nav-item">
+                <i class="ri-user-line"></i>
+                <span>마이</span>
+            </a>
+        </nav>
+    </div>
+
+    <script>
+        // FAQ Toggle
+        document.querySelectorAll('.faq-item').forEach(item => {
+            item.querySelector('.faq-question').addEventListener('click', () => {
+                item.classList.toggle('open');
+            });
+        });
+    </script>
+</body>
+</html>

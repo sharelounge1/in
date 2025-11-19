@@ -1,932 +1,721 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inquiry Detail - Admin Center</title>
-    <link rel="stylesheet" href="../shared/aurora-style.css">
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
-    <style>
-        .admin-layout {
-            display: flex;
-            min-height: 100vh;
-        }
-
-        /* Sidebar */
-        .sidebar {
-            width: 260px;
-            background: var(--bg-secondary);
-            border-right: 1px solid rgba(255, 255, 255, 0.1);
-            padding: var(--spacing-lg);
-            position: fixed;
-            height: 100vh;
-            overflow-y: auto;
-        }
-
-        .sidebar-logo {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-md);
-            padding-bottom: var(--spacing-lg);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            margin-bottom: var(--spacing-lg);
-        }
-
-        .sidebar-logo-icon {
-            width: 40px;
-            height: 40px;
-            background: var(--gradient-primary);
-            border-radius: var(--radius-md);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .sidebar-logo-icon i {
-            font-size: 20px;
-            color: white;
-        }
-
-        .sidebar-logo-text {
-            font-size: 16px;
-            font-weight: 700;
-        }
-
-        .sidebar-menu {
-            list-style: none;
-        }
-
-        .sidebar-menu-item {
-            margin-bottom: var(--spacing-xs);
-        }
-
-        .sidebar-menu-link {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-md);
-            padding: 12px 16px;
-            border-radius: var(--radius-md);
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 14px;
-            transition: all 0.3s ease;
-        }
-
-        .sidebar-menu-link:hover {
-            background: var(--bg-glass);
-            color: var(--text-primary);
-        }
-
-        .sidebar-menu-link.active {
-            background: var(--gradient-primary);
-            color: white;
-        }
-
-        .sidebar-menu-link i {
-            font-size: 18px;
-        }
-
-        .sidebar-divider {
-            height: 1px;
-            background: rgba(255, 255, 255, 0.1);
-            margin: var(--spacing-md) 0;
-        }
-
-        .sidebar-section-title {
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--text-muted);
-            padding: 0 16px;
-            margin-bottom: var(--spacing-sm);
-        }
-
-        /* Main Content */
-        .main-content {
-            flex: 1;
-            margin-left: 260px;
-            padding: var(--spacing-lg);
-        }
-
-        /* Top Bar */
-        .top-bar {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            margin-bottom: var(--spacing-xl);
-        }
-
-        .back-btn {
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--bg-glass);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: var(--radius-md);
-            color: var(--text-primary);
-            text-decoration: none;
-            transition: all 0.3s;
-        }
-
-        .back-btn:hover {
-            border-color: var(--aurora-purple);
-        }
-
-        .page-title {
-            font-size: 24px;
-            font-weight: 700;
-            flex: 1;
-        }
-
-        .top-bar-actions {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-md);
-        }
-
-        .admin-profile {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-sm);
-        }
-
-        .admin-profile-name {
-            font-size: 14px;
-            font-weight: 500;
-        }
-
-        /* Content Grid */
-        .content-grid {
-            display: grid;
-            grid-template-columns: 1fr 380px;
-            gap: 24px;
-        }
-
-        /* User Info Card */
-        .user-info-card {
-            background: var(--bg-glass);
-            border-radius: var(--radius-lg);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 24px;
-            margin-bottom: 24px;
-        }
-
-        .user-header {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .user-avatar {
-            width: 64px;
-            height: 64px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid var(--aurora-purple);
-        }
-
-        .user-details {
-            flex: 1;
-        }
-
-        .user-name {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 4px;
-        }
-
-        .user-email {
-            font-size: 13px;
-            color: var(--text-secondary);
-            margin-bottom: 8px;
-        }
-
-        .user-badges {
-            display: flex;
-            gap: 8px;
-        }
-
-        .user-badge {
-            padding: 4px 8px;
-            border-radius: var(--radius-full);
-            font-size: 11px;
-            font-weight: 600;
-        }
-
-        .user-badge.member {
-            background: rgba(102, 126, 234, 0.2);
-            color: var(--aurora-purple);
-        }
-
-        .user-badge.verified {
-            background: rgba(72, 187, 120, 0.2);
-            color: var(--success);
-        }
-
-        .user-contact {
-            display: flex;
-            gap: 12px;
-        }
-
-        .contact-btn {
-            padding: 8px 16px;
-            background: var(--bg-glass);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: var(--radius-md);
-            color: var(--text-primary);
-            font-size: 12px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .contact-btn:hover {
-            border-color: var(--aurora-purple);
-        }
-
-        /* Inquiry Content Card */
-        .inquiry-card {
-            background: var(--bg-glass);
-            border-radius: var(--radius-lg);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 24px;
-            margin-bottom: 24px;
-        }
-
-        .inquiry-meta {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 16px;
-            flex-wrap: wrap;
-        }
-
-        .inquiry-type-badge {
-            padding: 6px 12px;
-            border-radius: var(--radius-full);
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        .inquiry-type-badge.platform {
-            background: rgba(102, 126, 234, 0.2);
-            color: var(--aurora-purple);
-        }
-
-        .inquiry-type-badge.influencer {
-            background: rgba(240, 147, 251, 0.2);
-            color: var(--aurora-pink);
-        }
-
-        .inquiry-target {
-            font-size: 12px;
-            color: var(--aurora-cyan);
-        }
-
-        .inquiry-date {
-            font-size: 12px;
-            color: var(--text-muted);
-            margin-left: auto;
-        }
-
-        .inquiry-title {
-            font-size: 20px;
-            font-weight: 700;
-            margin-bottom: 16px;
-        }
-
-        .inquiry-content {
-            font-size: 14px;
-            line-height: 1.8;
-            color: var(--text-secondary);
-            margin-bottom: 20px;
-        }
-
-        .inquiry-attachments {
-            padding-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .attachments-label {
-            font-size: 13px;
-            font-weight: 600;
-            margin-bottom: 12px;
-        }
-
-        .attachment-list {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-
-        .attachment-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 14px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: var(--radius-md);
-            font-size: 13px;
-            color: var(--text-secondary);
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .attachment-item:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .attachment-item i {
-            color: var(--aurora-purple);
-        }
-
-        /* Response Form */
-        .response-card {
-            background: var(--bg-glass);
-            border-radius: var(--radius-lg);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 24px;
-            margin-bottom: 24px;
-        }
-
-        .response-title {
-            font-size: 16px;
-            font-weight: 700;
-            margin-bottom: 16px;
-        }
-
-        .quick-templates {
-            margin-bottom: 16px;
-        }
-
-        .templates-label {
-            font-size: 13px;
-            color: var(--text-secondary);
-            margin-bottom: 8px;
-        }
-
-        .template-list {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        .template-btn {
-            padding: 8px 12px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: var(--radius-md);
-            color: var(--text-secondary);
-            font-size: 12px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .template-btn:hover {
-            border-color: var(--aurora-purple);
-            color: var(--text-primary);
-        }
-
-        .response-textarea {
-            width: 100%;
-            min-height: 180px;
-            padding: 16px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: var(--radius-md);
-            color: var(--text-primary);
-            font-size: 14px;
-            line-height: 1.6;
-            resize: vertical;
-            margin-bottom: 16px;
-        }
-
-        .response-textarea:focus {
-            outline: none;
-            border-color: var(--aurora-purple);
-        }
-
-        .response-textarea::placeholder {
-            color: var(--text-muted);
-        }
-
-        .response-actions {
-            display: flex;
-            justify-content: flex-end;
-            gap: 12px;
-        }
-
-        .send-btn {
-            padding: 12px 24px;
-            background: var(--gradient-primary);
-            border: none;
-            border-radius: var(--radius-md);
-            color: white;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.3s;
-        }
-
-        .send-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 0 30px rgba(102, 126, 234, 0.4);
-        }
-
-        /* Internal Notes */
-        .notes-card {
-            background: var(--bg-glass);
-            border-radius: var(--radius-lg);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 24px;
-        }
-
-        .notes-title {
-            font-size: 16px;
-            font-weight: 700;
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .notes-title i {
-            color: var(--warning);
-        }
-
-        .notes-textarea {
-            width: 100%;
-            min-height: 120px;
-            padding: 16px;
-            background: rgba(236, 201, 75, 0.05);
-            border: 1px solid rgba(236, 201, 75, 0.2);
-            border-radius: var(--radius-md);
-            color: var(--text-primary);
-            font-size: 14px;
-            line-height: 1.6;
-            resize: vertical;
-            margin-bottom: 12px;
-        }
-
-        .notes-textarea:focus {
-            outline: none;
-            border-color: var(--warning);
-        }
-
-        .notes-textarea::placeholder {
-            color: var(--text-muted);
-        }
-
-        .notes-hint {
-            font-size: 12px;
-            color: var(--text-muted);
-        }
-
-        /* Sidebar Cards */
-        .side-card {
-            background: var(--bg-glass);
-            border-radius: var(--radius-lg);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            overflow: hidden;
-            margin-bottom: 24px;
-        }
-
-        .side-card-header {
-            padding: 16px 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .side-card-title {
-            font-size: 14px;
-            font-weight: 700;
-        }
-
-        .side-card-body {
-            padding: 16px;
-        }
-
-        /* User History */
-        .history-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .history-item {
-            padding: 12px;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: var(--radius-md);
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .history-item:hover {
-            background: rgba(255, 255, 255, 0.08);
-        }
-
-        .history-title {
-            font-size: 13px;
-            font-weight: 600;
-            margin-bottom: 6px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .history-meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .history-date {
-            font-size: 11px;
-            color: var(--text-muted);
-        }
-
-        .history-status {
-            padding: 4px 8px;
-            border-radius: var(--radius-full);
-            font-size: 10px;
-            font-weight: 600;
-        }
-
-        .history-status.completed {
-            background: rgba(72, 187, 120, 0.2);
-            color: var(--success);
-        }
-
-        .history-status.pending {
-            background: rgba(236, 201, 75, 0.2);
-            color: var(--warning);
-        }
-
-        /* User Stats */
-        .user-stats {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
-
-        .user-stat {
-            padding: 12px;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: var(--radius-md);
-            text-align: center;
-        }
-
-        .user-stat-value {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--aurora-purple);
-            margin-bottom: 4px;
-        }
-
-        .user-stat-label {
-            font-size: 11px;
-            color: var(--text-muted);
-        }
-
-        /* Quick Actions */
-        .quick-action-list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .quick-action-btn {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: var(--radius-md);
-            color: var(--text-primary);
-            font-size: 13px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .quick-action-btn:hover {
-            border-color: var(--aurora-purple);
-            background: rgba(255, 255, 255, 0.08);
-        }
-
-        .quick-action-btn i {
-            font-size: 16px;
-            color: var(--aurora-purple);
-        }
-
-        @media (max-width: 1200px) {
-            .content-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>문의 상세 - 관리자</title>
+  <link rel="stylesheet" href="../shared/clean-style.css">
+  <style>
+    body {
+      background: var(--bg-light);
+    }
+    .admin-layout {
+      display: flex;
+      min-height: 100vh;
+    }
+    /* Sidebar */
+    .sidebar {
+      width: 260px;
+      background: var(--bg-white);
+      border-right: 1px solid var(--border-light);
+      padding: 24px 0;
+      position: fixed;
+      height: 100vh;
+      overflow-y: auto;
+    }
+    .sidebar-logo {
+      padding: 0 24px 24px;
+      border-bottom: 1px solid var(--border-light);
+      margin-bottom: 24px;
+    }
+    .sidebar-logo-text {
+      font-size: 18px;
+      font-weight: 700;
+      background: var(--primary-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .sidebar-logo-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+    .sidebar-menu {
+      list-style: none;
+    }
+    .sidebar-item {
+      margin-bottom: 4px;
+    }
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 24px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    .sidebar-link:hover {
+      background: var(--bg-light);
+      color: var(--text-primary);
+    }
+    .sidebar-link.active {
+      background: rgba(124, 58, 237, 0.1);
+      color: var(--primary-start);
+      border-right: 3px solid var(--primary-start);
+    }
+    .sidebar-link svg {
+      width: 20px;
+      height: 20px;
+    }
+    .sidebar-badge {
+      margin-left: auto;
+      background: var(--primary-gradient);
+      color: white;
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 100px;
+    }
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      margin-left: 260px;
+      padding: 32px;
+      max-width: 1200px;
+    }
+    /* Page Header */
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 24px;
+    }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 14px;
+      margin-bottom: 16px;
+    }
+    .back-link:hover {
+      color: var(--primary-start);
+    }
+    .back-link svg {
+      width: 16px;
+      height: 16px;
+    }
+    .page-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+    .inquiry-meta {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+    .inquiry-id {
+      font-family: monospace;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .header-actions {
+      display: flex;
+      gap: 12px;
+    }
+    /* Content Grid */
+    .content-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 24px;
+    }
+    /* Inquiry Card */
+    .inquiry-card {
+      background: var(--bg-white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+    }
+    .inquiry-header {
+      padding: 24px;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .inquiry-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+    }
+    .inquiry-info {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .info-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+    .info-item svg {
+      width: 16px;
+      height: 16px;
+      color: var(--text-muted);
+    }
+    .inquiry-content {
+      padding: 24px;
+    }
+    .inquiry-text {
+      font-size: 15px;
+      line-height: 1.7;
+      color: var(--text-primary);
+      white-space: pre-wrap;
+    }
+    .inquiry-attachments {
+      margin-top: 24px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border-light);
+    }
+    .attachments-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .attachment-list {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .attachment-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background: var(--bg-light);
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      color: var(--text-secondary);
+      text-decoration: none;
+    }
+    .attachment-item:hover {
+      background: var(--border-light);
+    }
+    .attachment-item svg {
+      width: 16px;
+      height: 16px;
+    }
+    /* Reply Section */
+    .reply-section {
+      padding: 24px;
+      border-top: 1px solid var(--border-light);
+      background: var(--bg-light);
+    }
+    .reply-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+    .reply-textarea {
+      width: 100%;
+      min-height: 150px;
+      padding: 16px;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+      font-size: 14px;
+      font-family: inherit;
+      resize: vertical;
+      background: var(--bg-white);
+    }
+    .reply-textarea:focus {
+      outline: none;
+      border-color: var(--primary-start);
+    }
+    .reply-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 16px;
+    }
+    .template-select {
+      padding: 10px 16px;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      font-family: inherit;
+      background: var(--bg-white);
+    }
+    .reply-buttons {
+      display: flex;
+      gap: 8px;
+    }
+    /* Sidebar Info */
+    .info-card {
+      background: var(--bg-white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    .info-card-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .user-profile {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .user-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    .user-info {
+      flex: 1;
+    }
+    .user-name {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+    .user-email {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+    .user-stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border-light);
+    }
+    .user-stat {
+      text-align: center;
+    }
+    .user-stat-value {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+    .user-stat-label {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    /* Status Card */
+    .status-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .status-item:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+    .status-label {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+    .status-value {
+      font-size: 13px;
+      font-weight: 500;
+    }
+    .status-badge {
+      padding: 4px 10px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .status-badge.pending {
+      background: rgba(245, 158, 11, 0.1);
+      color: #F59E0B;
+    }
+    .status-badge.in-progress {
+      background: rgba(59, 130, 246, 0.1);
+      color: #3B82F6;
+    }
+    .status-badge.completed {
+      background: rgba(16, 185, 129, 0.1);
+      color: #10B981;
+    }
+    .category-badge {
+      padding: 4px 10px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 500;
+      background: rgba(59, 130, 246, 0.1);
+      color: #3B82F6;
+    }
+    .priority-badge {
+      padding: 4px 10px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .priority-badge.high {
+      background: rgba(239, 68, 68, 0.1);
+      color: #EF4444;
+    }
+    /* Action Buttons Card */
+    .action-card {
+      background: var(--bg-white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      padding: 24px;
+    }
+    .action-card-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 16px;
+    }
+    .action-buttons-vertical {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .action-btn-full {
+      width: 100%;
+      padding: 12px;
+      border-radius: var(--radius-md);
+      font-size: 14px;
+      font-weight: 500;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: none;
+    }
+    .action-btn-primary {
+      background: var(--primary-gradient);
+      color: white;
+      box-shadow: 0 4px 14px rgba(124, 58, 237, 0.3);
+    }
+    .action-btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(124, 58, 237, 0.4);
+    }
+    .action-btn-secondary {
+      background: var(--bg-light);
+      color: var(--text-primary);
+    }
+    .action-btn-secondary:hover {
+      background: var(--border-light);
+    }
+    .action-btn-danger {
+      background: rgba(239, 68, 68, 0.1);
+      color: #EF4444;
+    }
+    .action-btn-danger:hover {
+      background: rgba(239, 68, 68, 0.2);
+    }
+    /* History */
+    .history-list {
+      margin-top: 8px;
+    }
+    .history-item {
+      display: flex;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .history-item:last-child {
+      border-bottom: none;
+    }
+    .history-icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      background: var(--bg-light);
+    }
+    .history-icon svg {
+      width: 12px;
+      height: 12px;
+      color: var(--text-muted);
+    }
+    .history-content {
+      flex: 1;
+    }
+    .history-text {
+      font-size: 12px;
+      color: var(--text-primary);
+    }
+    .history-time {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+  </style>
 </head>
 <body>
-    <!-- Aurora Background -->
-    <div class="aurora-bg">
-        <div class="aurora-orb aurora-orb-1"></div>
-        <div class="aurora-orb aurora-orb-2"></div>
-        <div class="aurora-orb aurora-orb-3"></div>
-    </div>
+  <div class="admin-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <div class="sidebar-logo-text">인플루언서 여행</div>
+        <div class="sidebar-logo-sub">관리자 시스템</div>
+      </div>
+      <ul class="sidebar-menu">
+        <li class="sidebar-item">
+          <a href="dashboard.html" class="sidebar-link">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+            </svg>
+            대시보드
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a href="users.html" class="sidebar-link">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+            </svg>
+            회원 관리
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a href="influencers.html" class="sidebar-link">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
+            </svg>
+            인플루언서 관리
+            <span class="sidebar-badge">5</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a href="payments.html" class="sidebar-link">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+            </svg>
+            결제 관리
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a href="settlements.html" class="sidebar-link">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+            </svg>
+            정산 관리
+            <span class="sidebar-badge">3</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a href="inquiries.html" class="sidebar-link active">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
+            </svg>
+            문의 관리
+            <span class="sidebar-badge">12</span>
+          </a>
+        </li>
+      </ul>
+    </aside>
 
-    <div class="admin-layout">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="sidebar-logo">
-                <div class="sidebar-logo-icon">
-                    <i class="ri-plane-line"></i>
-                </div>
-                <span class="sidebar-logo-text">Admin Center</span>
-            </div>
+    <!-- Main Content -->
+    <main class="main-content">
+      <a href="inquiries.html" class="back-link">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+        </svg>
+        문의 목록으로 돌아가기
+      </a>
 
-            <ul class="sidebar-menu">
-                <li class="sidebar-menu-item">
-                    <a href="dashboard.html" class="sidebar-menu-link">
-                        <i class="ri-dashboard-line"></i>
-                        Dashboard
-                    </a>
-                </li>
-            </ul>
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">문의 상세</h1>
+          <div class="inquiry-meta">
+            <span class="inquiry-id">INQ-2024011500001</span>
+          </div>
+        </div>
+      </div>
 
-            <div class="sidebar-divider"></div>
-            <div class="sidebar-section-title">User Management</div>
-
-            <ul class="sidebar-menu">
-                <li class="sidebar-menu-item">
-                    <a href="users.html" class="sidebar-menu-link">
-                        <i class="ri-user-line"></i>
-                        Users
-                    </a>
-                </li>
-                <li class="sidebar-menu-item">
-                    <a href="influencers.html" class="sidebar-menu-link">
-                        <i class="ri-star-line"></i>
-                        Influencers
-                    </a>
-                </li>
-            </ul>
-
-            <div class="sidebar-divider"></div>
-            <div class="sidebar-section-title">Finance</div>
-
-            <ul class="sidebar-menu">
-                <li class="sidebar-menu-item">
-                    <a href="payments.html" class="sidebar-menu-link">
-                        <i class="ri-bank-card-line"></i>
-                        Payments
-                    </a>
-                </li>
-                <li class="sidebar-menu-item">
-                    <a href="settlements.html" class="sidebar-menu-link">
-                        <i class="ri-exchange-dollar-line"></i>
-                        Settlements
-                    </a>
-                </li>
-            </ul>
-
-            <div class="sidebar-divider"></div>
-            <div class="sidebar-section-title">Support</div>
-
-            <ul class="sidebar-menu">
-                <li class="sidebar-menu-item">
-                    <a href="inquiries.html" class="sidebar-menu-link active">
-                        <i class="ri-question-answer-line"></i>
-                        Inquiries
-                    </a>
-                </li>
-            </ul>
-
-            <div class="sidebar-divider"></div>
-            <div class="sidebar-section-title">Settings</div>
-
-            <ul class="sidebar-menu">
-                <li class="sidebar-menu-item">
-                    <a href="#" class="sidebar-menu-link">
-                        <i class="ri-settings-3-line"></i>
-                        System Settings
-                    </a>
-                </li>
-                <li class="sidebar-menu-item">
-                    <a href="login.html" class="sidebar-menu-link">
-                        <i class="ri-logout-box-line"></i>
-                        Logout
-                    </a>
-                </li>
-            </ul>
-        </aside>
-
+      <div class="content-grid">
         <!-- Main Content -->
-        <main class="main-content">
-            <!-- Top Bar -->
-            <div class="top-bar">
-                <a href="inquiries.html" class="back-btn">
-                    <i class="ri-arrow-left-line"></i>
-                </a>
-                <h1 class="page-title">Inquiry Detail</h1>
-                <div class="top-bar-actions">
-                    <div class="admin-profile">
-                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100" alt="Admin" class="avatar avatar-sm">
-                        <span class="admin-profile-name">Admin</span>
-                    </div>
+        <div>
+          <div class="inquiry-card">
+            <div class="inquiry-header">
+              <h2 class="inquiry-title">결제 완료 후 예약 확인이 안됩니다</h2>
+              <div class="inquiry-info">
+                <div class="info-item">
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                  </svg>
+                  2024-01-15 14:32
                 </div>
+                <div class="info-item">
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
+                  </svg>
+                  결제
+                </div>
+              </div>
             </div>
+            <div class="inquiry-content">
+              <div class="inquiry-text">안녕하세요,
 
-            <div class="content-grid">
-                <div>
-                    <!-- User Info -->
-                    <div class="user-info-card">
-                        <div class="user-header">
-                            <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200" class="user-avatar" alt="User">
-                            <div class="user-details">
-                                <div class="user-name">Minji Kim</div>
-                                <div class="user-email">minji.kim@email.com</div>
-                                <div class="user-badges">
-                                    <span class="user-badge member">Member</span>
-                                    <span class="user-badge verified">Verified</span>
-                                </div>
-                            </div>
-                            <div class="user-contact">
-                                <button class="contact-btn">
-                                    <i class="ri-mail-line"></i>
-                                    Email
-                                </button>
-                                <button class="contact-btn">
-                                    <i class="ri-phone-line"></i>
-                                    010-1234-5678
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+오늘 오후 2시경에 "제주 힐링 3박4일" 코스를 결제했는데, 마이페이지에서 예약 내역을 확인할 수가 없습니다.
 
-                    <!-- Inquiry Content -->
-                    <div class="inquiry-card">
-                        <div class="inquiry-meta">
-                            <span class="inquiry-type-badge influencer">Influencer Inquiry</span>
-                            <span class="inquiry-target">To: @travel_jina</span>
-                            <span class="inquiry-date">2024.01.15 14:32</span>
-                        </div>
-                        <h2 class="inquiry-title">Question about visa requirements for Bali trip</h2>
-                        <div class="inquiry-content">
-                            <p>Hello!</p>
-                            <p>I'm planning to join the Bali Luxury Healing 7-day trip scheduled for February. I have a few questions about the visa requirements:</p>
-                            <p>1. Do Korean passport holders need a visa to enter Bali?<br>
-                            2. If a visa is required, should I apply in advance or can I get it on arrival?<br>
-                            3. Are there any specific documents I need to prepare?</p>
-                            <p>Also, I'd like to know if there's anything specific I should prepare for the trip. This is my first time traveling with a group tour, so I'm a bit nervous but excited!</p>
-                            <p>Thank you for your help.</p>
-                        </div>
-                        <div class="inquiry-attachments">
-                            <div class="attachments-label">Attachments (1)</div>
-                            <div class="attachment-list">
-                                <div class="attachment-item">
-                                    <i class="ri-file-pdf-line"></i>
-                                    passport_copy.pdf
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+카드 결제는 정상적으로 완료되어 문자도 왔는데, 앱에서는 예약이 표시되지 않네요.
 
-                    <!-- Response Form -->
-                    <div class="response-card">
-                        <h3 class="response-title">Admin Response</h3>
-                        <div class="quick-templates">
-                            <div class="templates-label">Quick Templates</div>
-                            <div class="template-list">
-                                <button class="template-btn">Greeting</button>
-                                <button class="template-btn">Visa Info</button>
-                                <button class="template-btn">Refund Policy</button>
-                                <button class="template-btn">Technical Support</button>
-                                <button class="template-btn">Escalate to Influencer</button>
-                            </div>
-                        </div>
-                        <textarea class="response-textarea" placeholder="Write your response here..."></textarea>
-                        <div class="response-actions">
-                            <button class="btn btn-secondary">
-                                <i class="ri-save-line"></i>
-                                Save Draft
-                            </button>
-                            <button class="send-btn">
-                                <i class="ri-send-plane-line"></i>
-                                Send Response
-                            </button>
-                        </div>
-                    </div>
+결제 금액: 890,000원
+결제 수단: 신한카드
+결제 승인번호: 12345678
 
-                    <!-- Internal Notes -->
-                    <div class="notes-card">
-                        <h3 class="notes-title">
-                            <i class="ri-lock-line"></i>
-                            Internal Notes
-                        </h3>
-                        <textarea class="notes-textarea" placeholder="Add internal notes for other admins (not visible to user)...">User has made 3 previous inquiries, all resolved satisfactorily. High-value customer with 2 completed trips.</textarea>
-                        <div class="notes-hint">
-                            <i class="ri-information-line"></i>
-                            These notes are only visible to admin staff
-                        </div>
-                    </div>
+확인 부탁드립니다. 출발일이 2주 뒤라서 좀 급합니다.
+
+감사합니다.</div>
+              <div class="inquiry-attachments">
+                <h4 class="attachments-title">첨부파일</h4>
+                <div class="attachment-list">
+                  <a href="#" class="attachment-item">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    </svg>
+                    결제_완료_캡처.png
+                  </a>
+                  <a href="#" class="attachment-item">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    </svg>
+                    마이페이지_화면.png
+                  </a>
                 </div>
-
-                <!-- Sidebar -->
-                <div>
-                    <!-- User Stats -->
-                    <div class="side-card">
-                        <div class="side-card-header">
-                            <h3 class="side-card-title">User Statistics</h3>
-                        </div>
-                        <div class="side-card-body">
-                            <div class="user-stats">
-                                <div class="user-stat">
-                                    <div class="user-stat-value">3</div>
-                                    <div class="user-stat-label">Total Inquiries</div>
-                                </div>
-                                <div class="user-stat">
-                                    <div class="user-stat-value">2</div>
-                                    <div class="user-stat-label">Trips Completed</div>
-                                </div>
-                                <div class="user-stat">
-                                    <div class="user-stat-value">1.2M</div>
-                                    <div class="user-stat-label">Total Spent</div>
-                                </div>
-                                <div class="user-stat">
-                                    <div class="user-stat-value">4.8</div>
-                                    <div class="user-stat-label">Avg Rating</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Previous Inquiries -->
-                    <div class="side-card">
-                        <div class="side-card-header">
-                            <h3 class="side-card-title">User Inquiry History</h3>
-                        </div>
-                        <div class="side-card-body">
-                            <div class="history-list">
-                                <div class="history-item">
-                                    <div class="history-title">Question about payment methods</div>
-                                    <div class="history-meta">
-                                        <span class="history-date">2024.01.10</span>
-                                        <span class="history-status completed">Completed</span>
-                                    </div>
-                                </div>
-                                <div class="history-item">
-                                    <div class="history-title">Course date change inquiry</div>
-                                    <div class="history-meta">
-                                        <span class="history-date">2024.01.05</span>
-                                        <span class="history-status completed">Completed</span>
-                                    </div>
-                                </div>
-                                <div class="history-item">
-                                    <div class="history-title">Account registration issue</div>
-                                    <div class="history-meta">
-                                        <span class="history-date">2023.12.20</span>
-                                        <span class="history-status completed">Completed</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Quick Actions -->
-                    <div class="side-card">
-                        <div class="side-card-header">
-                            <h3 class="side-card-title">Quick Actions</h3>
-                        </div>
-                        <div class="side-card-body">
-                            <div class="quick-action-list">
-                                <button class="quick-action-btn">
-                                    <i class="ri-user-line"></i>
-                                    View User Profile
-                                </button>
-                                <button class="quick-action-btn">
-                                    <i class="ri-arrow-go-forward-line"></i>
-                                    Forward to Influencer
-                                </button>
-                                <button class="quick-action-btn">
-                                    <i class="ri-flag-line"></i>
-                                    Flag as Priority
-                                </button>
-                                <button class="quick-action-btn">
-                                    <i class="ri-archive-line"></i>
-                                    Archive Inquiry
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+              </div>
             </div>
-        </main>
-    </div>
+            <div class="reply-section">
+              <h3 class="reply-title">답변 작성</h3>
+              <textarea class="reply-textarea" placeholder="답변 내용을 입력하세요...">안녕하세요, 김서연 고객님.
+
+먼저 불편을 끼쳐드려 죄송합니다.
+
+확인 결과, 결제는 정상적으로 완료되었으나 시스템 동기화 지연으로 인해 예약 내역이 마이페이지에 반영되지 않았습니다.
+
+현재 해당 건은 정상 예약 처리되었으며, 마이페이지에서도 확인하실 수 있도록 조치하였습니다.
+
+다시 한번 불편을 끼쳐드린 점 사과드리며, 추가 문의사항이 있으시면 언제든 연락주세요.
+
+감사합니다.</textarea>
+              <div class="reply-actions">
+                <select class="template-select">
+                  <option value="">템플릿 선택...</option>
+                  <option value="payment">결제 확인 안내</option>
+                  <option value="refund">환불 처리 안내</option>
+                  <option value="schedule">일정 변경 안내</option>
+                  <option value="general">일반 안내</option>
+                </select>
+                <div class="reply-buttons">
+                  <button class="btn btn-outline">임시저장</button>
+                  <button class="btn btn-primary">답변 등록</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div>
+          <!-- User Info -->
+          <div class="info-card">
+            <h3 class="info-card-title">회원 정보</h3>
+            <div class="user-profile">
+              <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100" alt="" class="user-avatar">
+              <div class="user-info">
+                <div class="user-name">김서연</div>
+                <div class="user-email">seoyeon.kim@email.com</div>
+              </div>
+            </div>
+            <div class="user-stats">
+              <div class="user-stat">
+                <div class="user-stat-value">5</div>
+                <div class="user-stat-label">참여 코스</div>
+              </div>
+              <div class="user-stat">
+                <div class="user-stat-value">3</div>
+                <div class="user-stat-label">총 문의</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Status Info -->
+          <div class="info-card">
+            <h3 class="info-card-title">문의 상태</h3>
+            <div class="status-item">
+              <span class="status-label">상태</span>
+              <span class="status-badge pending">대기중</span>
+            </div>
+            <div class="status-item">
+              <span class="status-label">카테고리</span>
+              <span class="category-badge">결제</span>
+            </div>
+            <div class="status-item">
+              <span class="status-label">우선순위</span>
+              <span class="priority-badge high">높음</span>
+            </div>
+            <div class="status-item">
+              <span class="status-label">담당자</span>
+              <span class="status-value">미배정</span>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="action-card">
+            <h3 class="action-card-title">빠른 작업</h3>
+            <div class="action-buttons-vertical">
+              <button class="action-btn-full action-btn-primary">담당자 배정</button>
+              <button class="action-btn-full action-btn-secondary">우선순위 변경</button>
+              <button class="action-btn-full action-btn-secondary">상태 변경</button>
+              <button class="action-btn-full action-btn-danger">문의 삭제</button>
+            </div>
+          </div>
+
+          <!-- History -->
+          <div class="info-card" style="margin-top: 24px;">
+            <h3 class="info-card-title">처리 이력</h3>
+            <div class="history-list">
+              <div class="history-item">
+                <div class="history-icon">
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                  </svg>
+                </div>
+                <div class="history-content">
+                  <div class="history-text">문의 등록됨</div>
+                  <div class="history-time">2024-01-15 14:32</div>
+                </div>
+              </div>
+              <div class="history-item">
+                <div class="history-icon">
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                  </svg>
+                </div>
+                <div class="history-content">
+                  <div class="history-text">관리자 확인</div>
+                  <div class="history-time">2024-01-15 14:45</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
 </body>
 </html>

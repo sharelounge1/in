@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inquiry Management - Admin Center</title>
+    <link rel="stylesheet" href="../shared/aurora-style.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <style>
+        .admin-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background: var(--bg-secondary);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            padding: var(--spacing-lg);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            padding-bottom: var(--spacing-lg);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .sidebar-logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-primary);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sidebar-logo-icon i {
+            font-size: 20px;
+            color: white;
+        }
+
+        .sidebar-logo-text {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu-item {
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .sidebar-menu-link {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            padding: 12px 16px;
+            border-radius: var(--radius-md);
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-menu-link:hover {
+            background: var(--bg-glass);
+            color: var(--text-primary);
+        }
+
+        .sidebar-menu-link.active {
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .sidebar-menu-link i {
+            font-size: 18px;
+        }
+
+        .sidebar-divider {
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+            margin: var(--spacing-md) 0;
+        }
+
+        .sidebar-section-title {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            padding: 0 16px;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 260px;
+            padding: var(--spacing-lg);
+        }
+
+        /* Top Bar */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .top-bar-actions {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+        }
+
+        .notification-btn {
+            width: 40px;
+            height: 40px;
+            background: var(--bg-glass);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+            color: var(--text-primary);
+        }
+
+        .notification-dot {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 8px;
+            height: 8px;
+            background: var(--error);
+            border-radius: 50%;
+        }
+
+        .admin-profile {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+
+        .admin-profile-name {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--spacing-lg);
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .stat-card {
+            padding: var(--spacing-lg);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .stat-card.active {
+            border-color: var(--aurora-purple);
+        }
+
+        .stat-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .stat-card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .stat-card-icon.purple {
+            background: rgba(102, 126, 234, 0.2);
+            color: var(--aurora-purple);
+        }
+
+        .stat-card-icon.pink {
+            background: rgba(240, 147, 251, 0.2);
+            color: var(--aurora-pink);
+        }
+
+        .stat-card-icon.cyan {
+            background: rgba(79, 209, 197, 0.2);
+            color: var(--aurora-cyan);
+        }
+
+        .stat-card-icon.blue {
+            background: rgba(99, 179, 237, 0.2);
+            color: var(--aurora-blue);
+        }
+
+        .stat-card-value {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .stat-card-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        /* Filters */
+        .filters-row {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .filter-select {
+            padding: 12px 16px;
+            background: var(--bg-glass);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            font-size: 14px;
+            min-width: 160px;
+            cursor: pointer;
+        }
+
+        .filter-select option {
+            background: var(--bg-secondary);
+        }
+
+        .search-box {
+            flex: 1;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 16px 12px 44px;
+            background: var(--bg-glass);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        .search-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--aurora-purple);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+
+        /* Inquiry Table */
+        .inquiry-table-container {
+            background: var(--bg-glass);
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+        }
+
+        .inquiry-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .inquiry-table th,
+        .inquiry-table td {
+            padding: 16px 20px;
+            text-align: left;
+        }
+
+        .inquiry-table th {
+            background: rgba(255, 255, 255, 0.03);
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-secondary);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .inquiry-table tr {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .inquiry-table tr:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .inquiry-table tr:last-child {
+            border-bottom: none;
+        }
+
+        .user-cell {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .user-info {
+            flex: 1;
+        }
+
+        .user-name {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .user-email {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .inquiry-title {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .inquiry-preview {
+            font-size: 12px;
+            color: var(--text-muted);
+            max-width: 300px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .inquiry-type-badge {
+            padding: 4px 10px;
+            border-radius: var(--radius-full);
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .inquiry-type-badge.platform {
+            background: rgba(102, 126, 234, 0.2);
+            color: var(--aurora-purple);
+        }
+
+        .inquiry-type-badge.influencer {
+            background: rgba(240, 147, 251, 0.2);
+            color: var(--aurora-pink);
+        }
+
+        .target-cell {
+            font-size: 13px;
+        }
+
+        .target-platform {
+            color: var(--aurora-cyan);
+        }
+
+        .target-influencer {
+            color: var(--aurora-pink);
+        }
+
+        .date-cell {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: var(--radius-full);
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .status-badge.pending {
+            background: rgba(236, 201, 75, 0.2);
+            color: var(--warning);
+        }
+
+        .status-badge.completed {
+            background: rgba(72, 187, 120, 0.2);
+            color: var(--success);
+        }
+
+        .action-btn {
+            padding: 8px 12px;
+            background: var(--gradient-primary);
+            border: none;
+            border-radius: var(--radius-md);
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .action-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin-top: 24px;
+        }
+
+        .pagination-btn {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-glass);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+            color: var(--text-secondary);
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .pagination-btn:hover {
+            border-color: var(--aurora-purple);
+            color: var(--text-primary);
+        }
+
+        .pagination-btn.active {
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+        }
+
+        @media (max-width: 1200px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Aurora Background -->
+    <div class="aurora-bg">
+        <div class="aurora-orb aurora-orb-1"></div>
+        <div class="aurora-orb aurora-orb-2"></div>
+        <div class="aurora-orb aurora-orb-3"></div>
+    </div>
+
+    <div class="admin-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <div class="sidebar-logo-icon">
+                    <i class="ri-plane-line"></i>
+                </div>
+                <span class="sidebar-logo-text">Admin Center</span>
+            </div>
+
+            <ul class="sidebar-menu">
+                <li class="sidebar-menu-item">
+                    <a href="dashboard.html" class="sidebar-menu-link">
+                        <i class="ri-dashboard-line"></i>
+                        Dashboard
+                    </a>
+                </li>
+            </ul>
+
+            <div class="sidebar-divider"></div>
+            <div class="sidebar-section-title">User Management</div>
+
+            <ul class="sidebar-menu">
+                <li class="sidebar-menu-item">
+                    <a href="users.html" class="sidebar-menu-link">
+                        <i class="ri-user-line"></i>
+                        Users
+                    </a>
+                </li>
+                <li class="sidebar-menu-item">
+                    <a href="influencers.html" class="sidebar-menu-link">
+                        <i class="ri-star-line"></i>
+                        Influencers
+                    </a>
+                </li>
+            </ul>
+
+            <div class="sidebar-divider"></div>
+            <div class="sidebar-section-title">Finance</div>
+
+            <ul class="sidebar-menu">
+                <li class="sidebar-menu-item">
+                    <a href="payments.html" class="sidebar-menu-link">
+                        <i class="ri-bank-card-line"></i>
+                        Payments
+                    </a>
+                </li>
+                <li class="sidebar-menu-item">
+                    <a href="settlements.html" class="sidebar-menu-link">
+                        <i class="ri-exchange-dollar-line"></i>
+                        Settlements
+                    </a>
+                </li>
+            </ul>
+
+            <div class="sidebar-divider"></div>
+            <div class="sidebar-section-title">Support</div>
+
+            <ul class="sidebar-menu">
+                <li class="sidebar-menu-item">
+                    <a href="inquiries.html" class="sidebar-menu-link active">
+                        <i class="ri-question-answer-line"></i>
+                        Inquiries
+                    </a>
+                </li>
+            </ul>
+
+            <div class="sidebar-divider"></div>
+            <div class="sidebar-section-title">Settings</div>
+
+            <ul class="sidebar-menu">
+                <li class="sidebar-menu-item">
+                    <a href="#" class="sidebar-menu-link">
+                        <i class="ri-settings-3-line"></i>
+                        System Settings
+                    </a>
+                </li>
+                <li class="sidebar-menu-item">
+                    <a href="login.html" class="sidebar-menu-link">
+                        <i class="ri-logout-box-line"></i>
+                        Logout
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <div class="top-bar">
+                <h1 class="page-title">Inquiry Management</h1>
+                <div class="top-bar-actions">
+                    <button class="notification-btn">
+                        <i class="ri-notification-3-line"></i>
+                        <span class="notification-dot"></span>
+                    </button>
+                    <div class="admin-profile">
+                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100" alt="Admin" class="avatar avatar-sm">
+                        <span class="admin-profile-name">Admin</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <div class="card stat-card">
+                    <div class="stat-card-header">
+                        <div class="stat-card-icon purple">
+                            <i class="ri-question-answer-line"></i>
+                        </div>
+                    </div>
+                    <div class="stat-card-value">156</div>
+                    <div class="stat-card-label">Total Inquiries</div>
+                </div>
+
+                <div class="card stat-card">
+                    <div class="stat-card-header">
+                        <div class="stat-card-icon pink">
+                            <i class="ri-time-line"></i>
+                        </div>
+                    </div>
+                    <div class="stat-card-value">23</div>
+                    <div class="stat-card-label">Pending</div>
+                </div>
+
+                <div class="card stat-card">
+                    <div class="stat-card-header">
+                        <div class="stat-card-icon cyan">
+                            <i class="ri-check-double-line"></i>
+                        </div>
+                    </div>
+                    <div class="stat-card-value">133</div>
+                    <div class="stat-card-label">Completed</div>
+                </div>
+
+                <div class="card stat-card">
+                    <div class="stat-card-header">
+                        <div class="stat-card-icon blue">
+                            <i class="ri-timer-line"></i>
+                        </div>
+                    </div>
+                    <div class="stat-card-value">2.4h</div>
+                    <div class="stat-card-label">Avg Response Time</div>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="filters-row">
+                <select class="filter-select">
+                    <option value="">All Types</option>
+                    <option value="platform">Platform</option>
+                    <option value="influencer">Influencer</option>
+                </select>
+                <select class="filter-select">
+                    <option value="">All Status</option>
+                    <option value="pending">Pending</option>
+                    <option value="completed">Completed</option>
+                </select>
+                <div class="search-box">
+                    <i class="ri-search-line search-icon"></i>
+                    <input type="text" class="search-input" placeholder="Search by user name, email, or inquiry content...">
+                </div>
+            </div>
+
+            <!-- Inquiry Table -->
+            <div class="inquiry-table-container">
+                <table class="inquiry-table">
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Inquiry</th>
+                            <th>Type</th>
+                            <th>Target</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr onclick="location.href='inquiry-detail.html'">
+                            <td>
+                                <div class="user-cell">
+                                    <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100" class="user-avatar" alt="User">
+                                    <div class="user-info">
+                                        <div class="user-name">Minji Kim</div>
+                                        <div class="user-email">minji.kim@email.com</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="inquiry-title">Question about visa requirements</div>
+                                <div class="inquiry-preview">I'm planning to join the Bali trip in February...</div>
+                            </td>
+                            <td><span class="inquiry-type-badge influencer">Influencer</span></td>
+                            <td><span class="target-influencer">@travel_jina</span></td>
+                            <td class="date-cell">2024.01.15 14:32</td>
+                            <td><span class="status-badge pending">Pending</span></td>
+                            <td><button class="action-btn">View</button></td>
+                        </tr>
+                        <tr onclick="location.href='inquiry-detail.html'">
+                            <td>
+                                <div class="user-cell">
+                                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100" class="user-avatar" alt="User">
+                                    <div class="user-info">
+                                        <div class="user-name">Junhyuk Park</div>
+                                        <div class="user-email">junhyuk.p@email.com</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="inquiry-title">Payment error during checkout</div>
+                                <div class="inquiry-preview">I keep getting an error when trying to pay...</div>
+                            </td>
+                            <td><span class="inquiry-type-badge platform">Platform</span></td>
+                            <td><span class="target-platform">Platform Support</span></td>
+                            <td class="date-cell">2024.01.15 13:45</td>
+                            <td><span class="status-badge pending">Pending</span></td>
+                            <td><button class="action-btn">View</button></td>
+                        </tr>
+                        <tr onclick="location.href='inquiry-detail.html'">
+                            <td>
+                                <div class="user-cell">
+                                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100" class="user-avatar" alt="User">
+                                    <div class="user-info">
+                                        <div class="user-name">Daeun Jung</div>
+                                        <div class="user-email">daeun.j@email.com</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="inquiry-title">Refund request for cancelled trip</div>
+                                <div class="inquiry-preview">I need to cancel my trip due to personal reasons...</div>
+                            </td>
+                            <td><span class="inquiry-type-badge platform">Platform</span></td>
+                            <td><span class="target-platform">Platform Support</span></td>
+                            <td class="date-cell">2024.01.15 11:20</td>
+                            <td><span class="status-badge completed">Completed</span></td>
+                            <td><button class="action-btn">View</button></td>
+                        </tr>
+                        <tr onclick="location.href='inquiry-detail.html'">
+                            <td>
+                                <div class="user-cell">
+                                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100" class="user-avatar" alt="User">
+                                    <div class="user-info">
+                                        <div class="user-name">Suhyun Lee</div>
+                                        <div class="user-email">suhyun.lee@email.com</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="inquiry-title">Room type preferences</div>
+                                <div class="inquiry-preview">I would prefer a single room if possible...</div>
+                            </td>
+                            <td><span class="inquiry-type-badge influencer">Influencer</span></td>
+                            <td><span class="target-influencer">@seoul_foodie</span></td>
+                            <td class="date-cell">2024.01.15 10:05</td>
+                            <td><span class="status-badge completed">Completed</span></td>
+                            <td><button class="action-btn">View</button></td>
+                        </tr>
+                        <tr onclick="location.href='inquiry-detail.html'">
+                            <td>
+                                <div class="user-cell">
+                                    <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100" class="user-avatar" alt="User">
+                                    <div class="user-info">
+                                        <div class="user-name">Minjun Choi</div>
+                                        <div class="user-email">minjun.c@email.com</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="inquiry-title">Account verification issue</div>
+                                <div class="inquiry-preview">I haven't received the verification email...</div>
+                            </td>
+                            <td><span class="inquiry-type-badge platform">Platform</span></td>
+                            <td><span class="target-platform">Platform Support</span></td>
+                            <td class="date-cell">2024.01.14 18:30</td>
+                            <td><span class="status-badge pending">Pending</span></td>
+                            <td><button class="action-btn">View</button></td>
+                        </tr>
+                        <tr onclick="location.href='inquiry-detail.html'">
+                            <td>
+                                <div class="user-cell">
+                                    <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100" class="user-avatar" alt="User">
+                                    <div class="user-info">
+                                        <div class="user-name">Yuna Han</div>
+                                        <div class="user-email">yuna.han@email.com</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="inquiry-title">Travel insurance recommendation</div>
+                                <div class="inquiry-preview">Do you have any recommended travel insurance...</div>
+                            </td>
+                            <td><span class="inquiry-type-badge influencer">Influencer</span></td>
+                            <td><span class="target-influencer">@travel_jina</span></td>
+                            <td class="date-cell">2024.01.14 15:22</td>
+                            <td><span class="status-badge completed">Completed</span></td>
+                            <td><button class="action-btn">View</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination">
+                <button class="pagination-btn">
+                    <i class="ri-arrow-left-s-line"></i>
+                </button>
+                <button class="pagination-btn active">1</button>
+                <button class="pagination-btn">2</button>
+                <button class="pagination-btn">3</button>
+                <button class="pagination-btn">4</button>
+                <button class="pagination-btn">5</button>
+                <button class="pagination-btn">
+                    <i class="ri-arrow-right-s-line"></i>
+                </button>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

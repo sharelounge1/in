@@ -1,761 +1,413 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>공지사항 관리 - TRAVELY 인플루언서</title>
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
-    <link rel="stylesheet" href="../shared/aurora-style.css">
-    <style>
-        .app-layout {
-            display: flex;
-            min-height: 100vh;
-        }
-
-        /* Sidebar */
-        .sidebar {
-            width: 260px;
-            background: var(--bg-secondary);
-            border-right: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 24px;
-            position: fixed;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            overflow-y: auto;
-            z-index: 100;
-        }
-
-        .sidebar-logo {
-            font-size: 24px;
-            font-weight: 800;
-            background: var(--gradient-primary);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 32px;
-        }
-
-        .sidebar-profile {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 16px;
-            background: var(--bg-glass);
-            border-radius: var(--radius-lg);
-            margin-bottom: 24px;
-        }
-
-        .profile-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid var(--aurora-purple);
-        }
-
-        .profile-info {
-            flex: 1;
-        }
-
-        .profile-name {
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        .profile-handle {
-            font-size: 12px;
-            color: var(--aurora-purple);
-        }
-
-        .sidebar-nav {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .nav-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 16px;
-            border-radius: var(--radius-md);
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.3s;
-        }
-
-        .nav-item:hover {
-            background: var(--bg-glass);
-            color: var(--text-primary);
-        }
-
-        .nav-item.active {
-            background: var(--gradient-primary);
-            color: white;
-        }
-
-        .nav-item i {
-            font-size: 18px;
-        }
-
-        .nav-divider {
-            height: 1px;
-            background: rgba(255, 255, 255, 0.1);
-            margin: 16px 0;
-        }
-
-        .nav-label {
-            font-size: 11px;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            padding: 8px 16px;
-        }
-
-        /* Main Content */
-        .main-content {
-            flex: 1;
-            margin-left: 260px;
-            padding: 32px;
-        }
-
-        .main-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 32px;
-        }
-
-        .page-title-area {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .back-btn {
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: var(--radius-md);
-            background: var(--bg-glass);
-            color: var(--text-primary);
-            text-decoration: none;
-            border: none;
-            cursor: pointer;
-        }
-
-        .page-title {
-            font-size: 28px;
-            font-weight: 800;
-        }
-
-        .page-subtitle {
-            font-size: 14px;
-            color: var(--text-secondary);
-            margin-top: 4px;
-        }
-
-        .header-actions {
-            display: flex;
-            gap: 12px;
-        }
-
-        /* Content Card */
-        .content-card {
-            background: var(--bg-glass);
-            border-radius: var(--radius-lg);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            overflow: hidden;
-        }
-
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 24px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .card-title {
-            font-size: 16px;
-            font-weight: 700;
-        }
-
-        .card-body {
-            padding: 24px;
-        }
-
-        /* Announcement List */
-        .announcement-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .announcement-item {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: var(--radius-md);
-            transition: all 0.3s;
-        }
-
-        .announcement-item:hover {
-            background: rgba(255, 255, 255, 0.06);
-        }
-
-        .announcement-item.pinned {
-            border-left: 3px solid var(--aurora-purple);
-        }
-
-        .announcement-content {
-            flex: 1;
-        }
-
-        .announcement-title {
-            font-size: 15px;
-            font-weight: 600;
-            margin-bottom: 6px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .pin-icon {
-            color: var(--aurora-purple);
-            font-size: 14px;
-        }
-
-        .announcement-meta {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            font-size: 12px;
-            color: var(--text-secondary);
-        }
-
-        .meta-item {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .meta-item i {
-            font-size: 14px;
-        }
-
-        .announcement-actions {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .action-btn {
-            padding: 8px 12px;
-            border-radius: var(--radius-md);
-            font-size: 12px;
-            font-weight: 600;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .action-btn.edit {
-            background: rgba(66, 153, 225, 0.2);
-            color: var(--info);
-        }
-
-        .action-btn.edit:hover {
-            background: rgba(66, 153, 225, 0.3);
-        }
-
-        .action-btn.delete {
-            background: rgba(245, 101, 101, 0.2);
-            color: var(--error);
-        }
-
-        .action-btn.delete:hover {
-            background: rgba(245, 101, 101, 0.3);
-        }
-
-        /* Pin Toggle */
-        .pin-toggle {
-            position: relative;
-            width: 44px;
-            height: 24px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .pin-toggle.active {
-            background: var(--aurora-purple);
-        }
-
-        .pin-toggle::after {
-            content: '';
-            position: absolute;
-            width: 18px;
-            height: 18px;
-            background: white;
-            border-radius: 50%;
-            top: 3px;
-            left: 3px;
-            transition: all 0.3s;
-        }
-
-        .pin-toggle.active::after {
-            transform: translateX(20px);
-        }
-
-        /* Modal */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.7);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-        }
-
-        .modal-overlay.active {
-            display: flex;
-        }
-
-        .modal {
-            background: var(--bg-secondary);
-            border-radius: var(--radius-lg);
-            width: 100%;
-            max-width: 600px;
-            max-height: 90vh;
-            overflow-y: auto;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 24px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .modal-title {
-            font-size: 18px;
-            font-weight: 700;
-        }
-
-        .modal-close {
-            width: 32px;
-            height: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: var(--radius-md);
-            background: var(--bg-glass);
-            border: none;
-            color: var(--text-primary);
-            cursor: pointer;
-        }
-
-        .modal-body {
-            padding: 24px;
-        }
-
-        .modal-footer {
-            display: flex;
-            justify-content: flex-end;
-            gap: 12px;
-            padding: 24px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        /* Form */
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-label {
-            display: block;
-            font-size: 13px;
-            font-weight: 500;
-            color: var(--text-secondary);
-            margin-bottom: 8px;
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 14px 16px;
-            background: var(--bg-glass);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: var(--radius-md);
-            color: var(--text-primary);
-            font-size: 14px;
-            transition: all 0.3s;
-        }
-
-        .form-input:focus {
-            outline: none;
-            border-color: var(--aurora-purple);
-        }
-
-        .form-textarea {
-            min-height: 200px;
-            resize: vertical;
-            font-family: inherit;
-        }
-
-        .form-checkbox {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            cursor: pointer;
-        }
-
-        .form-checkbox input {
-            width: 20px;
-            height: 20px;
-            accent-color: var(--aurora-purple);
-        }
-
-        /* Empty State */
-        .empty-state {
-            text-align: center;
-            padding: 48px 24px;
-        }
-
-        .empty-icon {
-            font-size: 48px;
-            color: var(--text-muted);
-            margin-bottom: 16px;
-        }
-
-        .empty-title {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-
-        .empty-desc {
-            font-size: 14px;
-            color: var(--text-secondary);
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .sidebar {
-                transform: translateX(-100%);
-            }
-
-            .main-content {
-                margin-left: 0;
-                padding: 20px;
-            }
-
-            .announcement-item {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .announcement-actions {
-                margin-top: 12px;
-                width: 100%;
-                justify-content: flex-end;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>공지사항 관리 - 인플루언서</title>
+  <link rel="stylesheet" href="../shared/clean-style.css">
+  <style>
+    .content {
+      padding-bottom: 80px;
+    }
+    .back-btn {
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+    }
+    .course-selector {
+      padding: 16px 20px;
+      background: var(--bg-white);
+      border-bottom: 1px solid var(--border-light);
+    }
+    .course-select {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+      font-size: 14px;
+      font-family: inherit;
+      background: var(--bg-white);
+      cursor: pointer;
+    }
+    .create-section {
+      padding: 20px;
+    }
+    .create-card {
+      background: var(--bg-white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+    }
+    .create-header {
+      padding: 16px;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .create-title {
+      font-size: 16px;
+      font-weight: 600;
+    }
+    .create-form {
+      padding: 16px;
+    }
+    .input-group {
+      margin-bottom: 16px;
+    }
+    .input-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+    .input-field {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+      font-size: 14px;
+      font-family: inherit;
+      transition: border-color 0.2s;
+    }
+    .input-field:focus {
+      outline: none;
+      border-color: var(--primary-start);
+    }
+    textarea.input-field {
+      min-height: 100px;
+      resize: vertical;
+    }
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .checkbox-input {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--primary-start);
+    }
+    .checkbox-label {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+    .submit-btn {
+      width: 100%;
+      padding: 14px;
+      background: var(--primary-gradient);
+      color: white;
+      border: none;
+      border-radius: var(--radius-md);
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(124, 58, 237, 0.3);
+    }
+    .announcements-section {
+      padding: 0 20px;
+    }
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-size: 16px;
+      font-weight: 600;
+    }
+    .section-count {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+    .announcement-card {
+      background: var(--bg-white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      margin-bottom: 12px;
+      overflow: hidden;
+    }
+    .announcement-header {
+      padding: 16px;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .announcement-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .announcement-date {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .announcement-badge {
+      padding: 4px 8px;
+      border-radius: 100px;
+      font-size: 11px;
+      font-weight: 500;
+    }
+    .announcement-badge.important {
+      background: rgba(239, 68, 68, 0.1);
+      color: #EF4444;
+    }
+    .announcement-badge.normal {
+      background: rgba(100, 116, 139, 0.1);
+      color: #64748B;
+    }
+    .announcement-title {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .announcement-preview {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .announcement-stats {
+      display: flex;
+      gap: 16px;
+      padding: 12px 16px;
+      background: var(--bg-light);
+    }
+    .stat-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .stat-item svg {
+      width: 14px;
+      height: 14px;
+    }
+    .announcement-actions {
+      display: flex;
+      border-top: 1px solid var(--border-light);
+    }
+    .announcement-action {
+      flex: 1;
+      padding: 12px;
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-secondary);
+      background: none;
+      border: none;
+      border-right: 1px solid var(--border-light);
+      cursor: pointer;
+    }
+    .announcement-action:last-child {
+      border-right: none;
+    }
+    .announcement-action.delete {
+      color: #EF4444;
+    }
+    .announcement-action:hover {
+      background: var(--bg-light);
+    }
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+    }
+    .empty-icon {
+      width: 48px;
+      height: 48px;
+      margin: 0 auto 12px;
+      color: var(--text-muted);
+    }
+    .empty-text {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+  </style>
 </head>
 <body>
-    <div class="aurora-bg">
-        <div class="aurora-orb aurora-orb-1"></div>
-        <div class="aurora-orb aurora-orb-2"></div>
-        <div class="aurora-orb aurora-orb-3"></div>
-    </div>
+  <div class="mobile-container">
+    <!-- Header -->
+    <header class="header">
+      <a href="course-list.html" class="back-btn">
+        <svg class="header-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+        </svg>
+      </a>
+      <span class="header-title">공지사항 관리</span>
+      <div style="width: 24px;"></div>
+    </header>
 
-    <div class="app-layout">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="sidebar-logo">TRAVELY</div>
+    <!-- Content -->
+    <div class="content">
+      <!-- Course Selector -->
+      <div class="course-selector">
+        <select class="course-select">
+          <option>도쿄 맛집 투어 4박 5일 (진행중)</option>
+          <option>제주 힐링 3박 4일 (모집중)</option>
+        </select>
+      </div>
 
-            <div class="sidebar-profile">
-                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200" class="profile-avatar" alt="프로필">
-                <div class="profile-info">
-                    <div class="profile-name">여행하는 지나</div>
-                    <div class="profile-handle">@travel_jina</div>
-                </div>
+      <!-- Create Section -->
+      <div class="create-section">
+        <div class="create-card">
+          <div class="create-header">
+            <h3 class="create-title">새 공지사항 작성</h3>
+          </div>
+          <div class="create-form">
+            <div class="input-group">
+              <label class="input-label">제목</label>
+              <input type="text" class="input-field" placeholder="공지사항 제목을 입력하세요">
             </div>
-
-            <nav class="sidebar-nav">
-                <a href="dashboard.html" class="nav-item">
-                    <i class="ri-dashboard-line"></i>
-                    대시보드
-                </a>
-                <a href="course-list.html" class="nav-item active">
-                    <i class="ri-map-pin-line"></i>
-                    내 코스
-                </a>
-                <a href="applications.html" class="nav-item">
-                    <i class="ri-user-follow-line"></i>
-                    신청자 관리
-                </a>
-                <a href="settlements.html" class="nav-item">
-                    <i class="ri-money-dollar-circle-line"></i>
-                    정산 내역
-                </a>
-
-                <div class="nav-divider"></div>
-                <div class="nav-label">설정</div>
-
-                <a href="profile.html" class="nav-item">
-                    <i class="ri-user-settings-line"></i>
-                    프로필 설정
-                </a>
-                <a href="account.html" class="nav-item">
-                    <i class="ri-bank-card-line"></i>
-                    계좌 관리
-                </a>
-                <a href="notifications.html" class="nav-item">
-                    <i class="ri-notification-3-line"></i>
-                    알림 설정
-                </a>
-
-                <div class="nav-divider"></div>
-
-                <a href="help.html" class="nav-item">
-                    <i class="ri-question-line"></i>
-                    도움말
-                </a>
-                <a href="logout.html" class="nav-item">
-                    <i class="ri-logout-box-line"></i>
-                    로그아웃
-                </a>
-            </nav>
-        </aside>
-
-        <!-- Main Content -->
-        <main class="main-content">
-            <div class="main-header">
-                <div class="page-title-area">
-                    <a href="course-detail.html" class="back-btn">
-                        <i class="ri-arrow-left-line"></i>
-                    </a>
-                    <div>
-                        <h1 class="page-title">공지사항 관리</h1>
-                        <p class="page-subtitle">발리 럭셔리 힐링 7일</p>
-                    </div>
-                </div>
-                <div class="header-actions">
-                    <button class="btn btn-primary" onclick="openModal()">
-                        <i class="ri-add-line"></i>
-                        공지 작성
-                    </button>
-                </div>
+            <div class="input-group">
+              <label class="input-label">내용</label>
+              <textarea class="input-field" placeholder="공지사항 내용을 입력하세요"></textarea>
             </div>
-
-            <!-- Announcements Card -->
-            <div class="content-card">
-                <div class="card-header">
-                    <h3 class="card-title">공지사항 목록</h3>
-                    <span style="font-size: 13px; color: var(--text-secondary);">총 3개</span>
-                </div>
-                <div class="card-body">
-                    <div class="announcement-list">
-                        <!-- Pinned Announcement -->
-                        <div class="announcement-item pinned">
-                            <div class="announcement-content">
-                                <div class="announcement-title">
-                                    <i class="ri-pushpin-fill pin-icon"></i>
-                                    준비물 안내
-                                </div>
-                                <div class="announcement-meta">
-                                    <div class="meta-item">
-                                        <i class="ri-calendar-line"></i>
-                                        2024.01.20
-                                    </div>
-                                    <div class="meta-item">
-                                        <i class="ri-chat-3-line"></i>
-                                        댓글 5개
-                                    </div>
-                                    <div class="meta-item">
-                                        <i class="ri-eye-line"></i>
-                                        조회 42
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="pin-toggle active" onclick="togglePin(this)" title="고정 해제"></div>
-                            <div class="announcement-actions">
-                                <button class="action-btn edit">
-                                    <i class="ri-edit-line"></i>
-                                    수정
-                                </button>
-                                <button class="action-btn delete">
-                                    <i class="ri-delete-bin-line"></i>
-                                    삭제
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Regular Announcements -->
-                        <div class="announcement-item">
-                            <div class="announcement-content">
-                                <div class="announcement-title">
-                                    집합 장소 안내
-                                </div>
-                                <div class="announcement-meta">
-                                    <div class="meta-item">
-                                        <i class="ri-calendar-line"></i>
-                                        2024.01.18
-                                    </div>
-                                    <div class="meta-item">
-                                        <i class="ri-chat-3-line"></i>
-                                        댓글 3개
-                                    </div>
-                                    <div class="meta-item">
-                                        <i class="ri-eye-line"></i>
-                                        조회 38
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="pin-toggle" onclick="togglePin(this)" title="고정하기"></div>
-                            <div class="announcement-actions">
-                                <button class="action-btn edit">
-                                    <i class="ri-edit-line"></i>
-                                    수정
-                                </button>
-                                <button class="action-btn delete">
-                                    <i class="ri-delete-bin-line"></i>
-                                    삭제
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="announcement-item">
-                            <div class="announcement-content">
-                                <div class="announcement-title">
-                                    첫 번째 인사
-                                </div>
-                                <div class="announcement-meta">
-                                    <div class="meta-item">
-                                        <i class="ri-calendar-line"></i>
-                                        2024.01.15
-                                    </div>
-                                    <div class="meta-item">
-                                        <i class="ri-chat-3-line"></i>
-                                        댓글 12개
-                                    </div>
-                                    <div class="meta-item">
-                                        <i class="ri-eye-line"></i>
-                                        조회 56
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="pin-toggle" onclick="togglePin(this)" title="고정하기"></div>
-                            <div class="announcement-actions">
-                                <button class="action-btn edit">
-                                    <i class="ri-edit-line"></i>
-                                    수정
-                                </button>
-                                <button class="action-btn delete">
-                                    <i class="ri-delete-bin-line"></i>
-                                    삭제
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="checkbox-group">
+              <input type="checkbox" class="checkbox-input" id="important">
+              <label class="checkbox-label" for="important">중요 공지로 설정</label>
             </div>
-        </main>
-    </div>
-
-    <!-- Create/Edit Modal -->
-    <div class="modal-overlay" id="announcementModal">
-        <div class="modal">
-            <div class="modal-header">
-                <h3 class="modal-title">공지사항 작성</h3>
-                <button class="modal-close" onclick="closeModal()">
-                    <i class="ri-close-line"></i>
-                </button>
+            <div class="checkbox-group">
+              <input type="checkbox" class="checkbox-input" id="push" checked>
+              <label class="checkbox-label" for="push">참가자에게 푸시 알림 발송</label>
             </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label class="form-label">제목 *</label>
-                    <input type="text" class="form-input" placeholder="공지사항 제목을 입력하세요">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">내용 *</label>
-                    <textarea class="form-input form-textarea" placeholder="공지사항 내용을 입력하세요"></textarea>
-                </div>
-                <div class="form-group">
-                    <label class="form-checkbox">
-                        <input type="checkbox">
-                        <span>상단에 고정</span>
-                    </label>
-                </div>
-                <div class="form-group">
-                    <label class="form-checkbox">
-                        <input type="checkbox" checked>
-                        <span>참가자에게 알림 전송</span>
-                    </label>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" onclick="closeModal()">취소</button>
-                <button class="btn btn-primary">
-                    <i class="ri-check-line"></i>
-                    작성 완료
-                </button>
-            </div>
+            <button class="submit-btn">공지사항 등록</button>
+          </div>
         </div>
+      </div>
+
+      <!-- Announcements List -->
+      <div class="announcements-section">
+        <div class="section-header">
+          <h3 class="section-title">등록된 공지사항</h3>
+          <span class="section-count">3개</span>
+        </div>
+
+        <!-- Announcement 1 -->
+        <div class="announcement-card">
+          <div class="announcement-header">
+            <div class="announcement-meta">
+              <span class="announcement-date">오늘 09:30</span>
+              <span class="announcement-badge important">중요</span>
+            </div>
+            <h4 class="announcement-title">여행 첫째 날 집합 장소 안내</h4>
+            <p class="announcement-preview">안녕하세요! 드디어 내일 출발이네요. 첫째 날 집합 장소와 시간을 다시 한번 안내드립니다. 나리타 공항 1터미널 입국장 앞에서...</p>
+          </div>
+          <div class="announcement-stats">
+            <span class="stat-item">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+              </svg>
+              조회 18
+            </span>
+            <span class="stat-item">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              확인 15
+            </span>
+          </div>
+          <div class="announcement-actions">
+            <button class="announcement-action">수정</button>
+            <button class="announcement-action delete">삭제</button>
+          </div>
+        </div>
+
+        <!-- Announcement 2 -->
+        <div class="announcement-card">
+          <div class="announcement-header">
+            <div class="announcement-meta">
+              <span class="announcement-date">어제 14:20</span>
+              <span class="announcement-badge normal">일반</span>
+            </div>
+            <h4 class="announcement-title">준비물 체크리스트</h4>
+            <p class="announcement-preview">여행 전 꼭 챙기셔야 할 준비물을 정리했습니다. 여권, 현금(엔화), 편한 신발, 우산, 카메라 등을 잊지 마세요!</p>
+          </div>
+          <div class="announcement-stats">
+            <span class="stat-item">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+              </svg>
+              조회 20
+            </span>
+            <span class="stat-item">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              확인 20
+            </span>
+          </div>
+          <div class="announcement-actions">
+            <button class="announcement-action">수정</button>
+            <button class="announcement-action delete">삭제</button>
+          </div>
+        </div>
+
+        <!-- Announcement 3 -->
+        <div class="announcement-card">
+          <div class="announcement-header">
+            <div class="announcement-meta">
+              <span class="announcement-date">3일 전</span>
+              <span class="announcement-badge important">중요</span>
+            </div>
+            <h4 class="announcement-title">결제 완료 안내</h4>
+            <p class="announcement-preview">참가비 결제가 완료되었습니다. 결제 영수증은 마이페이지에서 확인하실 수 있습니다. 감사합니다!</p>
+          </div>
+          <div class="announcement-stats">
+            <span class="stat-item">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+              </svg>
+              조회 20
+            </span>
+            <span class="stat-item">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              확인 20
+            </span>
+          </div>
+          <div class="announcement-actions">
+            <button class="announcement-action">수정</button>
+            <button class="announcement-action delete">삭제</button>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <script>
-        function openModal() {
-            document.getElementById('announcementModal').classList.add('active');
-        }
-
-        function closeModal() {
-            document.getElementById('announcementModal').classList.remove('active');
-        }
-
-        function togglePin(element) {
-            element.classList.toggle('active');
-            const item = element.closest('.announcement-item');
-            item.classList.toggle('pinned');
-
-            const title = item.querySelector('.announcement-title');
-            if (element.classList.contains('active')) {
-                if (!title.querySelector('.pin-icon')) {
-                    const icon = document.createElement('i');
-                    icon.className = 'ri-pushpin-fill pin-icon';
-                    title.prepend(icon);
-                }
-            } else {
-                const icon = title.querySelector('.pin-icon');
-                if (icon) icon.remove();
-            }
-        }
-
-        // Close modal on overlay click
-        document.getElementById('announcementModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeModal();
-            }
-        });
-    </script>
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+      <a href="dashboard.html" class="nav-item">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+        </svg>
+        <span>홈</span>
+      </a>
+      <a href="course-list.html" class="nav-item active">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+        </svg>
+        <span>코스</span>
+      </a>
+      <a href="#" class="nav-item">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+        </svg>
+        <span>정산</span>
+      </a>
+      <a href="#" class="nav-item">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+        </svg>
+        <span>설정</span>
+      </a>
+    </nav>
+  </div>
 </body>
 </html>

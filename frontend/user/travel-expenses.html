@@ -1,526 +1,358 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>경비 - TRAVELY</title>
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
-    <link rel="stylesheet" href="../shared/aurora-style.css">
-    <style>
-        .expenses-container {
-            padding-bottom: 90px;
-        }
-
-        /* Travel Header */
-        .travel-header {
-            padding: 16px 20px;
-            background: var(--bg-glass);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            margin-bottom: 16px;
-        }
-
-        .travel-mini {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .travel-mini-image {
-            width: 48px;
-            height: 48px;
-            border-radius: var(--radius-md);
-            object-fit: cover;
-        }
-
-        .travel-mini-info {
-            flex: 1;
-        }
-
-        .travel-mini-title {
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 2px;
-        }
-
-        .travel-mini-date {
-            font-size: 11px;
-            color: var(--text-muted);
-        }
-
-        /* Tabs */
-        .detail-tabs {
-            display: flex;
-            padding: 0 20px;
-            gap: 8px;
-            margin-bottom: 20px;
-            overflow-x: auto;
-        }
-
-        .detail-tabs::-webkit-scrollbar {
-            display: none;
-        }
-
-        .detail-tab {
-            padding: 10px 18px;
-            border-radius: var(--radius-full);
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--text-secondary);
-            background: var(--bg-glass);
-            border: none;
-            cursor: pointer;
-            white-space: nowrap;
-            transition: all 0.3s ease;
-            text-decoration: none;
-        }
-
-        .detail-tab.active {
-            background: var(--gradient-primary);
-            color: white;
-        }
-
-        /* Balance Card */
-        .balance-card {
-            margin: 0 20px 20px;
-            padding: 24px;
-            background: var(--gradient-primary);
-            border-radius: var(--radius-xl);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .balance-card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -30%;
-            width: 200px;
-            height: 200px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-        }
-
-        .balance-label {
-            font-size: 13px;
-            opacity: 0.9;
-            margin-bottom: 8px;
-        }
-
-        .balance-amount {
-            font-size: 32px;
-            font-weight: 800;
-            margin-bottom: 16px;
-        }
-
-        .balance-actions {
-            display: flex;
-            gap: 8px;
-        }
-
-        .balance-btn {
-            flex: 1;
-            padding: 12px;
-            border-radius: var(--radius-md);
-            font-size: 13px;
-            font-weight: 600;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-decoration: none;
-        }
-
-        .balance-btn-primary {
-            background: white;
-            color: var(--aurora-purple);
-            border: none;
-        }
-
-        .balance-btn-secondary {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: none;
-        }
-
-        /* Info Card */
-        .info-card {
-            margin: 0 20px 20px;
-            padding: 16px;
-            background: rgba(66, 153, 225, 0.1);
-            border: 1px solid rgba(66, 153, 225, 0.3);
-            border-radius: var(--radius-lg);
-        }
-
-        .info-card-header {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 8px;
-        }
-
-        .info-card-icon {
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            background: var(--info);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-        }
-
-        .info-card-title {
-            font-size: 13px;
-            font-weight: 600;
-        }
-
-        .info-card-text {
-            font-size: 12px;
-            color: var(--text-secondary);
-            line-height: 1.5;
-        }
-
-        /* Transaction Section */
-        .transaction-section {
-            padding: 0 20px;
-        }
-
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-        }
-
-        .section-title {
-            font-size: 16px;
-            font-weight: 600;
-        }
-
-        .section-filter {
-            font-size: 12px;
-            color: var(--aurora-purple);
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            cursor: pointer;
-        }
-
-        /* Transaction Group */
-        .transaction-group {
-            margin-bottom: 20px;
-        }
-
-        .transaction-date {
-            font-size: 12px;
-            color: var(--text-muted);
-            margin-bottom: 12px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .transaction-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .transaction-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 14px;
-            background: var(--bg-glass);
-            border-radius: var(--radius-lg);
-        }
-
-        .transaction-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-        }
-
-        .transaction-icon.deposit {
-            background: rgba(72, 187, 120, 0.2);
-            color: var(--success);
-        }
-
-        .transaction-icon.withdrawal {
-            background: rgba(245, 101, 101, 0.2);
-            color: var(--error);
-        }
-
-        .transaction-info {
-            flex: 1;
-        }
-
-        .transaction-title {
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 2px;
-        }
-
-        .transaction-desc {
-            font-size: 11px;
-            color: var(--text-muted);
-        }
-
-        .transaction-amount {
-            text-align: right;
-        }
-
-        .transaction-value {
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        .transaction-value.deposit {
-            color: var(--success);
-        }
-
-        .transaction-value.withdrawal {
-            color: var(--error);
-        }
-
-        .transaction-balance {
-            font-size: 11px;
-            color: var(--text-muted);
-        }
-
-        /* Empty State */
-        .empty-state {
-            text-align: center;
-            padding: 40px 20px;
-        }
-
-        .empty-state-icon {
-            width: 64px;
-            height: 64px;
-            border-radius: 50%;
-            background: var(--bg-glass);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 16px;
-        }
-
-        .empty-state-icon i {
-            font-size: 28px;
-            color: var(--text-muted);
-        }
-
-        .empty-state-title {
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-
-        .empty-state-desc {
-            font-size: 13px;
-            color: var(--text-secondary);
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>내 경비 - TRAVELY</title>
+  <link rel="stylesheet" href="../shared/clean-style.css">
+  <style>
+    .content {
+      padding-bottom: 100px;
+    }
+    .balance-card {
+      margin: 16px 20px;
+      padding: 24px;
+      background: var(--primary-gradient);
+      border-radius: var(--radius-lg);
+      color: white;
+    }
+    .balance-label {
+      font-size: 14px;
+      opacity: 0.9;
+      margin-bottom: 8px;
+    }
+    .balance-amount {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+    .balance-stats {
+      display: flex;
+      gap: 24px;
+    }
+    .balance-stat {
+      flex: 1;
+    }
+    .balance-stat-label {
+      font-size: 12px;
+      opacity: 0.8;
+      margin-bottom: 4px;
+    }
+    .balance-stat-value {
+      font-size: 16px;
+      font-weight: 600;
+    }
+    .action-buttons {
+      display: flex;
+      gap: 12px;
+      margin: 0 20px 20px;
+    }
+    .action-btn {
+      flex: 1;
+      padding: 12px;
+      border-radius: var(--radius-md);
+      font-size: 14px;
+      font-weight: 600;
+      text-align: center;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .action-btn.charge {
+      background: var(--bg-white);
+      color: var(--primary-start);
+      border: 1px solid var(--primary-start);
+    }
+    .action-btn.charge:hover {
+      background: rgba(124, 58, 237, 0.05);
+    }
+    .action-btn svg {
+      width: 18px;
+      height: 18px;
+    }
+    .filter-section {
+      padding: 0 20px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .filter-label {
+      font-size: 16px;
+      font-weight: 600;
+    }
+    .filter-select {
+      padding: 8px 12px;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-family: inherit;
+      background: var(--bg-white);
+      color: var(--text-primary);
+    }
+    .transaction-list {
+      padding: 0 20px;
+    }
+    .transaction-date {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      padding: 12px 0 8px;
+    }
+    .transaction-item {
+      display: flex;
+      align-items: center;
+      padding: 16px;
+      background: var(--bg-white);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-card);
+      margin-bottom: 8px;
+    }
+    .transaction-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 12px;
+    }
+    .transaction-icon.charge {
+      background: rgba(16, 185, 129, 0.1);
+      color: #10B981;
+    }
+    .transaction-icon.expense {
+      background: rgba(239, 68, 68, 0.1);
+      color: #EF4444;
+    }
+    .transaction-icon svg {
+      width: 20px;
+      height: 20px;
+    }
+    .transaction-info {
+      flex: 1;
+    }
+    .transaction-title {
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 2px;
+    }
+    .transaction-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .transaction-amount {
+      font-size: 15px;
+      font-weight: 600;
+      text-align: right;
+    }
+    .transaction-amount.plus {
+      color: #10B981;
+    }
+    .transaction-amount.minus {
+      color: #EF4444;
+    }
+    .bottom-bar {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 430px;
+      padding: 16px 20px;
+      background: var(--bg-white);
+      border-top: 1px solid var(--border-light);
+    }
+  </style>
 </head>
 <body>
-    <div class="aurora-bg">
-        <div class="aurora-orb aurora-orb-1"></div>
-        <div class="aurora-orb aurora-orb-2"></div>
-        <div class="aurora-orb aurora-orb-3"></div>
+  <div class="mobile-container">
+    <!-- Header -->
+    <header class="header">
+      <button onclick="history.back()" style="background: none; border: none; cursor: pointer;">
+        <svg class="header-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+        </svg>
+      </button>
+      <span class="header-title">내 경비</span>
+      <div style="width: 24px;"></div>
+    </header>
+
+    <!-- Content -->
+    <div class="content">
+      <!-- Balance Card -->
+      <div class="balance-card">
+        <p class="balance-label">현재 잔액</p>
+        <p class="balance-amount">245,000원</p>
+        <div class="balance-stats">
+          <div class="balance-stat">
+            <p class="balance-stat-label">총 충전</p>
+            <p class="balance-stat-value">500,000원</p>
+          </div>
+          <div class="balance-stat">
+            <p class="balance-stat-label">총 사용</p>
+            <p class="balance-stat-value">255,000원</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="action-buttons">
+        <button class="action-btn charge">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+          </svg>
+          충전하기
+        </button>
+      </div>
+
+      <!-- Filter Section -->
+      <div class="filter-section">
+        <span class="filter-label">거래 내역</span>
+        <select class="filter-select">
+          <option>전체</option>
+          <option>충전</option>
+          <option>사용</option>
+        </select>
+      </div>
+
+      <!-- Transaction List -->
+      <div class="transaction-list">
+        <p class="transaction-date">오늘</p>
+
+        <div class="transaction-item">
+          <div class="transaction-icon expense">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+            </svg>
+          </div>
+          <div class="transaction-info">
+            <p class="transaction-title">중식 - 도시락</p>
+            <p class="transaction-desc">1100고지 휴게소</p>
+          </div>
+          <p class="transaction-amount minus">-15,000원</p>
+        </div>
+
+        <div class="transaction-item">
+          <div class="transaction-icon expense">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+            </svg>
+          </div>
+          <div class="transaction-info">
+            <p class="transaction-title">등산 스틱 대여</p>
+            <p class="transaction-desc">한라산 영실탐방로</p>
+          </div>
+          <p class="transaction-amount minus">-5,000원</p>
+        </div>
+
+        <p class="transaction-date">어제</p>
+
+        <div class="transaction-item">
+          <div class="transaction-icon expense">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+            </svg>
+          </div>
+          <div class="transaction-info">
+            <p class="transaction-title">석식 - 해산물</p>
+            <p class="transaction-desc">우도 해녀식당</p>
+          </div>
+          <p class="transaction-amount minus">-35,000원</p>
+        </div>
+
+        <div class="transaction-item">
+          <div class="transaction-icon expense">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+            </svg>
+          </div>
+          <div class="transaction-info">
+            <p class="transaction-title">우도 전기차 렌트</p>
+            <p class="transaction-desc">우도 선착장</p>
+          </div>
+          <p class="transaction-amount minus">-30,000원</p>
+        </div>
+
+        <div class="transaction-item">
+          <div class="transaction-icon expense">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+            </svg>
+          </div>
+          <div class="transaction-info">
+            <p class="transaction-title">중식 - 성산포 맛집</p>
+            <p class="transaction-desc">성산일출봉 인근</p>
+          </div>
+          <p class="transaction-amount minus">-25,000원</p>
+        </div>
+
+        <div class="transaction-item">
+          <div class="transaction-icon expense">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+            </svg>
+          </div>
+          <div class="transaction-info">
+            <p class="transaction-title">성산일출봉 입장료</p>
+            <p class="transaction-desc">성산일출봉</p>
+          </div>
+          <p class="transaction-amount minus">-5,000원</p>
+        </div>
+
+        <p class="transaction-date">1월 25일</p>
+
+        <div class="transaction-item">
+          <div class="transaction-icon charge">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/>
+            </svg>
+          </div>
+          <div class="transaction-info">
+            <p class="transaction-title">경비 충전</p>
+            <p class="transaction-desc">신한카드 ****1234</p>
+          </div>
+          <p class="transaction-amount plus">+300,000원</p>
+        </div>
+
+        <div class="transaction-item">
+          <div class="transaction-icon expense">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+            </svg>
+          </div>
+          <div class="transaction-info">
+            <p class="transaction-title">공항 간식 구매</p>
+            <p class="transaction-desc">제주공항</p>
+          </div>
+          <p class="transaction-amount minus">-8,000원</p>
+        </div>
+
+        <p class="transaction-date">1월 24일</p>
+
+        <div class="transaction-item">
+          <div class="transaction-icon charge">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/>
+            </svg>
+          </div>
+          <div class="transaction-info">
+            <p class="transaction-title">경비 충전</p>
+            <p class="transaction-desc">신한카드 ****1234</p>
+          </div>
+          <p class="transaction-amount plus">+200,000원</p>
+        </div>
+      </div>
     </div>
 
-    <div class="mobile-container expenses-container">
-        <!-- Header -->
-        <header class="header">
-            <a href="travel-detail.html" class="header-back">
-                <i class="ri-arrow-left-line"></i>
-            </a>
-            <h1 class="header-title">경비</h1>
-            <div style="width: 40px;"></div>
-        </header>
-
-        <!-- Travel Header -->
-        <div class="travel-header">
-            <div class="travel-mini">
-                <img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=200" class="travel-mini-image" alt="여행">
-                <div class="travel-mini-info">
-                    <div class="travel-mini-title">발리 럭셔리 힐링 7일</div>
-                    <div class="travel-mini-date">2025.02.20 - 02.26</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Tabs -->
-        <div class="detail-tabs">
-            <a href="travel-detail.html" class="detail-tab">
-                요약
-            </a>
-            <a href="travel-announcements.html" class="detail-tab">
-                공지사항
-            </a>
-            <a href="travel-schedule.html" class="detail-tab">
-                일정
-            </a>
-            <a href="travel-expenses.html" class="detail-tab active">
-                경비
-            </a>
-            <a href="travel-participants.html" class="detail-tab">
-                참가자
-            </a>
-        </div>
-
-        <!-- Balance Card -->
-        <div class="balance-card">
-            <div class="balance-label">현재 잔액</div>
-            <div class="balance-amount">500,000원</div>
-            <div class="balance-actions">
-                <button class="balance-btn balance-btn-primary">
-                    <i class="ri-add-line"></i>
-                    충전하기
-                </button>
-                <button class="balance-btn balance-btn-secondary">
-                    <i class="ri-file-list-3-line"></i>
-                    내역보기
-                </button>
-            </div>
-        </div>
-
-        <!-- Info Card -->
-        <div class="info-card">
-            <div class="info-card-header">
-                <div class="info-card-icon">
-                    <i class="ri-information-line"></i>
-                </div>
-                <div class="info-card-title">충전 안내</div>
-            </div>
-            <div class="info-card-text">
-                현지에서 사용할 공동 경비입니다. 인플루언서가 대신 결제 후 차감됩니다.
-                권장 충전 금액은 50만원이며, 여행 종료 후 잔액은 환불됩니다.
-            </div>
-        </div>
-
-        <!-- Transaction Section -->
-        <div class="transaction-section">
-            <div class="section-header">
-                <h3 class="section-title">거래 내역</h3>
-                <span class="section-filter">
-                    전체
-                    <i class="ri-arrow-down-s-line"></i>
-                </span>
-            </div>
-
-            <!-- Transaction Group -->
-            <div class="transaction-group">
-                <div class="transaction-date">2025년 1월 27일</div>
-                <div class="transaction-list">
-                    <div class="transaction-item">
-                        <div class="transaction-icon deposit">
-                            <i class="ri-add-line"></i>
-                        </div>
-                        <div class="transaction-info">
-                            <div class="transaction-title">경비 충전</div>
-                            <div class="transaction-desc">네이버페이</div>
-                        </div>
-                        <div class="transaction-amount">
-                            <div class="transaction-value deposit">+500,000원</div>
-                            <div class="transaction-balance">잔액 500,000원</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Transaction Group -->
-            <div class="transaction-group">
-                <div class="transaction-date">2025년 1월 25일</div>
-                <div class="transaction-list">
-                    <div class="transaction-item">
-                        <div class="transaction-icon withdrawal">
-                            <i class="ri-subtract-line"></i>
-                        </div>
-                        <div class="transaction-info">
-                            <div class="transaction-title">입장료 결제</div>
-                            <div class="transaction-desc">테갈랄랑 라이스 테라스</div>
-                        </div>
-                        <div class="transaction-amount">
-                            <div class="transaction-value withdrawal">-15,000원</div>
-                            <div class="transaction-balance">잔액 0원</div>
-                        </div>
-                    </div>
-                    <div class="transaction-item">
-                        <div class="transaction-icon deposit">
-                            <i class="ri-add-line"></i>
-                        </div>
-                        <div class="transaction-info">
-                            <div class="transaction-title">테스트 충전</div>
-                            <div class="transaction-desc">네이버페이</div>
-                        </div>
-                        <div class="transaction-amount">
-                            <div class="transaction-value deposit">+15,000원</div>
-                            <div class="transaction-balance">잔액 15,000원</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Transaction Group -->
-            <div class="transaction-group">
-                <div class="transaction-date">2025년 1월 20일</div>
-                <div class="transaction-list">
-                    <div class="transaction-item">
-                        <div class="transaction-icon withdrawal">
-                            <i class="ri-subtract-line"></i>
-                        </div>
-                        <div class="transaction-info">
-                            <div class="transaction-title">식사 비용</div>
-                            <div class="transaction-desc">웰컴 디너 (1인)</div>
-                        </div>
-                        <div class="transaction-amount">
-                            <div class="transaction-value withdrawal">-85,000원</div>
-                            <div class="transaction-balance">잔액 0원</div>
-                        </div>
-                    </div>
-                    <div class="transaction-item">
-                        <div class="transaction-icon deposit">
-                            <i class="ri-add-line"></i>
-                        </div>
-                        <div class="transaction-info">
-                            <div class="transaction-title">초기 충전</div>
-                            <div class="transaction-desc">네이버페이</div>
-                        </div>
-                        <div class="transaction-amount">
-                            <div class="transaction-value deposit">+85,000원</div>
-                            <div class="transaction-balance">잔액 85,000원</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Bottom Navigation -->
-        <nav class="bottom-nav">
-            <a href="home.html" class="nav-item">
-                <i class="ri-home-5-line"></i>
-                <span>홈</span>
-            </a>
-            <a href="#" class="nav-item">
-                <i class="ri-sparkling-line"></i>
-                <span>파티</span>
-            </a>
-            <a href="my-applications.html" class="nav-item">
-                <i class="ri-file-list-3-line"></i>
-                <span>내신청</span>
-            </a>
-            <a href="active-travels.html" class="nav-item active">
-                <i class="ri-suitcase-3-fill"></i>
-                <span>진행중</span>
-            </a>
-            <a href="mypage.html" class="nav-item">
-                <i class="ri-user-line"></i>
-                <span>마이</span>
-            </a>
-        </nav>
+    <!-- Bottom Bar -->
+    <div class="bottom-bar">
+      <button class="btn btn-primary btn-full">충전하기</button>
     </div>
+  </div>
 </body>
 </html>

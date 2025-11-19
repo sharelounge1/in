@@ -1,481 +1,247 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>파티 목록 - TRAVELY</title>
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
-    <link rel="stylesheet" href="../shared/aurora-style.css">
-    <style>
-        .parties-container {
-            padding-bottom: 90px;
-        }
-
-        /* Search Section */
-        .search-section {
-            padding: 16px 20px;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            background: rgba(15, 15, 26, 0.95);
-            backdrop-filter: blur(20px);
-        }
-
-        .search-bar {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 16px;
-            background: var(--bg-glass);
-            border-radius: var(--radius-lg);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .search-bar i {
-            color: var(--text-muted);
-            font-size: 20px;
-        }
-
-        .search-bar input {
-            flex: 1;
-            background: none;
-            border: none;
-            color: var(--text-primary);
-            font-size: 14px;
-            outline: none;
-        }
-
-        .search-bar input::placeholder {
-            color: var(--text-muted);
-        }
-
-        /* Filter Section */
-        .filter-section {
-            padding: 0 20px 16px;
-        }
-
-        .filter-row {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 12px;
-        }
-
-        .filter-scroll {
-            display: flex;
-            gap: 8px;
-            overflow-x: auto;
-            padding-bottom: 4px;
-        }
-
-        .filter-scroll::-webkit-scrollbar {
-            display: none;
-        }
-
-        .filter-chip {
-            padding: 8px 16px;
-            border-radius: var(--radius-full);
-            font-size: 13px;
-            font-weight: 500;
-            color: var(--text-secondary);
-            background: var(--bg-glass);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            cursor: pointer;
-            white-space: nowrap;
-            transition: all 0.3s ease;
-        }
-
-        .filter-chip.active {
-            background: var(--gradient-primary);
-            color: white;
-            border-color: transparent;
-        }
-
-        .date-filter {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 16px;
-            border-radius: var(--radius-full);
-            font-size: 13px;
-            color: var(--text-secondary);
-            background: var(--bg-glass);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            cursor: pointer;
-        }
-
-        .date-filter i {
-            font-size: 16px;
-        }
-
-        /* Results Info */
-        .results-info {
-            padding: 0 20px;
-            margin-bottom: 16px;
-        }
-
-        .results-count {
-            font-size: 14px;
-            color: var(--text-secondary);
-        }
-
-        .results-count strong {
-            color: var(--text-primary);
-        }
-
-        /* Party Cards */
-        .party-list {
-            padding: 0 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .party-card {
-            background: var(--bg-card);
-            border-radius: var(--radius-lg);
-            overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: transform 0.3s ease;
-            cursor: pointer;
-        }
-
-        .party-card:active {
-            transform: scale(0.98);
-        }
-
-        .party-image-wrap {
-            position: relative;
-            height: 180px;
-        }
-
-        .party-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .party-badge {
-            position: absolute;
-            top: 12px;
-            left: 12px;
-            padding: 6px 12px;
-            border-radius: var(--radius-full);
-            font-size: 11px;
-            font-weight: 600;
-        }
-
-        .party-badge.recruiting {
-            background: rgba(72, 187, 120, 0.9);
-            color: white;
-        }
-
-        .party-badge.closing-soon {
-            background: rgba(236, 201, 75, 0.9);
-            color: #1a1a2e;
-        }
-
-        .party-badge.closed {
-            background: rgba(245, 101, 101, 0.9);
-            color: white;
-        }
-
-        .party-content {
-            padding: 16px;
-        }
-
-        .party-title {
-            font-size: 16px;
-            font-weight: 700;
-            margin-bottom: 8px;
-            line-height: 1.3;
-        }
-
-        .party-influencer {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 12px;
-        }
-
-        .party-influencer-avatar {
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .party-influencer-name {
-            font-size: 13px;
-            color: var(--text-secondary);
-        }
-
-        .party-info {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            margin-bottom: 12px;
-        }
-
-        .party-info-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 12px;
-            color: var(--text-secondary);
-        }
-
-        .party-info-item i {
-            font-size: 14px;
-            color: var(--aurora-cyan);
-            width: 16px;
-        }
-
-        .party-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-top: 12px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .party-price {
-            font-size: 18px;
-            font-weight: 700;
-            background: var(--gradient-primary);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .party-slots {
-            font-size: 12px;
-            color: var(--text-secondary);
-        }
-
-        .party-slots strong {
-            color: var(--aurora-cyan);
-        }
-
-        /* Empty State */
-        .empty-parties {
-            padding: 48px 20px;
-            text-align: center;
-        }
-
-        .empty-parties-icon {
-            font-size: 48px;
-            color: var(--text-muted);
-            margin-bottom: 16px;
-        }
-
-        .empty-parties-title {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-
-        .empty-parties-desc {
-            font-size: 14px;
-            color: var(--text-secondary);
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>파티 - TRAVELY</title>
+  <link rel="stylesheet" href="../shared/clean-style.css">
+  <style>
+    .content {
+      padding-bottom: 80px;
+    }
+    .filter-section {
+      padding: 16px 20px;
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .filter-section::-webkit-scrollbar {
+      display: none;
+    }
+    .filter-chip {
+      flex-shrink: 0;
+      padding: 8px 16px;
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 500;
+      border: 1px solid var(--border-light);
+      background: var(--bg-white);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .filter-chip.active {
+      background: var(--primary-gradient);
+      color: white;
+      border-color: transparent;
+    }
+    .party-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      padding: 0 20px;
+    }
+    .party-card {
+      background: var(--bg-white);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-card);
+    }
+    .party-card-image {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+    }
+    .party-card-content {
+      padding: 12px;
+    }
+    .party-card-tag {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 500;
+      background: rgba(124, 58, 237, 0.1);
+      color: var(--primary-start);
+      margin-bottom: 8px;
+    }
+    .party-card-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      line-height: 1.3;
+    }
+    .party-card-info {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+    .party-card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .party-card-price {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--primary-start);
+    }
+    .party-card-count {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .section-header {
+      padding: 20px 20px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .section-header h2 {
+      font-size: 18px;
+      font-weight: 700;
+    }
+  </style>
 </head>
 <body>
-    <div class="aurora-bg">
-        <div class="aurora-orb aurora-orb-1"></div>
-        <div class="aurora-orb aurora-orb-2"></div>
-        <div class="aurora-orb aurora-orb-3"></div>
+  <div class="mobile-container">
+    <!-- Header -->
+    <header class="header">
+      <svg class="header-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+      </svg>
+      <span class="header-title">파티</span>
+      <svg class="header-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
+      </svg>
+    </header>
+
+    <!-- Content -->
+    <div class="content">
+      <!-- Filter Chips -->
+      <div class="filter-section">
+        <button class="filter-chip active">전체</button>
+        <button class="filter-chip">서핑/스포츠</button>
+        <button class="filter-chip">맛집/와인</button>
+        <button class="filter-chip">문화/예술</button>
+        <button class="filter-chip">힐링/명상</button>
+        <button class="filter-chip">사진/영상</button>
+      </div>
+
+      <!-- Section Header -->
+      <div class="section-header">
+        <h2>이번 주 인기 파티</h2>
+      </div>
+
+      <!-- Party Grid -->
+      <div class="party-grid">
+        <a href="party-detail.html" class="party-card" style="text-decoration: none; color: inherit;">
+          <img src="https://images.unsplash.com/photo-1519046904884-53103b34b206?w=400" alt="서핑" class="party-card-image">
+          <div class="party-card-content">
+            <span class="party-card-tag">서핑</span>
+            <h3 class="party-card-title">부산 송정 서핑 파티</h3>
+            <p class="party-card-info">12.28 (토) 10:00</p>
+            <div class="party-card-footer">
+              <span class="party-card-price">85,000원</span>
+              <span class="party-card-count">8/12명</span>
+            </div>
+          </div>
+        </a>
+
+        <div class="party-card">
+          <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400" alt="와인" class="party-card-image">
+          <div class="party-card-content">
+            <span class="party-card-tag">와인</span>
+            <h3 class="party-card-title">서울 와인 테이스팅</h3>
+            <p class="party-card-info">12.29 (일) 18:00</p>
+            <div class="party-card-footer">
+              <span class="party-card-price">120,000원</span>
+              <span class="party-card-count">14/15명</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="party-card">
+          <img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=400" alt="일출" class="party-card-image">
+          <div class="party-card-content">
+            <span class="party-card-tag">힐링</span>
+            <h3 class="party-card-title">강릉 일출 요가</h3>
+            <p class="party-card-info">1.1 (수) 06:00</p>
+            <div class="party-card-footer">
+              <span class="party-card-price">65,000원</span>
+              <span class="party-card-count">18/20명</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="party-card">
+          <img src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=400" alt="한옥" class="party-card-image">
+          <div class="party-card-content">
+            <span class="party-card-tag">문화</span>
+            <h3 class="party-card-title">전주 한옥 다도 체험</h3>
+            <p class="party-card-info">1.4 (토) 14:00</p>
+            <div class="party-card-footer">
+              <span class="party-card-price">45,000원</span>
+              <span class="party-card-count">6/10명</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="party-card">
+          <img src="https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=400" alt="캠핑" class="party-card-image">
+          <div class="party-card-content">
+            <span class="party-card-tag">캠핑</span>
+            <h3 class="party-card-title">가평 글램핑 파티</h3>
+            <p class="party-card-info">1.11 (토) 15:00</p>
+            <div class="party-card-footer">
+              <span class="party-card-price">150,000원</span>
+              <span class="party-card-count">10/16명</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="party-card">
+          <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=400" alt="사진" class="party-card-image">
+          <div class="party-card-content">
+            <span class="party-card-tag">사진</span>
+            <h3 class="party-card-title">제주 출사 모임</h3>
+            <p class="party-card-info">1.18 (토) 07:00</p>
+            <div class="party-card-footer">
+              <span class="party-card-price">95,000원</span>
+              <span class="party-card-count">5/8명</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div class="mobile-container parties-container">
-        <!-- Search Section -->
-        <div class="search-section">
-            <div class="search-bar">
-                <i class="ri-search-line"></i>
-                <input type="text" placeholder="파티 검색...">
-            </div>
-        </div>
-
-        <!-- Filter Section -->
-        <div class="filter-section">
-            <!-- Region Filter -->
-            <div class="filter-scroll">
-                <button class="filter-chip active">전체</button>
-                <button class="filter-chip">서울</button>
-                <button class="filter-chip">경기</button>
-                <button class="filter-chip">부산</button>
-                <button class="filter-chip">제주</button>
-                <button class="filter-chip">대구</button>
-                <button class="filter-chip">인천</button>
-                <button class="filter-chip">광주</button>
-            </div>
-
-            <!-- Date Filter -->
-            <div class="filter-row" style="margin-top: 12px;">
-                <button class="date-filter">
-                    <i class="ri-calendar-line"></i>
-                    <span>날짜 선택</span>
-                </button>
-            </div>
-        </div>
-
-        <!-- Results Info -->
-        <div class="results-info">
-            <p class="results-count"><strong>12개</strong>의 파티가 있습니다</p>
-        </div>
-
-        <!-- Party List -->
-        <div class="party-list">
-            <!-- Party Card 1 -->
-            <div class="party-card" onclick="location.href='party-detail.html'">
-                <div class="party-image-wrap">
-                    <img src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=800" class="party-image" alt="파티">
-                    <span class="party-badge recruiting">모집중</span>
-                </div>
-                <div class="party-content">
-                    <h3 class="party-title">한강 루프탑 선셋 파티</h3>
-                    <div class="party-influencer">
-                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200" class="party-influencer-avatar" alt="인플루언서">
-                        <span class="party-influencer-name">@party_queen</span>
-                    </div>
-                    <div class="party-info">
-                        <div class="party-info-item">
-                            <i class="ri-calendar-line"></i>
-                            <span>2024.02.15 (토) 18:00</span>
-                        </div>
-                        <div class="party-info-item">
-                            <i class="ri-map-pin-line"></i>
-                            <span>서울 용산구 이태원동</span>
-                        </div>
-                    </div>
-                    <div class="party-footer">
-                        <div class="party-price">150,000원</div>
-                        <div class="party-slots"><strong>12</strong>/30명</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Party Card 2 -->
-            <div class="party-card" onclick="location.href='party-detail.html'">
-                <div class="party-image-wrap">
-                    <img src="https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=800" class="party-image" alt="파티">
-                    <span class="party-badge closing-soon">마감임박</span>
-                </div>
-                <div class="party-content">
-                    <h3 class="party-title">해운대 비치 클럽 파티</h3>
-                    <div class="party-influencer">
-                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200" class="party-influencer-avatar" alt="인플루언서">
-                        <span class="party-influencer-name">@beach_vibes</span>
-                    </div>
-                    <div class="party-info">
-                        <div class="party-info-item">
-                            <i class="ri-calendar-line"></i>
-                            <span>2024.02.20 (목) 19:00</span>
-                        </div>
-                        <div class="party-info-item">
-                            <i class="ri-map-pin-line"></i>
-                            <span>부산 해운대구 해운대해변로</span>
-                        </div>
-                    </div>
-                    <div class="party-footer">
-                        <div class="party-price">200,000원</div>
-                        <div class="party-slots"><strong>28</strong>/30명</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Party Card 3 -->
-            <div class="party-card" onclick="location.href='party-detail.html'">
-                <div class="party-image-wrap">
-                    <img src="https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec?w=800" class="party-image" alt="파티">
-                    <span class="party-badge recruiting">모집중</span>
-                </div>
-                <div class="party-content">
-                    <h3 class="party-title">홍대 DJ 나이트 파티</h3>
-                    <div class="party-influencer">
-                        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200" class="party-influencer-avatar" alt="인플루언서">
-                        <span class="party-influencer-name">@dj_master</span>
-                    </div>
-                    <div class="party-info">
-                        <div class="party-info-item">
-                            <i class="ri-calendar-line"></i>
-                            <span>2024.02.22 (토) 21:00</span>
-                        </div>
-                        <div class="party-info-item">
-                            <i class="ri-map-pin-line"></i>
-                            <span>서울 마포구 홍익로</span>
-                        </div>
-                    </div>
-                    <div class="party-footer">
-                        <div class="party-price">80,000원</div>
-                        <div class="party-slots"><strong>45</strong>/100명</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Party Card 4 -->
-            <div class="party-card" onclick="location.href='party-detail.html'">
-                <div class="party-image-wrap">
-                    <img src="https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?w=800" class="party-image" alt="파티">
-                    <span class="party-badge recruiting">모집중</span>
-                </div>
-                <div class="party-content">
-                    <h3 class="party-title">제주 감성 와인 파티</h3>
-                    <div class="party-influencer">
-                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200" class="party-influencer-avatar" alt="인플루언서">
-                        <span class="party-influencer-name">@wine_lover</span>
-                    </div>
-                    <div class="party-info">
-                        <div class="party-info-item">
-                            <i class="ri-calendar-line"></i>
-                            <span>2024.02.28 (수) 17:00</span>
-                        </div>
-                        <div class="party-info-item">
-                            <i class="ri-map-pin-line"></i>
-                            <span>제주 서귀포시 안덕면</span>
-                        </div>
-                    </div>
-                    <div class="party-footer">
-                        <div class="party-price">120,000원</div>
-                        <div class="party-slots"><strong>8</strong>/20명</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Bottom Navigation -->
-        <nav class="bottom-nav">
-            <a href="home.html" class="nav-item">
-                <i class="ri-home-5-line"></i>
-                <span>홈</span>
-            </a>
-            <a href="parties.html" class="nav-item active">
-                <i class="ri-goblet-fill"></i>
-                <span>파티</span>
-            </a>
-            <a href="my-applications.html" class="nav-item">
-                <i class="ri-file-list-3-line"></i>
-                <span>내신청</span>
-            </a>
-            <a href="active-travels.html" class="nav-item">
-                <i class="ri-suitcase-3-line"></i>
-                <span>진행중</span>
-            </a>
-            <a href="mypage.html" class="nav-item">
-                <i class="ri-user-line"></i>
-                <span>마이</span>
-            </a>
-        </nav>
-    </div>
-
-    <script>
-        // Filter chip toggle
-        document.querySelectorAll('.filter-chip').forEach(chip => {
-            chip.addEventListener('click', function() {
-                document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
-                this.classList.add('active');
-            });
-        });
-    </script>
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+      <a href="home.html" class="nav-item">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+        </svg>
+        <span>홈</span>
+      </a>
+      <a href="parties.html" class="nav-item active">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+        </svg>
+        <span>파티</span>
+      </a>
+      <a href="my-applications.html" class="nav-item">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+        </svg>
+        <span>신청</span>
+      </a>
+      <a href="mypage.html" class="nav-item">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+        </svg>
+        <span>마이</span>
+      </a>
+    </nav>
+  </div>
 </body>
 </html>

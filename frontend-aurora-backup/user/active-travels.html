@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>진행 중인 여행 - TRAVELY</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="../shared/aurora-style.css">
+    <style>
+        .travels-container {
+            padding-bottom: 90px;
+        }
+
+        /* Summary Card */
+        .summary-card {
+            margin: 20px;
+            padding: 20px;
+            background: var(--gradient-primary);
+            border-radius: var(--radius-xl);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .summary-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -30%;
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+        }
+
+        .summary-title {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 4px;
+        }
+
+        .summary-count {
+            font-size: 32px;
+            font-weight: 800;
+        }
+
+        .summary-subtitle {
+            font-size: 13px;
+            opacity: 0.85;
+        }
+
+        /* Travel Card */
+        .travel-list {
+            padding: 0 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .travel-card {
+            background: var(--bg-glass);
+            border-radius: var(--radius-xl);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+        }
+
+        .travel-image-wrap {
+            position: relative;
+            height: 160px;
+        }
+
+        .travel-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .travel-dday {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            padding: 6px 12px;
+            background: var(--gradient-primary);
+            border-radius: var(--radius-full);
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .travel-status {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            padding: 6px 12px;
+            border-radius: var(--radius-full);
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .status-upcoming {
+            background: rgba(66, 153, 225, 0.9);
+        }
+
+        .status-ongoing {
+            background: rgba(72, 187, 120, 0.9);
+        }
+
+        .travel-content {
+            padding: 16px;
+        }
+
+        .travel-name {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .travel-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .travel-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .travel-meta-item i {
+            color: var(--aurora-purple);
+            font-size: 14px;
+        }
+
+        .travel-influencer {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .travel-influencer-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--aurora-purple);
+        }
+
+        .travel-influencer-info {
+            flex: 1;
+        }
+
+        .travel-influencer-name {
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .travel-influencer-handle {
+            font-size: 11px;
+            color: var(--aurora-purple);
+        }
+
+        .travel-actions {
+            display: flex;
+            gap: 8px;
+            padding: 12px 16px;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .travel-action-btn {
+            flex: 1;
+            padding: 10px;
+            border-radius: var(--radius-md);
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.3s;
+        }
+
+        .travel-action-btn.primary {
+            background: var(--gradient-primary);
+            border: none;
+            color: white;
+        }
+
+        .travel-action-btn.secondary {
+            background: var(--bg-glass);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--text-primary);
+        }
+
+        /* Progress Section */
+        .progress-section {
+            padding: 12px 16px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .progress-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .progress-value {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--aurora-purple);
+        }
+
+        .progress-bar {
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-primary);
+            border-radius: 2px;
+        }
+
+        /* New Notice Badge */
+        .notice-badge {
+            position: absolute;
+            bottom: 12px;
+            left: 12px;
+            padding: 6px 10px;
+            background: rgba(245, 101, 101, 0.9);
+            border-radius: var(--radius-full);
+            font-size: 10px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .notice-badge i {
+            font-size: 12px;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .empty-state-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--bg-glass);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+
+        .empty-state-icon i {
+            font-size: 32px;
+            color: var(--text-muted);
+        }
+
+        .empty-state-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .empty-state-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        .empty-state-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 12px 24px;
+            background: var(--gradient-primary);
+            border-radius: var(--radius-md);
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="aurora-bg">
+        <div class="aurora-orb aurora-orb-1"></div>
+        <div class="aurora-orb aurora-orb-2"></div>
+        <div class="aurora-orb aurora-orb-3"></div>
+    </div>
+
+    <div class="mobile-container travels-container">
+        <!-- Header -->
+        <header class="header">
+            <div style="width: 40px;"></div>
+            <h1 class="header-title">진행 중인 여행</h1>
+            <div style="width: 40px;"></div>
+        </header>
+
+        <!-- Summary Card -->
+        <div class="summary-card">
+            <div class="summary-title">다가오는 여행</div>
+            <div class="summary-count">2개</div>
+            <div class="summary-subtitle">가장 빠른 출발까지 D-23</div>
+        </div>
+
+        <!-- Travel List -->
+        <div class="travel-list">
+            <!-- Travel Card 1 - Upcoming -->
+            <div class="travel-card">
+                <div class="travel-image-wrap">
+                    <img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=800" class="travel-image" alt="여행">
+                    <div class="travel-dday">D-23</div>
+                    <div class="travel-status status-upcoming">출발 예정</div>
+                    <div class="notice-badge">
+                        <i class="ri-notification-3-fill"></i>
+                        새 공지 2개
+                    </div>
+                </div>
+                <div class="travel-content">
+                    <h3 class="travel-name">발리 럭셔리 힐링 7일</h3>
+                    <div class="travel-meta">
+                        <div class="travel-meta-item">
+                            <i class="ri-calendar-line"></i>
+                            2025.02.20 - 02.26
+                        </div>
+                        <div class="travel-meta-item">
+                            <i class="ri-map-pin-line"></i>
+                            인도네시아, 발리
+                        </div>
+                    </div>
+                    <div class="travel-influencer">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100" class="travel-influencer-avatar" alt="프로필">
+                        <div class="travel-influencer-info">
+                            <div class="travel-influencer-name">여행하는 지나</div>
+                            <div class="travel-influencer-handle">@travel_jina</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="progress-section">
+                    <div class="progress-header">
+                        <span class="progress-label">준비 현황</span>
+                        <span class="progress-value">3/5 완료</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 60%"></div>
+                    </div>
+                </div>
+                <div class="travel-actions">
+                    <button class="travel-action-btn primary">
+                        <i class="ri-megaphone-line"></i>
+                        공지사항
+                    </button>
+                    <button class="travel-action-btn secondary">
+                        <i class="ri-group-line"></i>
+                        참가자
+                    </button>
+                    <button class="travel-action-btn secondary">
+                        <i class="ri-chat-3-line"></i>
+                        채팅
+                    </button>
+                </div>
+            </div>
+
+            <!-- Travel Card 2 - Upcoming -->
+            <div class="travel-card">
+                <div class="travel-image-wrap">
+                    <img src="https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=800" class="travel-image" alt="여행">
+                    <div class="travel-dday">D-51</div>
+                    <div class="travel-status status-upcoming">출발 예정</div>
+                </div>
+                <div class="travel-content">
+                    <h3 class="travel-name">도쿄 맛집 & 카페 투어 5일</h3>
+                    <div class="travel-meta">
+                        <div class="travel-meta-item">
+                            <i class="ri-calendar-line"></i>
+                            2025.03.10 - 03.14
+                        </div>
+                        <div class="travel-meta-item">
+                            <i class="ri-map-pin-line"></i>
+                            일본, 도쿄
+                        </div>
+                    </div>
+                    <div class="travel-influencer">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100" class="travel-influencer-avatar" alt="프로필">
+                        <div class="travel-influencer-info">
+                            <div class="travel-influencer-name">도쿄 라이프</div>
+                            <div class="travel-influencer-handle">@tokyo_life</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="progress-section">
+                    <div class="progress-header">
+                        <span class="progress-label">준비 현황</span>
+                        <span class="progress-value">1/5 완료</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 20%"></div>
+                    </div>
+                </div>
+                <div class="travel-actions">
+                    <button class="travel-action-btn primary">
+                        <i class="ri-megaphone-line"></i>
+                        공지사항
+                    </button>
+                    <button class="travel-action-btn secondary">
+                        <i class="ri-group-line"></i>
+                        참가자
+                    </button>
+                    <button class="travel-action-btn secondary">
+                        <i class="ri-chat-3-line"></i>
+                        채팅
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <a href="home.html" class="nav-item">
+                <i class="ri-home-5-line"></i>
+                <span>홈</span>
+            </a>
+            <a href="parties.html" class="nav-item">
+                <i class="ri-goblet-line"></i>
+                <span>파티</span>
+            </a>
+            <a href="my-applications.html" class="nav-item">
+                <i class="ri-file-list-3-line"></i>
+                <span>내신청</span>
+            </a>
+            <a href="active-travels.html" class="nav-item active">
+                <i class="ri-suitcase-3-fill"></i>
+                <span>진행중</span>
+            </a>
+            <a href="mypage.html" class="nav-item">
+                <i class="ri-user-line"></i>
+                <span>마이</span>
+            </a>
+        </nav>
+    </div>
+</body>
+</html>

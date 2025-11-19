@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>마이페이지 - Clean Design</title>
+  <link rel="stylesheet" href="../shared/clean-style.css">
+  <style>
+    .content {
+      padding-bottom: 80px;
+    }
+    .profile-section {
+      padding: 32px 20px;
+      text-align: center;
+      background: var(--bg-white);
+    }
+    .profile-avatar-wrapper {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 16px;
+    }
+    .profile-avatar {
+      width: 88px;
+      height: 88px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    .profile-badge {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 28px;
+      height: 28px;
+      background: var(--primary-gradient);
+      border-radius: 50%;
+      border: 3px solid white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .profile-badge svg {
+      width: 14px;
+      height: 14px;
+      color: white;
+    }
+    .profile-name {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .profile-email {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+    .stats-section {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      padding: 20px;
+      background: var(--bg-light);
+      margin: 0 20px;
+      border-radius: var(--radius-lg);
+      margin-top: -20px;
+      position: relative;
+      box-shadow: var(--shadow-md);
+    }
+    .stat-item {
+      text-align: center;
+      position: relative;
+    }
+    .stat-item:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 1px;
+      height: 32px;
+      background: var(--border-light);
+    }
+    .stat-value {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--primary-start);
+      margin-bottom: 4px;
+    }
+    .stat-label {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+    .menu-section {
+      margin-top: 24px;
+    }
+    .menu-title {
+      padding: 0 20px;
+      margin-bottom: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+    .menu-list {
+      background: var(--bg-white);
+    }
+    .menu-item {
+      display: flex;
+      align-items: center;
+      padding: 16px 20px;
+      text-decoration: none;
+      color: var(--text-primary);
+      border-bottom: 1px solid var(--border-light);
+    }
+    .menu-item:last-child {
+      border-bottom: none;
+    }
+    .menu-item-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--bg-light);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 12px;
+    }
+    .menu-item-icon svg {
+      width: 20px;
+      height: 20px;
+      color: var(--text-secondary);
+    }
+    .menu-item-content {
+      flex: 1;
+    }
+    .menu-item-title {
+      font-size: 15px;
+      font-weight: 500;
+    }
+    .menu-item-subtitle {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+    .menu-item-arrow {
+      color: var(--text-muted);
+    }
+    .menu-item-arrow svg {
+      width: 20px;
+      height: 20px;
+    }
+    .upcoming-trip {
+      margin: 20px;
+      background: var(--primary-gradient);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      color: white;
+    }
+    .upcoming-trip-label {
+      font-size: 12px;
+      opacity: 0.9;
+      margin-bottom: 8px;
+    }
+    .upcoming-trip-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .upcoming-trip-date {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+    .upcoming-trip-btn {
+      margin-top: 12px;
+      padding: 8px 16px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 500;
+      border: none;
+      color: white;
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+  <div class="mobile-container">
+    <!-- Header -->
+    <header class="header">
+      <span class="header-title">마이페이지</span>
+      <svg class="header-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+      </svg>
+    </header>
+
+    <!-- Content -->
+    <div class="content">
+      <!-- Profile Section -->
+      <div class="profile-section">
+        <div class="profile-avatar-wrapper">
+          <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200" alt="프로필" class="profile-avatar">
+          <div class="profile-badge">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+            </svg>
+          </div>
+        </div>
+        <h2 class="profile-name">김민수</h2>
+        <p class="profile-email">minsu.kim@email.com</p>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-section">
+        <div class="stat-item">
+          <p class="stat-value">5</p>
+          <p class="stat-label">참여 여행</p>
+        </div>
+        <div class="stat-item">
+          <p class="stat-value">3</p>
+          <p class="stat-label">작성 후기</p>
+        </div>
+        <div class="stat-item">
+          <p class="stat-value">12</p>
+          <p class="stat-label">찜한 코스</p>
+        </div>
+      </div>
+
+      <!-- Upcoming Trip -->
+      <div class="upcoming-trip">
+        <p class="upcoming-trip-label">다가오는 여행</p>
+        <p class="upcoming-trip-title">제주 힐링 3박 4일</p>
+        <p class="upcoming-trip-date">2025.01.25 - 01.28</p>
+        <button class="upcoming-trip-btn">상세보기</button>
+      </div>
+
+      <!-- Menu Section -->
+      <div class="menu-section">
+        <p class="menu-title">내 활동</p>
+        <div class="menu-list">
+          <a href="#" class="menu-item">
+            <div class="menu-item-icon">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+              </svg>
+            </div>
+            <div class="menu-item-content">
+              <p class="menu-item-title">내 신청 내역</p>
+              <p class="menu-item-subtitle">신청한 코스와 파티</p>
+            </div>
+            <div class="menu-item-arrow">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </div>
+          </a>
+          <a href="#" class="menu-item">
+            <div class="menu-item-icon">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+              </svg>
+            </div>
+            <div class="menu-item-content">
+              <p class="menu-item-title">결제 내역</p>
+              <p class="menu-item-subtitle">결제 및 환불 내역</p>
+            </div>
+            <div class="menu-item-arrow">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </div>
+          </a>
+          <a href="#" class="menu-item">
+            <div class="menu-item-icon">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
+              </svg>
+            </div>
+            <div class="menu-item-content">
+              <p class="menu-item-title">내 후기</p>
+              <p class="menu-item-subtitle">작성한 여행 후기</p>
+            </div>
+            <div class="menu-item-arrow">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Settings Section -->
+      <div class="menu-section">
+        <p class="menu-title">설정</p>
+        <div class="menu-list">
+          <a href="#" class="menu-item">
+            <div class="menu-item-icon">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+              </svg>
+            </div>
+            <div class="menu-item-content">
+              <p class="menu-item-title">알림 설정</p>
+            </div>
+            <div class="menu-item-arrow">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </div>
+          </a>
+          <a href="#" class="menu-item">
+            <div class="menu-item-icon">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+            </div>
+            <div class="menu-item-content">
+              <p class="menu-item-title">고객센터</p>
+            </div>
+            <div class="menu-item-arrow">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+      <a href="home.html" class="nav-item">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+        </svg>
+        <span>홈</span>
+      </a>
+      <a href="#" class="nav-item">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+        </svg>
+        <span>검색</span>
+      </a>
+      <a href="#" class="nav-item">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+        </svg>
+        <span>찜</span>
+      </a>
+      <a href="#" class="nav-item active">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+        </svg>
+        <span>마이</span>
+      </a>
+    </nav>
+  </div>
+</body>
+</html>

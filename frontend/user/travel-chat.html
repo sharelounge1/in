@@ -1,523 +1,361 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>채팅 - TRAVELY</title>
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
-    <link rel="stylesheet" href="../shared/aurora-style.css">
-    <style>
-        .chat-container {
-            padding-bottom: 80px;
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-        }
-
-        /* Chat Header */
-        .chat-header {
-            padding: 16px 20px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            background: rgba(15, 15, 26, 0.95);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .chat-back {
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: var(--radius-md);
-            background: var(--bg-glass);
-            color: var(--text-primary);
-            text-decoration: none;
-            font-size: 18px;
-        }
-
-        .chat-user {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .chat-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid var(--aurora-purple);
-        }
-
-        .chat-user-info {
-            flex: 1;
-        }
-
-        .chat-user-name {
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        .chat-user-status {
-            font-size: 11px;
-            color: var(--success);
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .chat-user-status::before {
-            content: '';
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: var(--success);
-        }
-
-        .chat-menu-btn {
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: var(--radius-md);
-            background: var(--bg-glass);
-            color: var(--text-primary);
-            border: none;
-            font-size: 18px;
-            cursor: pointer;
-        }
-
-        /* Chat Messages */
-        .chat-messages {
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        /* Date Divider */
-        .date-divider {
-            text-align: center;
-            position: relative;
-            margin: 8px 0;
-        }
-
-        .date-divider span {
-            display: inline-block;
-            padding: 6px 16px;
-            background: var(--bg-glass);
-            border-radius: var(--radius-full);
-            font-size: 11px;
-            color: var(--text-muted);
-        }
-
-        /* Message Bubble */
-        .message-group {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .message-group.received {
-            align-items: flex-start;
-        }
-
-        .message-group.sent {
-            align-items: flex-end;
-        }
-
-        .message-wrapper {
-            display: flex;
-            align-items: flex-end;
-            gap: 8px;
-            max-width: 80%;
-        }
-
-        .message-group.sent .message-wrapper {
-            flex-direction: row-reverse;
-        }
-
-        .message-avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            object-fit: cover;
-            flex-shrink: 0;
-        }
-
-        .message-content {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .message-sender {
-            font-size: 11px;
-            color: var(--text-muted);
-            margin-left: 4px;
-        }
-
-        .message-bubble {
-            padding: 12px 16px;
-            border-radius: 18px;
-            font-size: 14px;
-            line-height: 1.5;
-            word-break: break-word;
-        }
-
-        .message-group.received .message-bubble {
-            background: var(--bg-glass);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-bottom-left-radius: 4px;
-        }
-
-        .message-group.sent .message-bubble {
-            background: var(--gradient-primary);
-            border-bottom-right-radius: 4px;
-        }
-
-        .message-time {
-            font-size: 10px;
-            color: var(--text-muted);
-            margin: 0 4px;
-        }
-
-        /* Message with Image */
-        .message-image {
-            max-width: 200px;
-            border-radius: var(--radius-md);
-            margin-bottom: 8px;
-        }
-
-        /* Read Status */
-        .message-read {
-            font-size: 10px;
-            color: var(--aurora-cyan);
-        }
-
-        /* Chat Input */
-        .chat-input-wrap {
-            position: fixed;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100%;
-            max-width: 430px;
-            padding: 12px 16px 24px;
-            background: rgba(26, 26, 46, 0.95);
-            backdrop-filter: blur(20px);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .chat-input-container {
-            display: flex;
-            align-items: flex-end;
-            gap: 8px;
-        }
-
-        .chat-input-actions {
-            display: flex;
-            gap: 4px;
-        }
-
-        .chat-action-btn {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: var(--bg-glass);
-            border: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-secondary);
-            font-size: 18px;
-            cursor: pointer;
-        }
-
-        .chat-input-field {
-            flex: 1;
-            min-height: 40px;
-            max-height: 120px;
-            padding: 10px 16px;
-            background: var(--bg-glass);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            color: var(--text-primary);
-            font-size: 14px;
-            resize: none;
-            outline: none;
-        }
-
-        .chat-input-field::placeholder {
-            color: var(--text-muted);
-        }
-
-        .chat-send-btn {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: var(--gradient-primary);
-            border: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 18px;
-            cursor: pointer;
-            flex-shrink: 0;
-        }
-
-        .chat-send-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        /* Typing Indicator */
-        .typing-indicator {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 0 4px;
-        }
-
-        .typing-dots {
-            display: flex;
-            gap: 4px;
-        }
-
-        .typing-dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: var(--text-muted);
-            animation: typing 1.4s infinite;
-        }
-
-        .typing-dot:nth-child(2) {
-            animation-delay: 0.2s;
-        }
-
-        .typing-dot:nth-child(3) {
-            animation-delay: 0.4s;
-        }
-
-        @keyframes typing {
-            0%, 60%, 100% {
-                transform: translateY(0);
-                opacity: 0.4;
-            }
-            30% {
-                transform: translateY(-4px);
-                opacity: 1;
-            }
-        }
-
-        .typing-text {
-            font-size: 11px;
-            color: var(--text-muted);
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>채팅 - TRAVELY</title>
+  <link rel="stylesheet" href="../shared/clean-style.css">
+  <style>
+    .chat-container {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+    .chat-header {
+      display: flex;
+      align-items: center;
+      padding: 16px 20px;
+      background: var(--bg-white);
+      border-bottom: 1px solid var(--border-light);
+    }
+    .chat-header-back {
+      background: none;
+      border: none;
+      cursor: pointer;
+      margin-right: 12px;
+    }
+    .chat-header-back svg {
+      width: 24px;
+      height: 24px;
+      color: var(--text-secondary);
+    }
+    .chat-header-info {
+      flex: 1;
+    }
+    .chat-header-title {
+      font-size: 16px;
+      font-weight: 600;
+    }
+    .chat-header-count {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+    .chat-header-menu {
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+    .chat-header-menu svg {
+      width: 24px;
+      height: 24px;
+      color: var(--text-secondary);
+    }
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px 20px;
+      background: var(--bg-light);
+    }
+    .message-date {
+      text-align: center;
+      margin: 16px 0;
+    }
+    .message-date span {
+      display: inline-block;
+      padding: 6px 12px;
+      background: var(--bg-white);
+      border-radius: 100px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .message-group {
+      margin-bottom: 16px;
+    }
+    .message-sender {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .message-sender.me {
+      flex-direction: row-reverse;
+    }
+    .message-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+    .message-content {
+      max-width: 70%;
+    }
+    .message-sender-name {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-bottom: 4px;
+    }
+    .message-sender.me .message-sender-name {
+      display: none;
+    }
+    .message-bubble {
+      padding: 10px 14px;
+      border-radius: var(--radius-md);
+      font-size: 14px;
+      line-height: 1.5;
+      margin-bottom: 4px;
+    }
+    .message-sender:not(.me) .message-bubble {
+      background: var(--bg-white);
+      color: var(--text-primary);
+      border-bottom-left-radius: 4px;
+    }
+    .message-sender.me .message-bubble {
+      background: var(--primary-gradient);
+      color: white;
+      border-bottom-right-radius: 4px;
+    }
+    .message-time {
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+    .message-sender.me .message-time {
+      text-align: right;
+    }
+    .notice-message {
+      text-align: center;
+      padding: 12px;
+      margin-bottom: 16px;
+    }
+    .notice-message-content {
+      display: inline-block;
+      padding: 10px 16px;
+      background: rgba(124, 58, 237, 0.1);
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      color: var(--primary-start);
+    }
+    .notice-message-content svg {
+      width: 14px;
+      height: 14px;
+      display: inline;
+      vertical-align: middle;
+      margin-right: 4px;
+    }
+    .chat-input-area {
+      padding: 12px 20px;
+      background: var(--bg-white);
+      border-top: 1px solid var(--border-light);
+    }
+    .chat-input-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .chat-attach-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .chat-attach-btn svg {
+      width: 24px;
+      height: 24px;
+      color: var(--text-muted);
+    }
+    .chat-input {
+      flex: 1;
+      padding: 12px 16px;
+      border: 1px solid var(--border-light);
+      border-radius: 100px;
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+    }
+    .chat-input:focus {
+      border-color: var(--primary-start);
+    }
+    .chat-send-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--primary-gradient);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .chat-send-btn svg {
+      width: 20px;
+      height: 20px;
+      color: white;
+    }
+    .image-message {
+      max-width: 200px;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin-bottom: 4px;
+    }
+    .image-message img {
+      width: 100%;
+      display: block;
+    }
+  </style>
 </head>
 <body>
-    <div class="aurora-bg">
-        <div class="aurora-orb aurora-orb-1"></div>
-        <div class="aurora-orb aurora-orb-2"></div>
-        <div class="aurora-orb aurora-orb-3"></div>
-    </div>
+  <div class="mobile-container">
+    <div class="chat-container">
+      <!-- Chat Header -->
+      <div class="chat-header">
+        <button class="chat-header-back" onclick="history.back()">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+          </svg>
+        </button>
+        <div class="chat-header-info">
+          <p class="chat-header-title">제주 힐링 3박 4일</p>
+          <p class="chat-header-count">참여자 18명</p>
+        </div>
+        <button class="chat-header-menu">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+      </div>
 
-    <div class="mobile-container chat-container">
-        <!-- Chat Header -->
-        <header class="chat-header">
-            <a href="travel-detail.html" class="chat-back">
-                <i class="ri-arrow-left-line"></i>
-            </a>
-            <div class="chat-user">
-                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100" class="chat-avatar" alt="인플루언서">
-                <div class="chat-user-info">
-                    <div class="chat-user-name">여행하는 지나</div>
-                    <div class="chat-user-status">온라인</div>
-                </div>
-            </div>
-            <button class="chat-menu-btn">
-                <i class="ri-more-2-fill"></i>
-            </button>
-        </header>
-
-        <!-- Chat Messages -->
-        <div class="chat-messages">
-            <!-- Date Divider -->
-            <div class="date-divider">
-                <span>2025년 1월 27일</span>
-            </div>
-
-            <!-- Received Message -->
-            <div class="message-group received">
-                <div class="message-wrapper">
-                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100" class="message-avatar" alt="인플루언서">
-                    <div class="message-content">
-                        <span class="message-sender">여행하는 지나</span>
-                        <div class="message-bubble">
-                            안녕하세요! 발리 여행에 참가해주셔서 감사합니다.
-                        </div>
-                        <span class="message-time">오전 10:30</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Received Message -->
-            <div class="message-group received">
-                <div class="message-wrapper">
-                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100" class="message-avatar" alt="인플루언서">
-                    <div class="message-content">
-                        <div class="message-bubble">
-                            혹시 궁금한 점이나 요청사항이 있으시면 편하게 말씀해주세요!
-                        </div>
-                        <span class="message-time">오전 10:30</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Sent Message -->
-            <div class="message-group sent">
-                <div class="message-wrapper">
-                    <div class="message-content">
-                        <div class="message-bubble">
-                            안녕하세요! 발리 여행 너무 기대됩니다.
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 4px; justify-content: flex-end;">
-                            <span class="message-read">읽음</span>
-                            <span class="message-time">오전 11:15</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Sent Message -->
-            <div class="message-group sent">
-                <div class="message-wrapper">
-                    <div class="message-content">
-                        <div class="message-bubble">
-                            한 가지 궁금한 게 있는데요, 경비에서 식사비는 따로 결제해야 하나요?
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 4px; justify-content: flex-end;">
-                            <span class="message-read">읽음</span>
-                            <span class="message-time">오전 11:16</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Received Message with Image -->
-            <div class="message-group received">
-                <div class="message-wrapper">
-                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100" class="message-avatar" alt="인플루언서">
-                    <div class="message-content">
-                        <span class="message-sender">여행하는 지나</span>
-                        <div class="message-bubble">
-                            좋은 질문이에요! 일정표에 포함된 식사는 경비에서 자동 차감되고요, 개인 식사는 따로 결제하시면 됩니다.
-                        </div>
-                        <span class="message-time">오전 11:45</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Received Message -->
-            <div class="message-group received">
-                <div class="message-wrapper">
-                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100" class="message-avatar" alt="인플루언서">
-                    <div class="message-content">
-                        <div class="message-bubble">
-                            일정표에 표시된 식당들은 제가 직접 가본 곳들이라 맛은 보장해요!
-                        </div>
-                        <span class="message-time">오전 11:45</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Sent Message -->
-            <div class="message-group sent">
-                <div class="message-wrapper">
-                    <div class="message-content">
-                        <div class="message-bubble">
-                            아 그렇군요! 자세한 설명 감사합니다. 그리고 혹시 우붓 외에 다른 지역도 방문하나요?
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 4px; justify-content: flex-end;">
-                            <span class="message-read">읽음</span>
-                            <span class="message-time">오후 12:03</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Received Message -->
-            <div class="message-group received">
-                <div class="message-wrapper">
-                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100" class="message-avatar" alt="인플루언서">
-                    <div class="message-content">
-                        <span class="message-sender">여행하는 지나</span>
-                        <div class="message-bubble">
-                            네! 우붓, 스미냑, 울루와뚜까지 발리의 핵심 지역을 다 돌아봐요. 일정표에서 확인해보세요!
-                        </div>
-                        <span class="message-time">오후 12:30</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Sent Message -->
-            <div class="message-group sent">
-                <div class="message-wrapper">
-                    <div class="message-content">
-                        <div class="message-bubble">
-                            완전 기대되네요! 감사합니다.
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 4px; justify-content: flex-end;">
-                            <span class="message-read">읽음</span>
-                            <span class="message-time">오후 12:35</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Typing Indicator -->
-            <div class="message-group received">
-                <div class="message-wrapper">
-                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100" class="message-avatar" alt="인플루언서">
-                    <div class="typing-indicator">
-                        <div class="typing-dots">
-                            <div class="typing-dot"></div>
-                            <div class="typing-dot"></div>
-                            <div class="typing-dot"></div>
-                        </div>
-                        <span class="typing-text">입력 중...</span>
-                    </div>
-                </div>
-            </div>
+      <!-- Chat Messages -->
+      <div class="chat-messages">
+        <div class="message-date">
+          <span>2025년 1월 26일 (일)</span>
         </div>
 
-        <!-- Chat Input -->
-        <div class="chat-input-wrap">
-            <div class="chat-input-container">
-                <div class="chat-input-actions">
-                    <button class="chat-action-btn">
-                        <i class="ri-add-line"></i>
-                    </button>
-                </div>
-                <textarea class="chat-input-field" placeholder="메시지를 입력하세요..." rows="1"></textarea>
-                <button class="chat-send-btn">
-                    <i class="ri-send-plane-2-fill"></i>
-                </button>
-            </div>
+        <!-- Notice Message -->
+        <div class="notice-message">
+          <div class="notice-message-content">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"/>
+            </svg>
+            새 공지: 2일차 일정 변경 안내
+          </div>
         </div>
+
+        <!-- Host Message -->
+        <div class="message-group">
+          <div class="message-sender">
+            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100" alt="여행하는 지민" class="message-avatar">
+            <div class="message-content">
+              <p class="message-sender-name">여행하는 지민</p>
+              <div class="message-bubble">안녕하세요 여러분! 오늘 한라산 트레킹 어떠셨나요? 다들 수고 많으셨습니다!</div>
+              <p class="message-time">오후 1:15</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Other User Message -->
+        <div class="message-group">
+          <div class="message-sender">
+            <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100" alt="이서연" class="message-avatar">
+            <div class="message-content">
+              <p class="message-sender-name">이서연</p>
+              <div class="message-bubble">정말 힘들었지만 정상에서 보는 경치가 너무 좋았어요! 사진 공유해도 될까요?</div>
+              <p class="message-time">오후 1:18</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Image Message -->
+        <div class="message-group">
+          <div class="message-sender">
+            <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100" alt="이서연" class="message-avatar">
+            <div class="message-content">
+              <p class="message-sender-name">이서연</p>
+              <div class="image-message">
+                <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=400" alt="한라산 풍경">
+              </div>
+              <p class="message-time">오후 1:19</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- My Message -->
+        <div class="message-group">
+          <div class="message-sender me">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100" alt="나" class="message-avatar">
+            <div class="message-content">
+              <p class="message-sender-name">나</p>
+              <div class="message-bubble">와 사진 정말 잘 나왔네요! 저도 공유할게요</div>
+              <p class="message-time">오후 1:22</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Other User Message -->
+        <div class="message-group">
+          <div class="message-sender">
+            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100" alt="박준혁" class="message-avatar">
+            <div class="message-content">
+              <p class="message-sender-name">박준혁</p>
+              <div class="message-bubble">다들 정상까지 완주하셔서 대단해요! 오후 산방산 일몰도 기대됩니다</div>
+              <p class="message-time">오후 1:25</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Host Message -->
+        <div class="message-group">
+          <div class="message-sender">
+            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100" alt="여행하는 지민" class="message-avatar">
+            <div class="message-content">
+              <p class="message-sender-name">여행하는 지민</p>
+              <div class="message-bubble">지금 1100고지 휴게소에서 점심 먹고 있는데, 도시락이 정말 맛있어요! 에너지 충전하시고 3시에 산방산으로 출발합니다!</div>
+              <p class="message-time">오후 1:30</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Other User Message -->
+        <div class="message-group">
+          <div class="message-sender">
+            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100" alt="최유진" class="message-avatar">
+            <div class="message-content">
+              <p class="message-sender-name">최유진</p>
+              <div class="message-bubble">저녁 흑돼지 너무 기대돼요</div>
+              <p class="message-time">오후 1:32</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- My Message -->
+        <div class="message-group">
+          <div class="message-sender me">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100" alt="나" class="message-avatar">
+            <div class="message-content">
+              <p class="message-sender-name">나</p>
+              <div class="message-bubble">저도요! 제주 흑돼지 처음 먹어봐요</div>
+              <p class="message-time">오후 1:35</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chat Input Area -->
+      <div class="chat-input-area">
+        <div class="chat-input-wrapper">
+          <button class="chat-attach-btn">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+            </svg>
+          </button>
+          <input type="text" class="chat-input" placeholder="메시지를 입력하세요">
+          <button class="chat-send-btn">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+            </svg>
+          </button>
+        </div>
+      </div>
     </div>
+  </div>
 </body>
 </html>

@@ -1,432 +1,238 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TRAVELY Frontend - All Screens</title>
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --bg: #0f0f1a;
-            --card: rgba(255, 255, 255, 0.05);
-            --glass: rgba(255, 255, 255, 0.1);
-            --text: #ffffff;
-            --text-secondary: rgba(255, 255, 255, 0.7);
-            --purple: #667eea;
-            --pink: #f093fb;
-            --cyan: #4fd1c5;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans KR', sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            min-height: 100vh;
-            padding: 40px 20px;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        h1 {
-            text-align: center;
-            font-size: 36px;
-            font-weight: 800;
-            margin-bottom: 8px;
-            background: linear-gradient(135deg, var(--purple), var(--pink));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .subtitle {
-            text-align: center;
-            color: var(--text-secondary);
-            margin-bottom: 48px;
-        }
-
-        .section {
-            margin-bottom: 48px;
-        }
-
-        .section-title {
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 24px;
-            padding-left: 16px;
-            border-left: 4px solid var(--purple);
-        }
-
-        .section-title span {
-            font-size: 14px;
-            color: var(--text-secondary);
-            margin-left: 12px;
-        }
-
-        .cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 16px;
-        }
-
-        .card {
-            background: var(--card);
-            border-radius: 16px;
-            padding: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
-            text-decoration: none;
-            color: var(--text);
-            display: block;
-        }
-
-        .card:hover {
-            transform: translateY(-4px);
-            border-color: var(--purple);
-            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.2);
-        }
-
-        .card-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            margin-bottom: 16px;
-        }
-
-        .card-icon.purple {
-            background: rgba(102, 126, 234, 0.2);
-            color: var(--purple);
-        }
-
-        .card-icon.pink {
-            background: rgba(240, 147, 251, 0.2);
-            color: var(--pink);
-        }
-
-        .card-icon.cyan {
-            background: rgba(79, 209, 197, 0.2);
-            color: var(--cyan);
-        }
-
-        .card-title {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .card-desc {
-            font-size: 13px;
-            color: var(--text-secondary);
-        }
-
-        .badge {
-            display: inline-block;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 10px;
-            font-weight: 600;
-            margin-left: 8px;
-        }
-
-        .badge-new {
-            background: rgba(240, 147, 251, 0.2);
-            color: var(--pink);
-        }
-
-        .badge-important {
-            background: rgba(79, 209, 197, 0.2);
-            color: var(--cyan);
-        }
-
-        @media (max-width: 768px) {
-            .cards {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TRAVELY - Clean White Design</title>
+  <link rel="stylesheet" href="shared/clean-style.css">
+  <style>
+    body {
+      background: var(--bg-light);
+      min-height: 100vh;
+    }
+    .preview-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+    .preview-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+    .preview-title {
+      font-size: 36px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      background: var(--primary-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .preview-subtitle {
+      font-size: 16px;
+      color: var(--text-secondary);
+      margin-bottom: 16px;
+    }
+    .preview-stats {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      margin-top: 24px;
+    }
+    .stat-item {
+      text-align: center;
+    }
+    .stat-value {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--primary-start);
+    }
+    .stat-label {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+    .section {
+      margin-bottom: 48px;
+    }
+    .section-title {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 24px;
+      padding-left: 16px;
+      border-left: 4px solid var(--primary-start);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .section-title span {
+      font-size: 14px;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+    .screen-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 16px;
+    }
+    .screen-card {
+      background: var(--bg-white);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      box-shadow: var(--shadow-card);
+      text-decoration: none;
+      color: var(--text-primary);
+      transition: all 0.2s;
+      display: block;
+    }
+    .screen-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+    }
+    .screen-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-md);
+      background: rgba(124, 58, 237, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 12px;
+    }
+    .screen-icon svg {
+      width: 24px;
+      height: 24px;
+      color: var(--primary-start);
+    }
+    .screen-name {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .screen-desc {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+    .backup-notice {
+      background: rgba(16, 185, 129, 0.1);
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .backup-notice svg {
+      width: 24px;
+      height: 24px;
+      color: #10B981;
+      flex-shrink: 0;
+    }
+    .backup-notice-text {
+      font-size: 14px;
+      color: #10B981;
+    }
+    .backup-notice-text strong {
+      font-weight: 600;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>TRAVELY Frontend</h1>
-        <p class="subtitle">Aurora Gradient 디자인 컨셉 - 전체 화면 목록</p>
+  <div class="preview-container">
+    <header class="preview-header">
+      <h1 class="preview-title">TRAVELY</h1>
+      <p class="preview-subtitle">인플루언서 맞춤형 공동 여행 플랫폼 - Clean White Design</p>
+      <div class="preview-stats">
+        <div class="stat-item">
+          <p class="stat-value">23</p>
+          <p class="stat-label">유저 화면</p>
+        </div>
+        <div class="stat-item">
+          <p class="stat-value">19</p>
+          <p class="stat-label">인플루언서 화면</p>
+        </div>
+        <div class="stat-item">
+          <p class="stat-value">8</p>
+          <p class="stat-label">관리자 화면</p>
+        </div>
+      </div>
+    </header>
 
-        <!-- User App -->
-        <section class="section">
-            <h2 class="section-title">유저 앱 <span>User App (Mobile) - 23개 화면</span></h2>
-            <div class="cards">
-                <a href="user/login.html" class="card">
-                    <div class="card-icon purple"><i class="ri-login-box-line"></i></div>
-                    <div class="card-title">로그인</div>
-                    <div class="card-desc">소셜 로그인 (카카오, 네이버, 애플)</div>
-                </a>
-                <a href="user/terms-agreement.html" class="card">
-                    <div class="card-icon purple"><i class="ri-file-list-3-line"></i></div>
-                    <div class="card-title">약관 동의</div>
-                    <div class="card-desc">필수/선택 약관 동의</div>
-                </a>
-                <a href="user/home.html" class="card">
-                    <div class="card-icon purple"><i class="ri-home-5-line"></i></div>
-                    <div class="card-title">홈</div>
-                    <div class="card-desc">메인 화면, 서비스 소개, 내 인플루언서</div>
-                </a>
-                <a href="user/course-landing.html" class="card">
-                    <div class="card-icon purple"><i class="ri-compass-3-line"></i></div>
-                    <div class="card-title">코스 상세 (모집 링크)<span class="badge badge-important">중요</span></div>
-                    <div class="card-desc">인플루언서가 공유하는 모집 링크 화면</div>
-                </a>
-                <a href="user/course-apply.html" class="card">
-                    <div class="card-icon purple"><i class="ri-edit-line"></i></div>
-                    <div class="card-title">코스 신청</div>
-                    <div class="card-desc">신청 폼, 결제 수단 선택</div>
-                </a>
-                <a href="user/payment-complete.html" class="card">
-                    <div class="card-icon purple"><i class="ri-checkbox-circle-line"></i></div>
-                    <div class="card-title">결제 완료</div>
-                    <div class="card-desc">결제 성공 안내</div>
-                </a>
-                <a href="user/parties.html" class="card">
-                    <div class="card-icon purple"><i class="ri-goblet-line"></i></div>
-                    <div class="card-title">파티 목록<span class="badge badge-new">NEW</span></div>
-                    <div class="card-desc">지역/날짜 필터, 파티 검색</div>
-                </a>
-                <a href="user/party-detail.html" class="card">
-                    <div class="card-icon purple"><i class="ri-goblet-fill"></i></div>
-                    <div class="card-title">파티 상세</div>
-                    <div class="card-desc">파티 정보, 장소, 신청하기</div>
-                </a>
-                <a href="user/party-apply.html" class="card">
-                    <div class="card-icon purple"><i class="ri-edit-2-line"></i></div>
-                    <div class="card-title">파티 신청</div>
-                    <div class="card-desc">신청 폼, 결제</div>
-                </a>
-                <a href="user/my-applications.html" class="card">
-                    <div class="card-icon purple"><i class="ri-file-list-2-line"></i></div>
-                    <div class="card-title">내 신청</div>
-                    <div class="card-desc">신청 목록, 상태별 필터</div>
-                </a>
-                <a href="user/active-travels.html" class="card">
-                    <div class="card-icon purple"><i class="ri-suitcase-3-line"></i></div>
-                    <div class="card-title">진행 중 여행</div>
-                    <div class="card-desc">확정된 여행 목록, D-Day</div>
-                </a>
-                <a href="user/travel-detail.html" class="card">
-                    <div class="card-icon purple"><i class="ri-route-line"></i></div>
-                    <div class="card-title">여행 상세<span class="badge badge-new">NEW</span></div>
-                    <div class="card-desc">공지/일정/경비/참가자 탭</div>
-                </a>
-                <a href="user/travel-announcements.html" class="card">
-                    <div class="card-icon purple"><i class="ri-megaphone-line"></i></div>
-                    <div class="card-title">공지사항 목록</div>
-                    <div class="card-desc">여행 공지사항</div>
-                </a>
-                <a href="user/travel-schedule.html" class="card">
-                    <div class="card-icon purple"><i class="ri-calendar-schedule-line"></i></div>
-                    <div class="card-title">일정 탭</div>
-                    <div class="card-desc">Day별 일정, 오늘 하이라이트</div>
-                </a>
-                <a href="user/travel-expenses.html" class="card">
-                    <div class="card-icon purple"><i class="ri-wallet-3-line"></i></div>
-                    <div class="card-title">경비 탭</div>
-                    <div class="card-desc">잔액, 충전, 거래내역</div>
-                </a>
-                <a href="user/travel-participants.html" class="card">
-                    <div class="card-icon purple"><i class="ri-team-line"></i></div>
-                    <div class="card-title">참가자 탭</div>
-                    <div class="card-desc">참가자 목록, 인스타 링크</div>
-                </a>
-                <a href="user/travel-chat.html" class="card">
-                    <div class="card-icon purple"><i class="ri-chat-3-line"></i></div>
-                    <div class="card-title">채팅</div>
-                    <div class="card-desc">인플루언서와 1:1 메시지</div>
-                </a>
-                <a href="user/notifications.html" class="card">
-                    <div class="card-icon purple"><i class="ri-notification-3-line"></i></div>
-                    <div class="card-title">알림</div>
-                    <div class="card-desc">알림 목록, 읽음/안읽음</div>
-                </a>
-                <a href="user/mypage.html" class="card">
-                    <div class="card-icon purple"><i class="ri-user-line"></i></div>
-                    <div class="card-title">마이페이지</div>
-                    <div class="card-desc">프로필, 메뉴 리스트</div>
-                </a>
-                <a href="user/inquiry.html" class="card">
-                    <div class="card-icon purple"><i class="ri-question-answer-line"></i></div>
-                    <div class="card-title">1:1 문의하기<span class="badge badge-new">NEW</span></div>
-                    <div class="card-desc">인플루언서/플랫폼 문의</div>
-                </a>
-                <a href="user/inquiry-list.html" class="card">
-                    <div class="card-icon purple"><i class="ri-list-check-2"></i></div>
-                    <div class="card-title">내 문의내역<span class="badge badge-new">NEW</span></div>
-                    <div class="card-desc">문의 목록, 답변 확인</div>
-                </a>
-                <a href="user/inquiry-detail.html" class="card">
-                    <div class="card-icon purple"><i class="ri-chat-check-line"></i></div>
-                    <div class="card-title">문의 상세<span class="badge badge-new">NEW</span></div>
-                    <div class="card-desc">문의 내용, 답변 보기</div>
-                </a>
-            </div>
-        </section>
-
-        <!-- Influencer App -->
-        <section class="section">
-            <h2 class="section-title">인플루언서 앱 <span>Influencer App (Web) - 19개 화면</span></h2>
-            <div class="cards">
-                <a href="influencer/landing.html" class="card">
-                    <div class="card-icon pink"><i class="ri-rocket-line"></i></div>
-                    <div class="card-title">랜딩 페이지<span class="badge badge-important">중요</span></div>
-                    <div class="card-desc">서비스 소개, 기능, 수수료 안내</div>
-                </a>
-                <a href="influencer/dashboard.html" class="card">
-                    <div class="card-icon pink"><i class="ri-dashboard-line"></i></div>
-                    <div class="card-title">대시보드</div>
-                    <div class="card-desc">수익 요약, 현황, 퀵 액션</div>
-                </a>
-                <a href="influencer/course-list.html" class="card">
-                    <div class="card-icon pink"><i class="ri-map-pin-line"></i></div>
-                    <div class="card-title">코스 목록</div>
-                    <div class="card-desc">상태별 필터, 코스 카드</div>
-                </a>
-                <a href="influencer/course-create.html" class="card">
-                    <div class="card-icon pink"><i class="ri-add-circle-line"></i></div>
-                    <div class="card-title">코스 생성</div>
-                    <div class="card-desc">스텝별 입력 폼</div>
-                </a>
-                <a href="influencer/course-detail.html" class="card">
-                    <div class="card-icon pink"><i class="ri-compass-3-line"></i></div>
-                    <div class="card-title">코스 상세</div>
-                    <div class="card-desc">코스 정보, 신청자 관리 진입</div>
-                </a>
-                <a href="influencer/course-edit.html" class="card">
-                    <div class="card-icon pink"><i class="ri-edit-box-line"></i></div>
-                    <div class="card-title">코스 수정<span class="badge badge-new">NEW</span></div>
-                    <div class="card-desc">코스 정보 수정, 통계, 탭 관리</div>
-                </a>
-                <a href="influencer/applications.html" class="card">
-                    <div class="card-icon pink"><i class="ri-group-line"></i></div>
-                    <div class="card-title">신청자 관리</div>
-                    <div class="card-desc">신청자 목록, 선정/미선정</div>
-                </a>
-                <a href="influencer/applicant-detail.html" class="card">
-                    <div class="card-icon pink"><i class="ri-user-search-line"></i></div>
-                    <div class="card-title">신청자 상세<span class="badge badge-new">NEW</span></div>
-                    <div class="card-desc">신청자 프로필, 승인/거절</div>
-                </a>
-                <a href="influencer/participants.html" class="card">
-                    <div class="card-icon pink"><i class="ri-team-line"></i></div>
-                    <div class="card-title">참가자 관리<span class="badge badge-new">NEW</span></div>
-                    <div class="card-desc">확정 참가자 목록, 상세정보</div>
-                </a>
-                <a href="influencer/announcements-manage.html" class="card">
-                    <div class="card-icon pink"><i class="ri-megaphone-line"></i></div>
-                    <div class="card-title">공지사항 관리<span class="badge badge-new">NEW</span></div>
-                    <div class="card-desc">공지 작성, 수정, 삭제</div>
-                </a>
-                <a href="influencer/nbang-manage.html" class="card">
-                    <div class="card-icon pink"><i class="ri-exchange-funds-line"></i></div>
-                    <div class="card-title">N빵 정산<span class="badge badge-new">NEW</span></div>
-                    <div class="card-desc">공동 경비 관리, 정산</div>
-                </a>
-                <a href="influencer/expense-status.html" class="card">
-                    <div class="card-icon pink"><i class="ri-wallet-3-line"></i></div>
-                    <div class="card-title">경비 현황<span class="badge badge-new">NEW</span></div>
-                    <div class="card-desc">충전 현황, 사용 내역</div>
-                </a>
-                <a href="influencer/settlements.html" class="card">
-                    <div class="card-icon pink"><i class="ri-money-dollar-circle-line"></i></div>
-                    <div class="card-title">정산 내역</div>
-                    <div class="card-desc">정산 목록, 상세 내역</div>
-                </a>
-                <a href="influencer/settings.html" class="card">
-                    <div class="card-icon pink"><i class="ri-settings-3-line"></i></div>
-                    <div class="card-title">설정<span class="badge badge-new">NEW</span></div>
-                    <div class="card-desc">프로필, 계좌, 알림 설정</div>
-                </a>
-                <a href="influencer/profile-settings.html" class="card">
-                    <div class="card-icon pink"><i class="ri-user-settings-line"></i></div>
-                    <div class="card-title">프로필 설정<span class="badge badge-new">NEW</span></div>
-                    <div class="card-desc">기본정보, 소개, SNS 연동</div>
-                </a>
-                <a href="influencer/account-settings.html" class="card">
-                    <div class="card-icon pink"><i class="ri-bank-card-line"></i></div>
-                    <div class="card-title">계좌 관리<span class="badge badge-new">NEW</span></div>
-                    <div class="card-desc">정산 계좌 등록/수정</div>
-                </a>
-                <a href="influencer/notification-settings.html" class="card">
-                    <div class="card-icon pink"><i class="ri-notification-3-line"></i></div>
-                    <div class="card-title">알림 설정</div>
-                    <div class="card-desc">푸시, 이메일, SMS 설정</div>
-                </a>
-                <a href="influencer/inquiries.html" class="card">
-                    <div class="card-icon pink"><i class="ri-question-answer-line"></i></div>
-                    <div class="card-title">받은 문의<span class="badge badge-new">NEW</span></div>
-                    <div class="card-desc">유저 문의 목록, 답변 대기</div>
-                </a>
-                <a href="influencer/inquiry-detail.html" class="card">
-                    <div class="card-icon pink"><i class="ri-chat-check-line"></i></div>
-                    <div class="card-title">문의 상세/답변<span class="badge badge-new">NEW</span></div>
-                    <div class="card-desc">문의 확인, 답변 작성</div>
-                </a>
-            </div>
-        </section>
-
-        <!-- Admin App -->
-        <section class="section">
-            <h2 class="section-title">관리자 앱 <span>Admin Dashboard (Web) - 8개 화면</span></h2>
-            <div class="cards">
-                <a href="admin/login.html" class="card">
-                    <div class="card-icon cyan"><i class="ri-admin-line"></i></div>
-                    <div class="card-title">관리자 로그인</div>
-                    <div class="card-desc">이메일/비밀번호 로그인</div>
-                </a>
-                <a href="admin/dashboard.html" class="card">
-                    <div class="card-icon cyan"><i class="ri-bar-chart-box-line"></i></div>
-                    <div class="card-title">대시보드</div>
-                    <div class="card-desc">통계, 차트, 처리 대기 항목</div>
-                </a>
-                <a href="admin/users.html" class="card">
-                    <div class="card-icon cyan"><i class="ri-user-search-line"></i></div>
-                    <div class="card-title">유저 관리</div>
-                    <div class="card-desc">유저 목록, 검색, 필터</div>
-                </a>
-                <a href="admin/influencers.html" class="card">
-                    <div class="card-icon cyan"><i class="ri-star-line"></i></div>
-                    <div class="card-title">인플루언서 관리</div>
-                    <div class="card-desc">인플루언서 목록, 승인/거부</div>
-                </a>
-                <a href="admin/payments.html" class="card">
-                    <div class="card-icon cyan"><i class="ri-bank-card-line"></i></div>
-                    <div class="card-title">결제 내역</div>
-                    <div class="card-desc">결제 목록, 환불 처리</div>
-                </a>
-                <a href="admin/settlements.html" class="card">
-                    <div class="card-icon cyan"><i class="ri-exchange-funds-line"></i></div>
-                    <div class="card-title">정산 관리</div>
-                    <div class="card-desc">정산 목록, 일괄 처리</div>
-                </a>
-                <a href="admin/inquiries.html" class="card">
-                    <div class="card-icon cyan"><i class="ri-question-answer-line"></i></div>
-                    <div class="card-title">문의 관리<span class="badge badge-new">NEW</span></div>
-                    <div class="card-desc">전체 문의 목록, 답변 관리</div>
-                </a>
-                <a href="admin/inquiry-detail.html" class="card">
-                    <div class="card-icon cyan"><i class="ri-chat-check-line"></i></div>
-                    <div class="card-title">문의 상세/답변<span class="badge badge-new">NEW</span></div>
-                    <div class="card-desc">문의 확인, 답변, 내부 메모</div>
-                </a>
-            </div>
-        </section>
+    <div class="backup-notice">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+      </svg>
+      <p class="backup-notice-text">
+        <strong>Aurora Gradient 디자인 백업 완료</strong> - frontend-aurora-backup 폴더에서 복구 가능
+      </p>
     </div>
+
+    <div class="section">
+      <h2 class="section-title">유저 앱 <span>23개 화면</span></h2>
+      <div class="screen-grid">
+        <a href="user/home.html" class="screen-card"><div class="screen-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg></div><h3 class="screen-name">홈</h3><p class="screen-desc">메인 홈 화면</p></a>
+        <a href="user/login.html" class="screen-card"><div class="screen-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/></svg></div><h3 class="screen-name">로그인</h3><p class="screen-desc">소셜 로그인</p></a>
+        <a href="user/terms-agreement.html" class="screen-card"><div class="screen-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div><h3 class="screen-name">약관 동의</h3><p class="screen-desc">이용약관 동의</p></a>
+        <a href="user/course-landing.html" class="screen-card"><div class="screen-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg></div><h3 class="screen-name">코스 랜딩</h3><p class="screen-desc">코스 상세 정보</p></a>
+        <a href="user/course-apply.html" class="screen-card"><div class="screen-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg></div><h3 class="screen-name">코스 신청</h3><p class="screen-desc">참가 신청 폼</p></a>
+        <a href="user/parties.html" class="screen-card"><div class="screen-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div><h3 class="screen-name">파티 목록</h3><p class="screen-desc">파티/이벤트 목록</p></a>
+        <a href="user/party-detail.html" class="screen-card"><div class="screen-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div><h3 class="screen-name">파티 상세</h3><p class="screen-desc">파티 상세 정보</p></a>
+        <a href="user/party-apply.html" class="screen-card"><div class="screen-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg></div><h3 class="screen-name">파티 신청</h3><p class="screen-desc">파티 참가 신청</p></a>
+        <a href="user/payment-complete.html" class="screen-card"><div class="screen-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div><h3 class="screen-name">결제 완료</h3><p class="screen-desc">결제 확인</p></a>
+        <a href="user/mypage.html" class="screen-card"><div class="screen-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg></div><h3 class="screen-name">마이페이지</h3><p class="screen-desc">내 정보 관리</p></a>
+        <a href="user/my-applications.html" class="screen-card"><div class="screen-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg></div><h3 class="screen-name">내 신청 목록</h3><p class="screen-desc">신청 내역</p></a>
+        <a href="user/active-travels.html" class="screen-card"><div class="screen-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064"/></svg></div><h3 class="screen-name">진행 중 여행</h3><p class="screen-desc">현재 여행</p></a>
+        <a href="user/travel-detail.html" class="screen-card"><div class="screen-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg></div><h3 class="screen-name">여행 상세</h3><p class="screen-desc">여행 정보</p></a>
+        <a href="user/travel-schedule.html" class="screen-card"><div class="screen-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></div><h3 class="screen-name">여행 일정</h3><p class="screen-desc">일자별 일정</p></a>
+        <a href="user/travel-announcements.html" class="screen-card"><div class="screen-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"/></svg></div><h3 class="screen-name">여행 공지</h3><p class="screen-desc">공지사항 목록</p></a>
+        <a href="user/announcement-detail.html" class="screen-card"><div class="screen-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg></div><h3 class="screen-name">공지 상세</h3><p class="screen-desc">공지사항 상세</p></a>
+        <a href="user/travel-participants.html" class="screen-card"><div class="screen-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg></div><h3 class="screen-name">참가자 목록</h3><p class="screen-desc">함께하는 참가자</p></a>
+        <a href="user/travel-expenses.html" class="screen-card"><div class="screen-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg></div><h3 class="screen-name">내 경비</h3><p class="screen-desc">경비 충전/사용</p></a>
+        <a href="user/travel-chat.html" class="screen-card"><div class="screen-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg></div><h3 class="screen-name">채팅</h3><p class="screen-desc">참가자 채팅</p></a>
+        <a href="user/notifications.html" class="screen-card"><div class="screen-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg></div><h3 class="screen-name">알림</h3><p class="screen-desc">알림 목록</p></a>
+        <a href="user/inquiry.html" class="screen-card"><div class="screen-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div><h3 class="screen-name">문의하기</h3><p class="screen-desc">1:1 문의</p></a>
+        <a href="user/inquiry-list.html" class="screen-card"><div class="screen-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg></div><h3 class="screen-name">문의 목록</h3><p class="screen-desc">내 문의 목록</p></a>
+        <a href="user/inquiry-detail.html" class="screen-card"><div class="screen-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"/></svg></div><h3 class="screen-name">문의 상세</h3><p class="screen-desc">문의 및 답변</p></a>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2 class="section-title">인플루언서 앱 <span>19개 화면</span></h2>
+      <div class="screen-grid">
+        <a href="influencer/landing.html" class="screen-card"><div class="screen-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg></div><h3 class="screen-name">랜딩</h3><p class="screen-desc">앱 소개</p></a>
+        <a href="influencer/dashboard.html" class="screen-card"><div class="screen-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg></div><h3 class="screen-name">대시보드</h3><p class="screen-desc">통계 및 수익</p></a>
+        <a href="influencer/course-list.html" class="screen-card"><div class="screen-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg></div><h3 class="screen-name">코스 목록</h3><p class="screen-desc">내 코스 관리</p></a>
+        <a href="influencer/course-create.html" class="screen-card"><div class="screen-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg></div><h3 class="screen-name">코스 생성</h3><p class="screen-desc">새 코스 만들기</p></a>
+        <a href="influencer/course-detail.html" class="screen-card"><div class="screen-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div><h3 class="screen-name">코스 상세</h3><p class="screen-desc">코스 정보</p></a>
+        <a href="influencer/course-edit.html" class="screen-card"><div class="screen-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></div><h3 class="screen-name">코스 수정</h3><p class="screen-desc">코스 편집</p></a>
+        <a href="influencer/applications.html" class="screen-card"><div class="screen-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div><h3 class="screen-name">신청자 목록</h3><p class="screen-desc">신청자 관리</p></a>
+        <a href="influencer/applicant-detail.html" class="screen-card"><div class="screen-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg></div><h3 class="screen-name">신청자 상세</h3><p class="screen-desc">프로필 및 선정</p></a>
+        <a href="influencer/participants.html" class="screen-card"><div class="screen-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg></div><h3 class="screen-name">참가자 관리</h3><p class="screen-desc">확정 참가자</p></a>
+        <a href="influencer/announcements-manage.html" class="screen-card"><div class="screen-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"/></svg></div><h3 class="screen-name">공지 관리</h3><p class="screen-desc">공지사항 작성</p></a>
+        <a href="influencer/expense-status.html" class="screen-card"><div class="screen-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg></div><h3 class="screen-name">경비 현황</h3><p class="screen-desc">참가자 경비</p></a>
+        <a href="influencer/nbang-manage.html" class="screen-card"><div class="screen-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg></div><h3 class="screen-name">N빵 정산</h3><p class="screen-desc">N빵 항목 관리</p></a>
+        <a href="influencer/settlements.html" class="screen-card"><div class="screen-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div><h3 class="screen-name">정산 내역</h3><p class="screen-desc">정산 및 출금</p></a>
+        <a href="influencer/settings.html" class="screen-card"><div class="screen-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/></svg></div><h3 class="screen-name">설정</h3><p class="screen-desc">설정 메뉴</p></a>
+        <a href="influencer/profile-settings.html" class="screen-card"><div class="screen-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg></div><h3 class="screen-name">프로필 설정</h3><p class="screen-desc">인플루언서 프로필</p></a>
+        <a href="influencer/account-settings.html" class="screen-card"><div class="screen-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg></div><h3 class="screen-name">계좌 설정</h3><p class="screen-desc">정산 계좌 관리</p></a>
+        <a href="influencer/notification-settings.html" class="screen-card"><div class="screen-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg></div><h3 class="screen-name">알림 설정</h3><p class="screen-desc">알림 환경 설정</p></a>
+        <a href="influencer/inquiries.html" class="screen-card"><div class="screen-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/></svg></div><h3 class="screen-name">문의 목록</h3><p class="screen-desc">받은 문의</p></a>
+        <a href="influencer/inquiry-detail.html" class="screen-card"><div class="screen-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"/></svg></div><h3 class="screen-name">문의 상세</h3><p class="screen-desc">문의 답변</p></a>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2 class="section-title">관리자 대시보드 <span>8개 화면</span></h2>
+      <div class="screen-grid">
+        <a href="admin/login.html" class="screen-card"><div class="screen-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg></div><h3 class="screen-name">로그인</h3><p class="screen-desc">관리자 로그인</p></a>
+        <a href="admin/dashboard.html" class="screen-card"><div class="screen-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg></div><h3 class="screen-name">대시보드</h3><p class="screen-desc">전체 통계</p></a>
+        <a href="admin/users.html" class="screen-card"><div class="screen-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg></div><h3 class="screen-name">사용자 관리</h3><p class="screen-desc">전체 사용자</p></a>
+        <a href="admin/influencers.html" class="screen-card"><div class="screen-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg></div><h3 class="screen-name">인플루언서 관리</h3><p class="screen-desc">승인/관리</p></a>
+        <a href="admin/payments.html" class="screen-card"><div class="screen-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg></div><h3 class="screen-name">결제 관리</h3><p class="screen-desc">전체 결제</p></a>
+        <a href="admin/settlements.html" class="screen-card"><div class="screen-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div><h3 class="screen-name">정산 관리</h3><p class="screen-desc">정산 승인</p></a>
+        <a href="admin/inquiries.html" class="screen-card"><div class="screen-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/></svg></div><h3 class="screen-name">문의 관리</h3><p class="screen-desc">전체 문의</p></a>
+        <a href="admin/inquiry-detail.html" class="screen-card"><div class="screen-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"/></svg></div><h3 class="screen-name">문의 상세</h3><p class="screen-desc">문의 상세/답변</p></a>
+      </div>
+    </div>
+  </div>
 </body>
 </html>

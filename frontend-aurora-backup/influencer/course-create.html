@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>새 코스 만들기 - TRAVELY 인플루언서</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="../shared/aurora-style.css">
+    <style>
+        .app-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background: var(--bg-secondary);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 24px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .sidebar-logo {
+            font-size: 24px;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 32px;
+        }
+
+        .sidebar-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            background: var(--bg-glass);
+            border-radius: var(--radius-lg);
+            margin-bottom: 24px;
+        }
+
+        .profile-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--aurora-purple);
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .profile-name {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .profile-handle {
+            font-size: 12px;
+            color: var(--aurora-purple);
+        }
+
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: var(--radius-md);
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .nav-item:hover {
+            background: var(--bg-glass);
+            color: var(--text-primary);
+        }
+
+        .nav-item.active {
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .nav-item i {
+            font-size: 18px;
+        }
+
+        .nav-divider {
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+            margin: 16px 0;
+        }
+
+        .nav-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 8px 16px;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 260px;
+            padding: 32px;
+        }
+
+        .main-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .back-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-md);
+            background: var(--bg-glass);
+            border: none;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 800;
+        }
+
+        /* Progress Steps */
+        .progress-steps {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+
+        .step-item {
+            display: flex;
+            align-items: center;
+        }
+
+        .step-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--bg-glass);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .step-item.active .step-circle {
+            background: var(--gradient-primary);
+            border-color: transparent;
+        }
+
+        .step-item.completed .step-circle {
+            background: var(--success);
+            border-color: transparent;
+        }
+
+        .step-text {
+            margin-left: 12px;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .step-item.active .step-text {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .step-line {
+            width: 80px;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.2);
+            margin: 0 16px;
+        }
+
+        .step-item.completed + .step-line {
+            background: var(--success);
+        }
+
+        /* Form Container */
+        .form-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .form-card {
+            background: var(--bg-glass);
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 32px;
+            margin-bottom: 24px;
+        }
+
+        .form-card-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-card-title i {
+            color: var(--aurora-purple);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group.full {
+            grid-column: span 2;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .form-label .required {
+            color: var(--error);
+            margin-left: 4px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--aurora-purple);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+        }
+
+        .form-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.5)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 16px;
+            padding-right: 40px;
+        }
+
+        .form-hint {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 6px;
+        }
+
+        /* Image Upload */
+        .image-upload {
+            border: 2px dashed rgba(255, 255, 255, 0.2);
+            border-radius: var(--radius-lg);
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .image-upload:hover {
+            border-color: var(--aurora-purple);
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .image-upload-icon {
+            font-size: 48px;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        .image-upload-text {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .image-upload-hint {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* Date Range */
+        .date-range {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .date-range input {
+            flex: 1;
+        }
+
+        .date-separator {
+            color: var(--text-muted);
+        }
+
+        /* Radio Group */
+        .radio-group {
+            display: flex;
+            gap: 12px;
+        }
+
+        .radio-item {
+            flex: 1;
+            position: relative;
+        }
+
+        .radio-item input {
+            position: absolute;
+            opacity: 0;
+        }
+
+        .radio-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .radio-item input:checked + .radio-label {
+            background: rgba(102, 126, 234, 0.2);
+            border-color: var(--aurora-purple);
+            color: var(--aurora-purple);
+        }
+
+        /* Form Actions */
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            padding-top: 24px;
+        }
+
+        .form-actions-right {
+            display: flex;
+            gap: 12px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full {
+                grid-column: span 1;
+            }
+
+            .progress-steps {
+                overflow-x: auto;
+                justify-content: flex-start;
+                padding: 0 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .radio-group {
+                flex-direction: column;
+            }
+
+            .date-range {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .date-separator {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="aurora-bg">
+        <div class="aurora-orb aurora-orb-1"></div>
+        <div class="aurora-orb aurora-orb-2"></div>
+        <div class="aurora-orb aurora-orb-3"></div>
+    </div>
+
+    <div class="app-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">TRAVELY</div>
+
+            <div class="sidebar-profile">
+                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200" class="profile-avatar" alt="프로필">
+                <div class="profile-info">
+                    <div class="profile-name">여행하는 지나</div>
+                    <div class="profile-handle">@travel_jina</div>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">
+                    <i class="ri-dashboard-line"></i>
+                    대시보드
+                </a>
+                <a href="course-list.html" class="nav-item active">
+                    <i class="ri-map-pin-line"></i>
+                    내 코스
+                </a>
+                <a href="applications.html" class="nav-item">
+                    <i class="ri-user-follow-line"></i>
+                    신청자 관리
+                </a>
+                <a href="settlements.html" class="nav-item">
+                    <i class="ri-money-dollar-circle-line"></i>
+                    정산 내역
+                </a>
+
+                <div class="nav-divider"></div>
+                <div class="nav-label">설정</div>
+
+                <a href="profile.html" class="nav-item">
+                    <i class="ri-user-settings-line"></i>
+                    프로필 설정
+                </a>
+                <a href="account.html" class="nav-item">
+                    <i class="ri-bank-card-line"></i>
+                    계좌 관리
+                </a>
+                <a href="notifications.html" class="nav-item">
+                    <i class="ri-notification-3-line"></i>
+                    알림 설정
+                </a>
+
+                <div class="nav-divider"></div>
+
+                <a href="help.html" class="nav-item">
+                    <i class="ri-question-line"></i>
+                    도움말
+                </a>
+                <a href="logout.html" class="nav-item">
+                    <i class="ri-logout-box-line"></i>
+                    로그아웃
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="main-header">
+                <div class="header-left">
+                    <a href="course-list.html" class="back-btn">
+                        <i class="ri-arrow-left-line"></i>
+                    </a>
+                    <h1 class="page-title">새 코스 만들기</h1>
+                </div>
+            </div>
+
+            <!-- Progress Steps -->
+            <div class="progress-steps">
+                <div class="step-item active">
+                    <div class="step-circle">1</div>
+                    <span class="step-text">기본 정보</span>
+                </div>
+                <div class="step-line"></div>
+                <div class="step-item">
+                    <div class="step-circle">2</div>
+                    <span class="step-text">일정 설정</span>
+                </div>
+                <div class="step-line"></div>
+                <div class="step-item">
+                    <div class="step-circle">3</div>
+                    <span class="step-text">포함사항</span>
+                </div>
+                <div class="step-line"></div>
+                <div class="step-item">
+                    <div class="step-circle">4</div>
+                    <span class="step-text">완료</span>
+                </div>
+            </div>
+
+            <!-- Form Container -->
+            <div class="form-container">
+                <!-- Basic Info -->
+                <div class="form-card">
+                    <h2 class="form-card-title">
+                        <i class="ri-information-line"></i>
+                        기본 정보
+                    </h2>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            코스 제목 <span class="required">*</span>
+                        </label>
+                        <input type="text" class="form-input" placeholder="예: 발리 럭셔리 힐링 7일">
+                        <div class="form-hint">매력적인 제목으로 참가자의 관심을 끌어보세요</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            코스 소개 <span class="required">*</span>
+                        </label>
+                        <textarea class="form-input form-textarea" placeholder="여행의 컨셉과 특별한 포인트를 소개해주세요"></textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">
+                                여행지 국가 <span class="required">*</span>
+                            </label>
+                            <select class="form-input form-select">
+                                <option value="">국가 선택</option>
+                                <option value="indonesia">인도네시아</option>
+                                <option value="japan">일본</option>
+                                <option value="france">프랑스</option>
+                                <option value="switzerland">스위스</option>
+                                <option value="usa">미국</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">
+                                상세 지역 <span class="required">*</span>
+                            </label>
+                            <input type="text" class="form-input" placeholder="예: 발리, 우붓">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Images -->
+                <div class="form-card">
+                    <h2 class="form-card-title">
+                        <i class="ri-image-line"></i>
+                        대표 이미지
+                    </h2>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            커버 이미지 <span class="required">*</span>
+                        </label>
+                        <div class="image-upload">
+                            <i class="ri-image-add-line image-upload-icon"></i>
+                            <div class="image-upload-text">클릭하여 이미지를 업로드하세요</div>
+                            <div class="image-upload-hint">권장 크기: 1200x800px, 최대 10MB</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Schedule -->
+                <div class="form-card">
+                    <h2 class="form-card-title">
+                        <i class="ri-calendar-line"></i>
+                        일정 및 모집
+                    </h2>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            여행 기간 <span class="required">*</span>
+                        </label>
+                        <div class="date-range">
+                            <input type="date" class="form-input">
+                            <span class="date-separator">~</span>
+                            <input type="date" class="form-input">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">
+                                모집 인원 <span class="required">*</span>
+                            </label>
+                            <select class="form-input form-select">
+                                <option value="">인원 선택</option>
+                                <option value="5">5명</option>
+                                <option value="8">8명</option>
+                                <option value="10">10명</option>
+                                <option value="12">12명</option>
+                                <option value="15">15명</option>
+                                <option value="20">20명</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">
+                                모집 마감일 <span class="required">*</span>
+                            </label>
+                            <input type="date" class="form-input">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pricing -->
+                <div class="form-card">
+                    <h2 class="form-card-title">
+                        <i class="ri-money-dollar-circle-line"></i>
+                        가격 설정
+                    </h2>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">
+                                참가비 <span class="required">*</span>
+                            </label>
+                            <input type="number" class="form-input" placeholder="1,890,000">
+                            <div class="form-hint">플랫폼 수수료 10%가 차감된 금액이 정산됩니다</div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">
+                                항공권 포함 여부 <span class="required">*</span>
+                            </label>
+                            <div class="radio-group">
+                                <div class="radio-item">
+                                    <input type="radio" name="flight" id="flight-included">
+                                    <label for="flight-included" class="radio-label">
+                                        <i class="ri-plane-line"></i>
+                                        포함
+                                    </label>
+                                </div>
+                                <div class="radio-item">
+                                    <input type="radio" name="flight" id="flight-excluded" checked>
+                                    <label for="flight-excluded" class="radio-label">
+                                        <i class="ri-close-line"></i>
+                                        미포함
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Target -->
+                <div class="form-card">
+                    <h2 class="form-card-title">
+                        <i class="ri-user-line"></i>
+                        참가 조건
+                    </h2>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">연령 제한</label>
+                            <div class="date-range">
+                                <input type="number" class="form-input" placeholder="20">
+                                <span class="date-separator">~</span>
+                                <input type="number" class="form-input" placeholder="39">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">성별 제한</label>
+                            <div class="radio-group">
+                                <div class="radio-item">
+                                    <input type="radio" name="gender" id="gender-all" checked>
+                                    <label for="gender-all" class="radio-label">무관</label>
+                                </div>
+                                <div class="radio-item">
+                                    <input type="radio" name="gender" id="gender-female">
+                                    <label for="gender-female" class="radio-label">여성</label>
+                                </div>
+                                <div class="radio-item">
+                                    <input type="radio" name="gender" id="gender-male">
+                                    <label for="gender-male" class="radio-label">남성</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">추가 요구사항</label>
+                        <textarea class="form-input form-textarea" placeholder="예: 수영 가능자, 기본 영어 회화 가능자"></textarea>
+                    </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="form-actions">
+                    <button class="btn btn-secondary">
+                        <i class="ri-draft-line"></i>
+                        임시 저장
+                    </button>
+                    <div class="form-actions-right">
+                        <a href="course-list.html" class="btn btn-outline">취소</a>
+                        <button class="btn btn-primary">
+                            다음 단계
+                            <i class="ri-arrow-right-line"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

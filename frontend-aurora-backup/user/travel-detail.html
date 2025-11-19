@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>여행 상세 - TRAVELY</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="../shared/aurora-style.css">
+    <style>
+        .detail-container {
+            padding-bottom: 90px;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            position: relative;
+            height: 240px;
+            overflow: hidden;
+        }
+
+        .hero-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 120px;
+            background: linear-gradient(to top, rgba(15, 15, 26, 1) 0%, transparent 100%);
+        }
+
+        .hero-back {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-md);
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            font-size: 20px;
+        }
+
+        .hero-status {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            padding: 6px 12px;
+            border-radius: var(--radius-full);
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-ongoing {
+            background: rgba(72, 187, 120, 0.9);
+        }
+
+        .status-upcoming {
+            background: rgba(66, 153, 225, 0.9);
+        }
+
+        /* Course Info */
+        .course-info {
+            padding: 0 20px;
+            margin-top: -40px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .course-title {
+            font-size: 22px;
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .course-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .course-meta-item i {
+            color: var(--aurora-purple);
+            font-size: 16px;
+            width: 20px;
+        }
+
+        /* Influencer Card */
+        .influencer-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            background: var(--bg-glass);
+            border-radius: var(--radius-lg);
+            margin-bottom: 20px;
+        }
+
+        .influencer-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--aurora-purple);
+        }
+
+        .influencer-info {
+            flex: 1;
+        }
+
+        .influencer-name {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .influencer-handle {
+            font-size: 12px;
+            color: var(--aurora-purple);
+        }
+
+        .influencer-badge {
+            padding: 4px 10px;
+            background: var(--gradient-primary);
+            border-radius: var(--radius-full);
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        /* Tabs */
+        .detail-tabs {
+            display: flex;
+            padding: 0 20px;
+            gap: 8px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+        }
+
+        .detail-tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .detail-tab {
+            padding: 10px 18px;
+            border-radius: var(--radius-full);
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            background: var(--bg-glass);
+            border: none;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .detail-tab.active {
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .detail-tab .badge-count {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 18px;
+            height: 18px;
+            padding: 0 5px;
+            background: rgba(245, 101, 101, 0.9);
+            border-radius: var(--radius-full);
+            font-size: 10px;
+            margin-left: 6px;
+        }
+
+        .detail-tab.active .badge-count {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Tab Content */
+        .tab-content {
+            padding: 0 20px;
+        }
+
+        /* Summary Cards */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .summary-item {
+            padding: 16px;
+            background: var(--bg-glass);
+            border-radius: var(--radius-lg);
+            text-align: center;
+        }
+
+        .summary-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            font-size: 18px;
+        }
+
+        .summary-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .summary-value {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .quick-action {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            padding: 16px 8px;
+            background: var(--bg-glass);
+            border-radius: var(--radius-lg);
+            text-decoration: none;
+            color: var(--text-primary);
+            transition: all 0.3s;
+        }
+
+        .quick-action:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .quick-action i {
+            font-size: 22px;
+            color: var(--aurora-purple);
+        }
+
+        .quick-action span {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        /* Recent Announcements */
+        .recent-section {
+            margin-bottom: 20px;
+        }
+
+        .recent-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .recent-title {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .recent-more {
+            font-size: 12px;
+            color: var(--aurora-purple);
+            text-decoration: none;
+        }
+
+        .announcement-preview {
+            padding: 16px;
+            background: var(--bg-glass);
+            border-radius: var(--radius-lg);
+        }
+
+        .announcement-preview-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .announcement-preview-badge {
+            padding: 3px 8px;
+            background: rgba(245, 101, 101, 0.2);
+            color: var(--error);
+            border-radius: var(--radius-full);
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .announcement-preview-date {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .announcement-preview-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .announcement-preview-text {
+            font-size: 12px;
+            color: var(--text-secondary);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* Floating Button */
+        .floating-btn {
+            position: fixed;
+            bottom: 100px;
+            right: 20px;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: var(--shadow-glow);
+            transition: all 0.3s;
+            z-index: 50;
+        }
+
+        .floating-btn:hover {
+            transform: scale(1.1);
+        }
+
+        @media (min-width: 431px) {
+            .floating-btn {
+                right: calc(50% - 215px + 20px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="aurora-bg">
+        <div class="aurora-orb aurora-orb-1"></div>
+        <div class="aurora-orb aurora-orb-2"></div>
+        <div class="aurora-orb aurora-orb-3"></div>
+    </div>
+
+    <div class="mobile-container detail-container">
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=800" class="hero-image" alt="여행">
+            <div class="hero-overlay"></div>
+            <a href="active-travels.html" class="hero-back">
+                <i class="ri-arrow-left-line"></i>
+            </a>
+            <div class="hero-status status-upcoming">D-23 출발 예정</div>
+        </div>
+
+        <!-- Course Info -->
+        <div class="course-info">
+            <h1 class="course-title">발리 럭셔리 힐링 7일</h1>
+            <div class="course-meta">
+                <div class="course-meta-item">
+                    <i class="ri-calendar-line"></i>
+                    <span>2025.02.20 (목) - 02.26 (수)</span>
+                </div>
+                <div class="course-meta-item">
+                    <i class="ri-map-pin-line"></i>
+                    <span>인도네시아, 발리</span>
+                </div>
+                <div class="course-meta-item">
+                    <i class="ri-group-line"></i>
+                    <span>참가자 12명</span>
+                </div>
+            </div>
+
+            <!-- Influencer Card -->
+            <div class="influencer-card">
+                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100" class="influencer-avatar" alt="인플루언서">
+                <div class="influencer-info">
+                    <div class="influencer-name">여행하는 지나</div>
+                    <div class="influencer-handle">@travel_jina</div>
+                </div>
+                <div class="influencer-badge">HOST</div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="detail-tabs">
+            <a href="travel-detail.html" class="detail-tab active">
+                요약
+            </a>
+            <a href="travel-announcements.html" class="detail-tab">
+                공지사항
+                <span class="badge-count">2</span>
+            </a>
+            <a href="travel-schedule.html" class="detail-tab">
+                일정
+            </a>
+            <a href="travel-expenses.html" class="detail-tab">
+                경비
+            </a>
+            <a href="travel-participants.html" class="detail-tab">
+                참가자
+            </a>
+        </div>
+
+        <!-- Tab Content -->
+        <div class="tab-content">
+            <!-- Summary Cards -->
+            <div class="summary-grid">
+                <div class="summary-item">
+                    <div class="summary-icon">
+                        <i class="ri-calendar-check-line"></i>
+                    </div>
+                    <div class="summary-label">남은 일수</div>
+                    <div class="summary-value">D-23</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-icon">
+                        <i class="ri-wallet-3-line"></i>
+                    </div>
+                    <div class="summary-label">경비 잔액</div>
+                    <div class="summary-value">500,000원</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-icon">
+                        <i class="ri-megaphone-line"></i>
+                    </div>
+                    <div class="summary-label">새 공지</div>
+                    <div class="summary-value">2개</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-icon">
+                        <i class="ri-checkbox-circle-line"></i>
+                    </div>
+                    <div class="summary-label">준비 현황</div>
+                    <div class="summary-value">3/5</div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <a href="travel-announcements.html" class="quick-action">
+                    <i class="ri-megaphone-line"></i>
+                    <span>공지</span>
+                </a>
+                <a href="travel-schedule.html" class="quick-action">
+                    <i class="ri-calendar-line"></i>
+                    <span>일정</span>
+                </a>
+                <a href="travel-expenses.html" class="quick-action">
+                    <i class="ri-wallet-3-line"></i>
+                    <span>경비</span>
+                </a>
+                <a href="travel-participants.html" class="quick-action">
+                    <i class="ri-group-line"></i>
+                    <span>참가자</span>
+                </a>
+            </div>
+
+            <!-- Recent Announcements -->
+            <div class="recent-section">
+                <div class="recent-header">
+                    <h3 class="recent-title">최근 공지사항</h3>
+                    <a href="travel-announcements.html" class="recent-more">전체보기</a>
+                </div>
+                <div class="announcement-preview">
+                    <div class="announcement-preview-header">
+                        <span class="announcement-preview-badge">NEW</span>
+                        <span class="announcement-preview-date">2시간 전</span>
+                    </div>
+                    <div class="announcement-preview-title">여행 준비물 안내</div>
+                    <div class="announcement-preview-text">
+                        안녕하세요, 여행자 여러분! 출발이 얼마 남지 않았네요. 준비물 체크리스트를 공유드립니다...
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Floating Message Button -->
+        <button class="floating-btn" onclick="location.href='travel-chat.html'">
+            <i class="ri-chat-3-line"></i>
+        </button>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <a href="home.html" class="nav-item">
+                <i class="ri-home-5-line"></i>
+                <span>홈</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="ri-sparkling-line"></i>
+                <span>파티</span>
+            </a>
+            <a href="my-applications.html" class="nav-item">
+                <i class="ri-file-list-3-line"></i>
+                <span>내신청</span>
+            </a>
+            <a href="active-travels.html" class="nav-item active">
+                <i class="ri-suitcase-3-fill"></i>
+                <span>진행중</span>
+            </a>
+            <a href="mypage.html" class="nav-item">
+                <i class="ri-user-line"></i>
+                <span>마이</span>
+            </a>
+        </nav>
+    </div>
+</body>
+</html>

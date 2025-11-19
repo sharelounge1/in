@@ -1,392 +1,318 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>설정 - TRAVELY 인플루언서</title>
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
-    <link rel="stylesheet" href="../shared/aurora-style.css">
-    <style>
-        .app-layout {
-            display: flex;
-            min-height: 100vh;
-        }
-
-        /* Sidebar */
-        .sidebar {
-            width: 260px;
-            background: var(--bg-secondary);
-            border-right: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 24px;
-            position: fixed;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            overflow-y: auto;
-            z-index: 100;
-        }
-
-        .sidebar-logo {
-            font-size: 24px;
-            font-weight: 800;
-            background: var(--gradient-primary);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 32px;
-        }
-
-        .sidebar-profile {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 16px;
-            background: var(--bg-glass);
-            border-radius: var(--radius-lg);
-            margin-bottom: 24px;
-        }
-
-        .profile-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid var(--aurora-purple);
-        }
-
-        .profile-info {
-            flex: 1;
-        }
-
-        .profile-name {
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        .profile-handle {
-            font-size: 12px;
-            color: var(--aurora-purple);
-        }
-
-        .sidebar-nav {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .nav-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 16px;
-            border-radius: var(--radius-md);
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.3s;
-        }
-
-        .nav-item:hover {
-            background: var(--bg-glass);
-            color: var(--text-primary);
-        }
-
-        .nav-item.active {
-            background: var(--gradient-primary);
-            color: white;
-        }
-
-        .nav-item i {
-            font-size: 18px;
-        }
-
-        .nav-divider {
-            height: 1px;
-            background: rgba(255, 255, 255, 0.1);
-            margin: 16px 0;
-        }
-
-        .nav-label {
-            font-size: 11px;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            padding: 8px 16px;
-        }
-
-        /* Main Content */
-        .main-content {
-            flex: 1;
-            margin-left: 260px;
-            padding: 32px;
-        }
-
-        .main-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 32px;
-        }
-
-        .page-title {
-            font-size: 28px;
-            font-weight: 800;
-        }
-
-        /* Settings Menu */
-        .settings-section {
-            margin-bottom: 32px;
-        }
-
-        .settings-section-title {
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 16px;
-            padding-left: 4px;
-        }
-
-        .settings-menu {
-            background: var(--bg-glass);
-            border-radius: var(--radius-lg);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            overflow: hidden;
-        }
-
-        .settings-item {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            padding: 20px 24px;
-            text-decoration: none;
-            color: var(--text-primary);
-            transition: all 0.3s;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .settings-item:last-child {
-            border-bottom: none;
-        }
-
-        .settings-item:hover {
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .settings-item-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: var(--radius-md);
-            background: var(--bg-glass);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            color: var(--aurora-purple);
-        }
-
-        .settings-item-content {
-            flex: 1;
-        }
-
-        .settings-item-title {
-            font-size: 15px;
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .settings-item-desc {
-            font-size: 13px;
-            color: var(--text-secondary);
-        }
-
-        .settings-item-arrow {
-            color: var(--text-muted);
-            font-size: 18px;
-        }
-
-        .settings-item.danger .settings-item-icon {
-            color: var(--error);
-        }
-
-        .settings-item.danger .settings-item-title {
-            color: var(--error);
-        }
-
-        /* Version Info */
-        .version-info {
-            text-align: center;
-            padding: 32px;
-            color: var(--text-muted);
-            font-size: 13px;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .sidebar {
-                transform: translateX(-100%);
-            }
-
-            .main-content {
-                margin-left: 0;
-                padding: 20px;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>설정 - 인플루언서</title>
+  <link rel="stylesheet" href="../shared/clean-style.css">
+  <style>
+    .content {
+      padding-bottom: 80px;
+    }
+    .profile-section {
+      padding: 24px 20px;
+      text-align: center;
+      border-bottom: 8px solid var(--bg-light);
+    }
+    .profile-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 12px;
+      border: 3px solid var(--primary-start);
+    }
+    .profile-name {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .profile-email {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+    }
+    .profile-badge {
+      display: inline-block;
+      padding: 6px 12px;
+      background: var(--primary-gradient);
+      color: white;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .settings-group {
+      padding: 12px 0;
+      border-bottom: 8px solid var(--bg-light);
+    }
+    .settings-group:last-child {
+      border-bottom: none;
+    }
+    .settings-group-title {
+      padding: 8px 20px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .settings-item {
+      display: flex;
+      align-items: center;
+      padding: 14px 20px;
+      text-decoration: none;
+      color: var(--text-primary);
+      transition: background 0.2s;
+    }
+    .settings-item:hover {
+      background: var(--bg-light);
+    }
+    .settings-item-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 14px;
+    }
+    .settings-item-icon svg {
+      width: 20px;
+      height: 20px;
+    }
+    .settings-item-icon.purple {
+      background: rgba(124, 58, 237, 0.1);
+      color: #7C3AED;
+    }
+    .settings-item-icon.blue {
+      background: rgba(59, 130, 246, 0.1);
+      color: #3B82F6;
+    }
+    .settings-item-icon.green {
+      background: rgba(16, 185, 129, 0.1);
+      color: #10B981;
+    }
+    .settings-item-icon.orange {
+      background: rgba(245, 158, 11, 0.1);
+      color: #F59E0B;
+    }
+    .settings-item-icon.red {
+      background: rgba(239, 68, 68, 0.1);
+      color: #EF4444;
+    }
+    .settings-item-icon.gray {
+      background: rgba(100, 116, 139, 0.1);
+      color: #64748B;
+    }
+    .settings-item-content {
+      flex: 1;
+    }
+    .settings-item-title {
+      font-size: 15px;
+      font-weight: 500;
+      margin-bottom: 2px;
+    }
+    .settings-item-subtitle {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+    .settings-item-arrow {
+      width: 20px;
+      height: 20px;
+      color: var(--text-muted);
+    }
+    .settings-item-badge {
+      padding: 4px 8px;
+      border-radius: 100px;
+      font-size: 11px;
+      font-weight: 500;
+      background: rgba(239, 68, 68, 0.1);
+      color: #EF4444;
+      margin-right: 8px;
+    }
+    .version-info {
+      text-align: center;
+      padding: 20px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+  </style>
 </head>
 <body>
-    <div class="aurora-bg">
-        <div class="aurora-orb aurora-orb-1"></div>
-        <div class="aurora-orb aurora-orb-2"></div>
-        <div class="aurora-orb aurora-orb-3"></div>
+  <div class="mobile-container">
+    <!-- Header -->
+    <header class="header">
+      <span class="header-title">설정</span>
+      <div style="width: 24px;"></div>
+    </header>
+
+    <!-- Content -->
+    <div class="content">
+      <!-- Profile Section -->
+      <div class="profile-section">
+        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200" alt="프로필" class="profile-avatar">
+        <h2 class="profile-name">여행하는 지민</h2>
+        <p class="profile-email">jimin.travel@email.com</p>
+        <span class="profile-badge">인플루언서</span>
+      </div>
+
+      <!-- Account Settings -->
+      <div class="settings-group">
+        <p class="settings-group-title">계정 설정</p>
+        <a href="profile-settings.html" class="settings-item">
+          <div class="settings-item-icon purple">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+            </svg>
+          </div>
+          <div class="settings-item-content">
+            <p class="settings-item-title">프로필 설정</p>
+            <p class="settings-item-subtitle">이름, 소개, 프로필 사진</p>
+          </div>
+          <svg class="settings-item-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+          </svg>
+        </a>
+        <a href="account-settings.html" class="settings-item">
+          <div class="settings-item-icon green">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+            </svg>
+          </div>
+          <div class="settings-item-content">
+            <p class="settings-item-title">정산 계좌</p>
+            <p class="settings-item-subtitle">신한은행 110-***-456789</p>
+          </div>
+          <svg class="settings-item-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+          </svg>
+        </a>
+        <a href="notification-settings.html" class="settings-item">
+          <div class="settings-item-icon blue">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+            </svg>
+          </div>
+          <div class="settings-item-content">
+            <p class="settings-item-title">알림 설정</p>
+            <p class="settings-item-subtitle">푸시 알림, 이메일 알림</p>
+          </div>
+          <svg class="settings-item-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+          </svg>
+        </a>
+      </div>
+
+      <!-- Service Settings -->
+      <div class="settings-group">
+        <p class="settings-group-title">서비스</p>
+        <a href="inquiries.html" class="settings-item">
+          <div class="settings-item-icon orange">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
+            </svg>
+          </div>
+          <div class="settings-item-content">
+            <p class="settings-item-title">받은 문의</p>
+            <p class="settings-item-subtitle">참가자 문의 및 답변</p>
+          </div>
+          <span class="settings-item-badge">3</span>
+          <svg class="settings-item-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+          </svg>
+        </a>
+        <a href="#" class="settings-item">
+          <div class="settings-item-icon gray">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+            </svg>
+          </div>
+          <div class="settings-item-content">
+            <p class="settings-item-title">이용약관</p>
+            <p class="settings-item-subtitle">서비스 이용약관</p>
+          </div>
+          <svg class="settings-item-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+          </svg>
+        </a>
+        <a href="#" class="settings-item">
+          <div class="settings-item-icon gray">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+            </svg>
+          </div>
+          <div class="settings-item-content">
+            <p class="settings-item-title">개인정보처리방침</p>
+            <p class="settings-item-subtitle">개인정보 수집 및 이용</p>
+          </div>
+          <svg class="settings-item-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+          </svg>
+        </a>
+        <a href="#" class="settings-item">
+          <div class="settings-item-icon gray">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </div>
+          <div class="settings-item-content">
+            <p class="settings-item-title">고객센터</p>
+            <p class="settings-item-subtitle">FAQ, 1:1 문의</p>
+          </div>
+          <svg class="settings-item-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+          </svg>
+        </a>
+      </div>
+
+      <!-- Account Actions -->
+      <div class="settings-group">
+        <a href="#" class="settings-item">
+          <div class="settings-item-icon red">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+            </svg>
+          </div>
+          <div class="settings-item-content">
+            <p class="settings-item-title">로그아웃</p>
+          </div>
+        </a>
+      </div>
+
+      <!-- Version Info -->
+      <div class="version-info">
+        버전 1.0.0
+      </div>
     </div>
 
-    <div class="app-layout">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="sidebar-logo">TRAVELY</div>
-
-            <div class="sidebar-profile">
-                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200" class="profile-avatar" alt="프로필">
-                <div class="profile-info">
-                    <div class="profile-name">여행하는 지나</div>
-                    <div class="profile-handle">@travel_jina</div>
-                </div>
-            </div>
-
-            <nav class="sidebar-nav">
-                <a href="dashboard.html" class="nav-item">
-                    <i class="ri-dashboard-line"></i>
-                    대시보드
-                </a>
-                <a href="course-list.html" class="nav-item">
-                    <i class="ri-map-pin-line"></i>
-                    내 코스
-                </a>
-                <a href="applications.html" class="nav-item">
-                    <i class="ri-user-follow-line"></i>
-                    신청자 관리
-                </a>
-                <a href="settlements.html" class="nav-item">
-                    <i class="ri-money-dollar-circle-line"></i>
-                    정산 내역
-                </a>
-
-                <div class="nav-divider"></div>
-                <div class="nav-label">설정</div>
-
-                <a href="settings.html" class="nav-item active">
-                    <i class="ri-settings-3-line"></i>
-                    설정
-                </a>
-
-                <div class="nav-divider"></div>
-
-                <a href="help.html" class="nav-item">
-                    <i class="ri-question-line"></i>
-                    도움말
-                </a>
-                <a href="logout.html" class="nav-item">
-                    <i class="ri-logout-box-line"></i>
-                    로그아웃
-                </a>
-            </nav>
-        </aside>
-
-        <!-- Main Content -->
-        <main class="main-content">
-            <div class="main-header">
-                <h1 class="page-title">설정</h1>
-            </div>
-
-            <!-- Account Settings -->
-            <div class="settings-section">
-                <div class="settings-section-title">계정 설정</div>
-                <div class="settings-menu">
-                    <a href="profile-settings.html" class="settings-item">
-                        <div class="settings-item-icon">
-                            <i class="ri-user-settings-line"></i>
-                        </div>
-                        <div class="settings-item-content">
-                            <div class="settings-item-title">프로필 설정</div>
-                            <div class="settings-item-desc">프로필 이미지, 활동명, SNS 링크 관리</div>
-                        </div>
-                        <i class="ri-arrow-right-s-line settings-item-arrow"></i>
-                    </a>
-                    <a href="account-settings.html" class="settings-item">
-                        <div class="settings-item-icon">
-                            <i class="ri-bank-card-line"></i>
-                        </div>
-                        <div class="settings-item-content">
-                            <div class="settings-item-title">정산 계좌</div>
-                            <div class="settings-item-desc">정산받을 계좌 정보 등록 및 변경</div>
-                        </div>
-                        <i class="ri-arrow-right-s-line settings-item-arrow"></i>
-                    </a>
-                    <a href="notification-settings.html" class="settings-item">
-                        <div class="settings-item-icon">
-                            <i class="ri-notification-3-line"></i>
-                        </div>
-                        <div class="settings-item-content">
-                            <div class="settings-item-title">알림 설정</div>
-                            <div class="settings-item-desc">푸시, 이메일, SMS 알림 관리</div>
-                        </div>
-                        <i class="ri-arrow-right-s-line settings-item-arrow"></i>
-                    </a>
-                </div>
-            </div>
-
-            <!-- Service Info -->
-            <div class="settings-section">
-                <div class="settings-section-title">서비스 정보</div>
-                <div class="settings-menu">
-                    <a href="fee-info.html" class="settings-item">
-                        <div class="settings-item-icon">
-                            <i class="ri-percent-line"></i>
-                        </div>
-                        <div class="settings-item-content">
-                            <div class="settings-item-title">수수료 안내</div>
-                            <div class="settings-item-desc">플랫폼 이용 수수료 및 정산 안내</div>
-                        </div>
-                        <i class="ri-arrow-right-s-line settings-item-arrow"></i>
-                    </a>
-                    <a href="help-center.html" class="settings-item">
-                        <div class="settings-item-icon">
-                            <i class="ri-customer-service-2-line"></i>
-                        </div>
-                        <div class="settings-item-content">
-                            <div class="settings-item-title">고객센터</div>
-                            <div class="settings-item-desc">FAQ, 1:1 문의, 공지사항</div>
-                        </div>
-                        <i class="ri-arrow-right-s-line settings-item-arrow"></i>
-                    </a>
-                </div>
-            </div>
-
-            <!-- Account Management -->
-            <div class="settings-section">
-                <div class="settings-section-title">계정 관리</div>
-                <div class="settings-menu">
-                    <a href="withdraw.html" class="settings-item danger">
-                        <div class="settings-item-icon">
-                            <i class="ri-user-unfollow-line"></i>
-                        </div>
-                        <div class="settings-item-content">
-                            <div class="settings-item-title">서비스 탈퇴</div>
-                            <div class="settings-item-desc">계정 삭제 및 서비스 탈퇴</div>
-                        </div>
-                        <i class="ri-arrow-right-s-line settings-item-arrow"></i>
-                    </a>
-                </div>
-            </div>
-
-            <!-- Version Info -->
-            <div class="version-info">
-                TRAVELY v1.0.0
-            </div>
-        </main>
-    </div>
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+      <a href="dashboard.html" class="nav-item">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+        </svg>
+        <span>홈</span>
+      </a>
+      <a href="course-list.html" class="nav-item">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+        </svg>
+        <span>코스</span>
+      </a>
+      <a href="settlements.html" class="nav-item">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+        </svg>
+        <span>정산</span>
+      </a>
+      <a href="#" class="nav-item active">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+        </svg>
+        <span>설정</span>
+      </a>
+    </nav>
+  </div>
 </body>
 </html>

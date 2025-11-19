@@ -1,401 +1,298 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>약관 동의 - TRAVELY</title>
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
-    <link rel="stylesheet" href="../shared/aurora-style.css">
-    <style>
-        .terms-container {
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-
-        .terms-content {
-            flex: 1;
-            padding: 20px;
-        }
-
-        .terms-header {
-            text-align: center;
-            margin-bottom: 32px;
-        }
-
-        .terms-title {
-            font-size: 24px;
-            font-weight: 800;
-            margin-bottom: 8px;
-        }
-
-        .terms-subtitle {
-            font-size: 14px;
-            color: var(--text-secondary);
-        }
-
-        /* All Agree Box */
-        .all-agree-box {
-            padding: 20px;
-            background: var(--gradient-primary);
-            border-radius: var(--radius-lg);
-            margin-bottom: 24px;
-        }
-
-        .all-agree-inner {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .all-agree-checkbox {
-            width: 24px;
-            height: 24px;
-            border-radius: 6px;
-            border: 2px solid rgba(255, 255, 255, 0.5);
-            background: transparent;
-            appearance: none;
-            cursor: pointer;
-            flex-shrink: 0;
-        }
-
-        .all-agree-checkbox:checked {
-            background: white;
-            border-color: white;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' fill='%23667eea' viewBox='0 0 16 16'%3E%3Cpath d='M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: center;
-        }
-
-        .all-agree-text {
-            flex: 1;
-        }
-
-        .all-agree-title {
-            font-size: 16px;
-            font-weight: 700;
-        }
-
-        .all-agree-desc {
-            font-size: 12px;
-            opacity: 0.9;
-            margin-top: 2px;
-        }
-
-        /* Terms List */
-        .terms-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-bottom: 24px;
-        }
-
-        .term-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            padding: 16px;
-            background: var(--bg-glass);
-            border-radius: var(--radius-md);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .term-checkbox {
-            width: 20px;
-            height: 20px;
-            border-radius: 4px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            background: transparent;
-            appearance: none;
-            cursor: pointer;
-            flex-shrink: 0;
-            margin-top: 2px;
-        }
-
-        .term-checkbox:checked {
-            background: var(--aurora-purple);
-            border-color: var(--aurora-purple);
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='white' viewBox='0 0 16 16'%3E%3Cpath d='M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: center;
-        }
-
-        .term-content {
-            flex: 1;
-        }
-
-        .term-title {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .term-badge {
-            font-size: 10px;
-            padding: 2px 6px;
-            border-radius: 4px;
-        }
-
-        .term-badge.required {
-            background: rgba(245, 101, 101, 0.2);
-            color: var(--error);
-        }
-
-        .term-badge.optional {
-            background: rgba(66, 153, 225, 0.2);
-            color: var(--info);
-        }
-
-        .term-desc {
-            font-size: 12px;
-            color: var(--text-secondary);
-            line-height: 1.5;
-        }
-
-        .term-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            font-size: 12px;
-            color: var(--aurora-purple);
-            text-decoration: none;
-            margin-top: 8px;
-        }
-
-        .term-link i {
-            font-size: 14px;
-        }
-
-        /* Info Box */
-        .info-box {
-            padding: 16px;
-            background: rgba(79, 209, 197, 0.1);
-            border: 1px solid rgba(79, 209, 197, 0.3);
-            border-radius: var(--radius-md);
-            margin-bottom: 24px;
-        }
-
-        .info-box-content {
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
-            font-size: 12px;
-            color: var(--text-secondary);
-            line-height: 1.6;
-        }
-
-        .info-box-content i {
-            color: var(--aurora-cyan);
-            font-size: 18px;
-            flex-shrink: 0;
-        }
-
-        /* Bottom Section */
-        .bottom-section {
-            padding: 16px 20px 32px;
-            background: rgba(15, 15, 26, 0.95);
-            backdrop-filter: blur(20px);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .next-btn {
-            width: 100%;
-            padding: 16px;
-            background: var(--bg-glass);
-            border: none;
-            border-radius: var(--radius-md);
-            color: var(--text-muted);
-            font-size: 16px;
-            font-weight: 700;
-            cursor: not-allowed;
-            transition: all 0.3s;
-        }
-
-        .next-btn.active {
-            background: var(--gradient-primary);
-            color: white;
-            cursor: pointer;
-            box-shadow: var(--shadow-glow);
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>약관 동의 - TRAVELY</title>
+  <link rel="stylesheet" href="../shared/clean-style.css">
+  <style>
+    .content {
+      padding: 20px;
+      padding-bottom: 120px;
+    }
+    .agreement-header {
+      text-align: center;
+      padding: 24px 0;
+    }
+    .agreement-title {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .agreement-subtitle {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+    .all-agree-box {
+      background: var(--bg-light);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+    .checkbox-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      cursor: pointer;
+    }
+    .checkbox-input {
+      width: 24px;
+      height: 24px;
+      border: 2px solid var(--border-medium);
+      border-radius: 6px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    .checkbox-input.checked {
+      background: var(--primary-gradient);
+      border-color: var(--primary-start);
+    }
+    .checkbox-input svg {
+      width: 14px;
+      height: 14px;
+      color: white;
+      display: none;
+    }
+    .checkbox-input.checked svg {
+      display: block;
+    }
+    .checkbox-label {
+      flex: 1;
+    }
+    .checkbox-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    .checkbox-desc {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+    .terms-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .term-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px;
+      background: var(--bg-white);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+    }
+    .term-checkbox {
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--border-medium);
+      border-radius: 4px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    .term-checkbox.checked {
+      background: var(--primary-gradient);
+      border-color: var(--primary-start);
+    }
+    .term-checkbox svg {
+      width: 12px;
+      height: 12px;
+      color: white;
+      display: none;
+    }
+    .term-checkbox.checked svg {
+      display: block;
+    }
+    .term-content {
+      flex: 1;
+    }
+    .term-title {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+    .term-required {
+      font-size: 12px;
+      color: var(--primary-start);
+      margin-left: 4px;
+    }
+    .term-optional {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-left: 4px;
+    }
+    .term-view {
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+    .term-view svg {
+      width: 20px;
+      height: 20px;
+    }
+    .bottom-bar {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 430px;
+      padding: 16px 20px;
+      background: var(--bg-white);
+      border-top: 1px solid var(--border-light);
+    }
+    .agree-btn {
+      width: 100%;
+      padding: 16px;
+      background: var(--primary-gradient);
+      color: white;
+      border-radius: var(--radius-md);
+      font-size: 16px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(124, 58, 237, 0.3);
+    }
+    .agree-btn:disabled {
+      background: var(--bg-gray);
+      color: var(--text-muted);
+      box-shadow: none;
+    }
+  </style>
 </head>
 <body>
-    <div class="aurora-bg">
-        <div class="aurora-orb aurora-orb-1"></div>
-        <div class="aurora-orb aurora-orb-2"></div>
-        <div class="aurora-orb aurora-orb-3"></div>
-    </div>
+  <div class="mobile-container">
+    <!-- Header -->
+    <header class="header">
+      <a href="login.html" style="text-decoration: none;">
+        <svg class="header-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+        </svg>
+      </a>
+      <span class="header-title">약관 동의</span>
+      <div style="width: 24px;"></div>
+    </header>
 
-    <div class="mobile-container">
-        <!-- Header -->
-        <header class="header">
-            <a href="login.html" class="header-back">
-                <i class="ri-arrow-left-line"></i>
-            </a>
-            <h1 class="header-title">약관 동의</h1>
-            <div style="width: 40px;"></div>
-        </header>
+    <!-- Content -->
+    <div class="content">
+      <div class="agreement-header">
+        <h1 class="agreement-title">서비스 이용을 위해<br>약관에 동의해주세요</h1>
+        <p class="agreement-subtitle">필수 항목에 모두 동의해야 가입이 완료됩니다</p>
+      </div>
 
-        <div class="terms-container">
-            <div class="terms-content">
-                <div class="terms-header">
-                    <h1 class="terms-title">서비스 이용약관</h1>
-                    <p class="terms-subtitle">TRAVELY 서비스 이용을 위해<br>아래 약관에 동의해주세요</p>
-                </div>
-
-                <!-- All Agree -->
-                <div class="all-agree-box">
-                    <div class="all-agree-inner">
-                        <input type="checkbox" class="all-agree-checkbox" id="allAgree">
-                        <div class="all-agree-text">
-                            <div class="all-agree-title">전체 동의</div>
-                            <div class="all-agree-desc">모든 약관에 동의합니다</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Terms List -->
-                <div class="terms-list">
-                    <div class="term-item">
-                        <input type="checkbox" class="term-checkbox required-term" id="term1">
-                        <div class="term-content">
-                            <div class="term-title">
-                                <span class="term-badge required">필수</span>
-                                이용약관 동의
-                            </div>
-                            <div class="term-desc">
-                                TRAVELY 서비스 이용에 관한 전반적인 약관입니다.
-                            </div>
-                            <a href="#" class="term-link">
-                                전체보기
-                                <i class="ri-arrow-right-s-line"></i>
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="term-item">
-                        <input type="checkbox" class="term-checkbox required-term" id="term2">
-                        <div class="term-content">
-                            <div class="term-title">
-                                <span class="term-badge required">필수</span>
-                                개인정보 수집 및 이용 동의
-                            </div>
-                            <div class="term-desc">
-                                서비스 제공을 위한 개인정보 수집 및 이용에 동의합니다.
-                            </div>
-                            <a href="#" class="term-link">
-                                전체보기
-                                <i class="ri-arrow-right-s-line"></i>
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="term-item">
-                        <input type="checkbox" class="term-checkbox required-term" id="term3">
-                        <div class="term-content">
-                            <div class="term-title">
-                                <span class="term-badge required">필수</span>
-                                전자금융거래 이용약관
-                            </div>
-                            <div class="term-desc">
-                                결제 및 환불 서비스 이용에 관한 약관입니다.
-                            </div>
-                            <a href="#" class="term-link">
-                                전체보기
-                                <i class="ri-arrow-right-s-line"></i>
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="term-item">
-                        <input type="checkbox" class="term-checkbox required-term" id="term4">
-                        <div class="term-content">
-                            <div class="term-title">
-                                <span class="term-badge required">필수</span>
-                                만 14세 이상 확인
-                            </div>
-                            <div class="term-desc">
-                                본 서비스는 만 14세 이상만 이용 가능합니다.
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="term-item">
-                        <input type="checkbox" class="term-checkbox optional-term" id="term5">
-                        <div class="term-content">
-                            <div class="term-title">
-                                <span class="term-badge optional">선택</span>
-                                마케팅 정보 수신 동의
-                            </div>
-                            <div class="term-desc">
-                                이벤트, 할인 정보 등 마케팅 정보를 카카오톡, SMS로 받을 수 있습니다.
-                            </div>
-                            <a href="#" class="term-link">
-                                전체보기
-                                <i class="ri-arrow-right-s-line"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Info Box -->
-                <div class="info-box">
-                    <div class="info-box-content">
-                        <i class="ri-shield-check-line"></i>
-                        <span>
-                            TRAVELY는 고객님의 개인정보를 안전하게 보호하며,
-                            동의 없이 제3자에게 제공하지 않습니다.
-                        </span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Bottom Section -->
-            <div class="bottom-section">
-                <button class="next-btn" id="nextBtn" onclick="location.href='home.html'">
-                    동의하고 시작하기
-                </button>
-            </div>
+      <!-- All Agree -->
+      <div class="all-agree-box">
+        <div class="checkbox-item" onclick="toggleAll()">
+          <div class="checkbox-input" id="allCheck">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
+            </svg>
+          </div>
+          <div class="checkbox-label">
+            <p class="checkbox-title">전체 동의하기</p>
+            <p class="checkbox-desc">선택 항목 포함 모든 약관에 동의합니다</p>
+          </div>
         </div>
+      </div>
+
+      <!-- Terms List -->
+      <div class="terms-list">
+        <div class="term-item">
+          <div class="term-checkbox checked" onclick="toggleCheck(this)">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
+            </svg>
+          </div>
+          <div class="term-content">
+            <span class="term-title">서비스 이용약관<span class="term-required">(필수)</span></span>
+          </div>
+          <div class="term-view">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            </svg>
+          </div>
+        </div>
+
+        <div class="term-item">
+          <div class="term-checkbox checked" onclick="toggleCheck(this)">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
+            </svg>
+          </div>
+          <div class="term-content">
+            <span class="term-title">개인정보 수집 및 이용<span class="term-required">(필수)</span></span>
+          </div>
+          <div class="term-view">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            </svg>
+          </div>
+        </div>
+
+        <div class="term-item">
+          <div class="term-checkbox checked" onclick="toggleCheck(this)">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
+            </svg>
+          </div>
+          <div class="term-content">
+            <span class="term-title">만 14세 이상 확인<span class="term-required">(필수)</span></span>
+          </div>
+          <div class="term-view">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            </svg>
+          </div>
+        </div>
+
+        <div class="term-item">
+          <div class="term-checkbox" onclick="toggleCheck(this)">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
+            </svg>
+          </div>
+          <div class="term-content">
+            <span class="term-title">마케팅 정보 수신<span class="term-optional">(선택)</span></span>
+          </div>
+          <div class="term-view">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            </svg>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <script>
-        const allAgree = document.getElementById('allAgree');
-        const requiredTerms = document.querySelectorAll('.required-term');
-        const allTerms = document.querySelectorAll('.term-checkbox');
-        const nextBtn = document.getElementById('nextBtn');
+    <!-- Bottom Bar -->
+    <div class="bottom-bar">
+      <button class="agree-btn" onclick="location.href='home.html'">동의하고 시작하기</button>
+    </div>
+  </div>
 
-        // Update button state
-        function updateButtonState() {
-            const allRequiredChecked = Array.from(requiredTerms).every(cb => cb.checked);
-            if (allRequiredChecked) {
-                nextBtn.classList.add('active');
-            } else {
-                nextBtn.classList.remove('active');
-            }
-        }
+  <script>
+    function toggleCheck(element) {
+      element.classList.toggle('checked');
+    }
 
-        // All agree checkbox
-        allAgree.addEventListener('change', () => {
-            allTerms.forEach(cb => {
-                cb.checked = allAgree.checked;
-            });
-            updateButtonState();
-        });
+    function toggleAll() {
+      const allCheck = document.getElementById('allCheck');
+      const isChecked = !allCheck.classList.contains('checked');
 
-        // Individual checkboxes
-        allTerms.forEach(cb => {
-            cb.addEventListener('change', () => {
-                allAgree.checked = Array.from(allTerms).every(c => c.checked);
-                updateButtonState();
-            });
-        });
-
-        // Initial state
-        updateButtonState();
-    </script>
+      if (isChecked) {
+        allCheck.classList.add('checked');
+        document.querySelectorAll('.term-checkbox').forEach(cb => cb.classList.add('checked'));
+      } else {
+        allCheck.classList.remove('checked');
+        document.querySelectorAll('.term-checkbox').forEach(cb => cb.classList.remove('checked'));
+      }
+    }
+  </script>
 </body>
 </html>

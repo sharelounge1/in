@@ -1,751 +1,590 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>인플루언서 목록 - 관리자 센터</title>
-    <link rel="stylesheet" href="../shared/aurora-style.css">
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
-    <style>
-        .admin-layout {
-            display: flex;
-            min-height: 100vh;
-        }
-
-        /* Sidebar */
-        .sidebar {
-            width: 260px;
-            background: var(--bg-secondary);
-            border-right: 1px solid rgba(255, 255, 255, 0.1);
-            padding: var(--spacing-lg);
-            position: fixed;
-            height: 100vh;
-            overflow-y: auto;
-        }
-
-        .sidebar-logo {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-md);
-            padding-bottom: var(--spacing-lg);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            margin-bottom: var(--spacing-lg);
-        }
-
-        .sidebar-logo-icon {
-            width: 40px;
-            height: 40px;
-            background: var(--gradient-primary);
-            border-radius: var(--radius-md);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .sidebar-logo-icon i {
-            font-size: 20px;
-            color: white;
-        }
-
-        .sidebar-logo-text {
-            font-size: 16px;
-            font-weight: 700;
-        }
-
-        .sidebar-menu {
-            list-style: none;
-        }
-
-        .sidebar-menu-item {
-            margin-bottom: var(--spacing-xs);
-        }
-
-        .sidebar-menu-link {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-md);
-            padding: 12px 16px;
-            border-radius: var(--radius-md);
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 14px;
-            transition: all 0.3s ease;
-        }
-
-        .sidebar-menu-link:hover {
-            background: var(--bg-glass);
-            color: var(--text-primary);
-        }
-
-        .sidebar-menu-link.active {
-            background: var(--gradient-primary);
-            color: white;
-        }
-
-        .sidebar-menu-link i {
-            font-size: 18px;
-        }
-
-        .sidebar-divider {
-            height: 1px;
-            background: rgba(255, 255, 255, 0.1);
-            margin: var(--spacing-md) 0;
-        }
-
-        .sidebar-section-title {
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--text-muted);
-            padding: 0 16px;
-            margin-bottom: var(--spacing-sm);
-        }
-
-        /* Main Content */
-        .main-content {
-            flex: 1;
-            margin-left: 260px;
-            padding: var(--spacing-lg);
-        }
-
-        /* Top Bar */
-        .top-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: var(--spacing-xl);
-        }
-
-        .page-title {
-            font-size: 24px;
-            font-weight: 700;
-        }
-
-        /* Status Tabs */
-        .status-tabs {
-            display: flex;
-            gap: var(--spacing-sm);
-            margin-bottom: var(--spacing-lg);
-        }
-
-        .status-tab {
-            padding: 10px 20px;
-            border-radius: var(--radius-full);
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--text-secondary);
-            background: var(--bg-glass);
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .status-tab.active {
-            background: var(--gradient-primary);
-            color: white;
-        }
-
-        .status-tab .count {
-            margin-left: var(--spacing-xs);
-            padding: 2px 6px;
-            border-radius: var(--radius-full);
-            background: rgba(255, 255, 255, 0.2);
-            font-size: 11px;
-        }
-
-        /* Filter Bar */
-        .filter-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: var(--spacing-lg);
-            gap: var(--spacing-md);
-            flex-wrap: wrap;
-        }
-
-        .search-box {
-            position: relative;
-            flex: 1;
-            max-width: 400px;
-        }
-
-        .search-box i {
-            position: absolute;
-            left: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-muted);
-        }
-
-        .search-box input {
-            width: 100%;
-            padding: 12px 16px 12px 44px;
-            background: var(--bg-glass);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: var(--radius-md);
-            color: var(--text-primary);
-            font-size: 14px;
-        }
-
-        .search-box input:focus {
-            outline: none;
-            border-color: var(--aurora-purple);
-        }
-
-        .filter-actions {
-            display: flex;
-            gap: var(--spacing-sm);
-        }
-
-        .filter-select {
-            padding: 12px 16px;
-            background: var(--bg-glass);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: var(--radius-md);
-            color: var(--text-primary);
-            font-size: 14px;
-            cursor: pointer;
-        }
-
-        /* Table */
-        .table-card {
-            padding: var(--spacing-lg);
-        }
-
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .data-table th,
-        .data-table td {
-            padding: var(--spacing-md);
-            text-align: left;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .data-table th {
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .data-table td {
-            font-size: 14px;
-        }
-
-        .data-table tbody tr:hover {
-            background: rgba(255, 255, 255, 0.02);
-        }
-
-        .user-cell {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-md);
-        }
-
-        .user-info {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .user-name {
-            font-weight: 500;
-        }
-
-        .user-handle {
-            font-size: 12px;
-            color: var(--aurora-purple);
-        }
-
-        .follower-count {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-xs);
-            font-size: 13px;
-        }
-
-        .follower-count i {
-            color: var(--aurora-pink);
-        }
-
-        .action-btns {
-            display: flex;
-            gap: var(--spacing-sm);
-        }
-
-        .action-btn {
-            padding: 8px 12px;
-            border-radius: var(--radius-sm);
-            background: var(--bg-glass);
-            border: none;
-            color: var(--text-secondary);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-xs);
-            font-size: 12px;
-            transition: all 0.3s ease;
-        }
-
-        .action-btn:hover {
-            background: var(--aurora-purple);
-            color: white;
-        }
-
-        .action-btn.approve {
-            background: rgba(72, 187, 120, 0.2);
-            color: var(--success);
-        }
-
-        .action-btn.approve:hover {
-            background: var(--success);
-            color: white;
-        }
-
-        .action-btn.reject {
-            background: rgba(245, 101, 101, 0.2);
-            color: var(--error);
-        }
-
-        .action-btn.reject:hover {
-            background: var(--error);
-            color: white;
-        }
-
-        /* Pagination */
-        .pagination {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: var(--spacing-lg);
-            padding-top: var(--spacing-lg);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .pagination-info {
-            font-size: 13px;
-            color: var(--text-secondary);
-        }
-
-        .pagination-btns {
-            display: flex;
-            gap: var(--spacing-sm);
-        }
-
-        .pagination-btn {
-            width: 36px;
-            height: 36px;
-            border-radius: var(--radius-sm);
-            background: var(--bg-glass);
-            border: none;
-            color: var(--text-secondary);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            transition: all 0.3s ease;
-        }
-
-        .pagination-btn:hover,
-        .pagination-btn.active {
-            background: var(--gradient-primary);
-            color: white;
-        }
-
-        .platform-icons {
-            display: flex;
-            gap: var(--spacing-xs);
-        }
-
-        .platform-icon {
-            width: 24px;
-            height: 24px;
-            border-radius: var(--radius-sm);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-        }
-
-        .platform-icon.instagram {
-            background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
-            color: white;
-        }
-
-        .platform-icon.youtube {
-            background: #ff0000;
-            color: white;
-        }
-
-        .platform-icon.tiktok {
-            background: #000;
-            color: white;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>인플루언서 관리 - 관리자</title>
+  <link rel="stylesheet" href="../shared/clean-style.css">
+  <style>
+    body {
+      background: var(--bg-light);
+    }
+    .admin-layout {
+      display: flex;
+      min-height: 100vh;
+    }
+    /* Sidebar */
+    .sidebar {
+      width: 260px;
+      background: var(--bg-white);
+      border-right: 1px solid var(--border-light);
+      padding: 24px 0;
+      position: fixed;
+      height: 100vh;
+      overflow-y: auto;
+    }
+    .sidebar-logo {
+      padding: 0 24px 24px;
+      border-bottom: 1px solid var(--border-light);
+      margin-bottom: 24px;
+    }
+    .sidebar-logo-text {
+      font-size: 18px;
+      font-weight: 700;
+      background: var(--primary-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .sidebar-logo-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+    .sidebar-menu {
+      list-style: none;
+    }
+    .sidebar-item {
+      margin-bottom: 4px;
+    }
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 24px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    .sidebar-link:hover {
+      background: var(--bg-light);
+      color: var(--text-primary);
+    }
+    .sidebar-link.active {
+      background: rgba(124, 58, 237, 0.1);
+      color: var(--primary-start);
+      border-right: 3px solid var(--primary-start);
+    }
+    .sidebar-link svg {
+      width: 20px;
+      height: 20px;
+    }
+    .sidebar-badge {
+      margin-left: auto;
+      background: var(--primary-gradient);
+      color: white;
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 100px;
+    }
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      margin-left: 260px;
+      padding: 32px;
+    }
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 32px;
+    }
+    .page-title {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+    .page-subtitle {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+    /* Tabs */
+    .tabs-container {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+    .tab-btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: var(--radius-md);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: var(--bg-white);
+      color: var(--text-secondary);
+    }
+    .tab-btn:hover {
+      background: var(--bg-gray);
+    }
+    .tab-btn.active {
+      background: var(--primary-gradient);
+      color: white;
+    }
+    .tab-btn .count {
+      margin-left: 6px;
+      padding: 2px 6px;
+      border-radius: 100px;
+      font-size: 11px;
+      background: rgba(255, 255, 255, 0.2);
+    }
+    .tab-btn:not(.active) .count {
+      background: var(--bg-light);
+      color: var(--text-muted);
+    }
+    /* Filters */
+    .filters-bar {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .search-box {
+      flex: 1;
+      max-width: 400px;
+      position: relative;
+    }
+    .search-input {
+      width: 100%;
+      padding: 12px 16px 12px 44px;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+      font-size: 14px;
+      font-family: inherit;
+      background: var(--bg-white);
+    }
+    .search-input:focus {
+      outline: none;
+      border-color: var(--primary-start);
+    }
+    .search-icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 18px;
+      height: 18px;
+      color: var(--text-muted);
+    }
+    /* Cards Grid */
+    .influencer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 20px;
+    }
+    .influencer-card {
+      background: var(--bg-white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      padding: 24px;
+    }
+    .influencer-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    .influencer-avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    .influencer-info {
+      flex: 1;
+    }
+    .influencer-name {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .influencer-handle {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+    .influencer-platform {
+      display: flex;
+      gap: 6px;
+    }
+    .platform-badge {
+      padding: 2px 8px;
+      border-radius: 100px;
+      font-size: 11px;
+      font-weight: 500;
+      background: var(--bg-light);
+      color: var(--text-secondary);
+    }
+    .influencer-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      padding: 16px 0;
+      border-top: 1px solid var(--border-light);
+      border-bottom: 1px solid var(--border-light);
+      margin-bottom: 16px;
+    }
+    .stat-item {
+      text-align: center;
+    }
+    .stat-value {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+    .stat-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+    .influencer-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .meta-item {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+    .meta-label {
+      color: var(--text-muted);
+    }
+    .status-badge {
+      padding: 4px 10px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .status-badge.pending {
+      background: rgba(245, 158, 11, 0.1);
+      color: #F59E0B;
+    }
+    .status-badge.approved {
+      background: rgba(16, 185, 129, 0.1);
+      color: #10B981;
+    }
+    .status-badge.rejected {
+      background: rgba(239, 68, 68, 0.1);
+      color: #EF4444;
+    }
+    .influencer-actions {
+      display: flex;
+      gap: 8px;
+    }
+    .action-btn {
+      flex: 1;
+      padding: 10px;
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      font-weight: 600;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: none;
+    }
+    .action-btn-approve {
+      background: var(--primary-gradient);
+      color: white;
+      box-shadow: 0 4px 14px rgba(124, 58, 237, 0.3);
+    }
+    .action-btn-approve:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(124, 58, 237, 0.4);
+    }
+    .action-btn-reject {
+      background: var(--bg-light);
+      color: var(--text-primary);
+    }
+    .action-btn-reject:hover {
+      background: var(--border-light);
+    }
+    .action-btn-view {
+      background: var(--bg-light);
+      color: var(--text-primary);
+    }
+    .action-btn-view:hover {
+      background: var(--border-light);
+    }
+  </style>
 </head>
 <body>
-    <!-- Aurora Background -->
-    <div class="aurora-bg">
-        <div class="aurora-orb aurora-orb-1"></div>
-        <div class="aurora-orb aurora-orb-2"></div>
-        <div class="aurora-orb aurora-orb-3"></div>
-    </div>
+  <div class="admin-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <div class="sidebar-logo-text">인플루언서 여행</div>
+        <div class="sidebar-logo-sub">관리자 시스템</div>
+      </div>
+      <ul class="sidebar-menu">
+        <li class="sidebar-item">
+          <a href="dashboard.html" class="sidebar-link">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+            </svg>
+            대시보드
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a href="users.html" class="sidebar-link">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+            </svg>
+            회원 관리
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a href="influencers.html" class="sidebar-link active">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
+            </svg>
+            인플루언서 관리
+            <span class="sidebar-badge">5</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a href="payments.html" class="sidebar-link">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+            </svg>
+            결제 관리
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a href="settlements.html" class="sidebar-link">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+            </svg>
+            정산 관리
+            <span class="sidebar-badge">3</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a href="inquiries.html" class="sidebar-link">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
+            </svg>
+            문의 관리
+            <span class="sidebar-badge">12</span>
+          </a>
+        </li>
+      </ul>
+    </aside>
 
-    <div class="admin-layout">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="sidebar-logo">
-                <div class="sidebar-logo-icon">
-                    <i class="ri-plane-line"></i>
-                </div>
-                <span class="sidebar-logo-text">관리자 센터</span>
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">인플루언서 관리</h1>
+          <p class="page-subtitle">인플루언서 신청을 검토하고 승인합니다</p>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs-container">
+        <button class="tab-btn active">대기중<span class="count">5</span></button>
+        <button class="tab-btn">승인완료<span class="count">127</span></button>
+        <button class="tab-btn">반려<span class="count">12</span></button>
+      </div>
+
+      <!-- Filters -->
+      <div class="filters-bar">
+        <div class="search-box">
+          <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+          </svg>
+          <input type="text" class="search-input" placeholder="이름, 채널명으로 검색...">
+        </div>
+      </div>
+
+      <!-- Influencer Cards Grid -->
+      <div class="influencer-grid">
+        <!-- Card 1 -->
+        <div class="influencer-card">
+          <div class="influencer-header">
+            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100" alt="" class="influencer-avatar">
+            <div class="influencer-info">
+              <div class="influencer-name">김지현</div>
+              <div class="influencer-handle">@travel_jihyun</div>
+              <div class="influencer-platform">
+                <span class="platform-badge">Instagram</span>
+                <span class="platform-badge">YouTube</span>
+              </div>
             </div>
-
-            <ul class="sidebar-menu">
-                <li class="sidebar-menu-item">
-                    <a href="dashboard.html" class="sidebar-menu-link">
-                        <i class="ri-dashboard-line"></i>
-                        대시보드
-                    </a>
-                </li>
-            </ul>
-
-            <div class="sidebar-divider"></div>
-            <div class="sidebar-section-title">유저 관리</div>
-
-            <ul class="sidebar-menu">
-                <li class="sidebar-menu-item">
-                    <a href="users.html" class="sidebar-menu-link">
-                        <i class="ri-user-line"></i>
-                        유저 목록
-                    </a>
-                </li>
-                <li class="sidebar-menu-item">
-                    <a href="influencers.html" class="sidebar-menu-link active">
-                        <i class="ri-star-line"></i>
-                        인플루언서
-                    </a>
-                </li>
-            </ul>
-
-            <div class="sidebar-divider"></div>
-            <div class="sidebar-section-title">재정 관리</div>
-
-            <ul class="sidebar-menu">
-                <li class="sidebar-menu-item">
-                    <a href="payments.html" class="sidebar-menu-link">
-                        <i class="ri-bank-card-line"></i>
-                        결제 내역
-                    </a>
-                </li>
-                <li class="sidebar-menu-item">
-                    <a href="settlements.html" class="sidebar-menu-link">
-                        <i class="ri-exchange-dollar-line"></i>
-                        정산 관리
-                    </a>
-                </li>
-            </ul>
-
-            <div class="sidebar-divider"></div>
-            <div class="sidebar-section-title">설정</div>
-
-            <ul class="sidebar-menu">
-                <li class="sidebar-menu-item">
-                    <a href="#" class="sidebar-menu-link">
-                        <i class="ri-settings-3-line"></i>
-                        시스템 설정
-                    </a>
-                </li>
-                <li class="sidebar-menu-item">
-                    <a href="login.html" class="sidebar-menu-link">
-                        <i class="ri-logout-box-line"></i>
-                        로그아웃
-                    </a>
-                </li>
-            </ul>
-        </aside>
-
-        <!-- Main Content -->
-        <main class="main-content">
-            <!-- Top Bar -->
-            <div class="top-bar">
-                <h1 class="page-title">인플루언서 관리</h1>
+          </div>
+          <div class="influencer-stats">
+            <div class="stat-item">
+              <div class="stat-value">125K</div>
+              <div class="stat-label">팔로워</div>
             </div>
-
-            <!-- Status Tabs -->
-            <div class="status-tabs">
-                <button class="status-tab active">
-                    전체
-                    <span class="count">342</span>
-                </button>
-                <button class="status-tab">
-                    승인 대기
-                    <span class="count">12</span>
-                </button>
-                <button class="status-tab">
-                    활성
-                    <span class="count">318</span>
-                </button>
-                <button class="status-tab">
-                    비활성
-                    <span class="count">12</span>
-                </button>
+            <div class="stat-item">
+              <div class="stat-value">4.2%</div>
+              <div class="stat-label">참여율</div>
             </div>
-
-            <!-- Filter Bar -->
-            <div class="filter-bar">
-                <div class="search-box">
-                    <i class="ri-search-line"></i>
-                    <input type="text" placeholder="이름, 핸들로 검색...">
-                </div>
-                <div class="filter-actions">
-                    <select class="filter-select">
-                        <option value="">전체 플랫폼</option>
-                        <option value="instagram">인스타그램</option>
-                        <option value="youtube">유튜브</option>
-                        <option value="tiktok">틱톡</option>
-                    </select>
-                    <select class="filter-select">
-                        <option value="">팔로워순</option>
-                        <option value="courses">코스 수</option>
-                        <option value="revenue">매출순</option>
-                    </select>
-                </div>
+            <div class="stat-item">
+              <div class="stat-value">86</div>
+              <div class="stat-label">게시물</div>
             </div>
+          </div>
+          <div class="influencer-meta">
+            <span class="meta-item"><span class="meta-label">신청일:</span> 2024-01-15</span>
+            <span class="status-badge pending">대기중</span>
+          </div>
+          <div class="influencer-actions">
+            <button class="action-btn action-btn-approve">승인</button>
+            <button class="action-btn action-btn-reject">반려</button>
+          </div>
+        </div>
 
-            <!-- Table -->
-            <div class="card table-card">
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>인플루언서</th>
-                            <th>플랫폼</th>
-                            <th>팔로워</th>
-                            <th>코스</th>
-                            <th>총 매출</th>
-                            <th>상태</th>
-                            <th>관리</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <div class="user-cell">
-                                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100" alt="User" class="avatar avatar-sm">
-                                    <div class="user-info">
-                                        <span class="user-name">김지은</span>
-                                        <span class="user-handle">@jieun_travel</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="platform-icons">
-                                    <span class="platform-icon instagram">
-                                        <i class="ri-instagram-line"></i>
-                                    </span>
-                                    <span class="platform-icon youtube">
-                                        <i class="ri-youtube-line"></i>
-                                    </span>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="follower-count">
-                                    <i class="ri-heart-fill"></i>
-                                    125.3K
-                                </div>
-                            </td>
-                            <td>15</td>
-                            <td>₩45,200,000</td>
-                            <td><span class="badge badge-success">활성</span></td>
-                            <td>
-                                <div class="action-btns">
-                                    <button class="action-btn">
-                                        <i class="ri-eye-line"></i>
-                                        상세
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="user-cell">
-                                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100" alt="User" class="avatar avatar-sm">
-                                    <div class="user-info">
-                                        <span class="user-name">박현우</span>
-                                        <span class="user-handle">@hyunwoo_adventure</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="platform-icons">
-                                    <span class="platform-icon youtube">
-                                        <i class="ri-youtube-line"></i>
-                                    </span>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="follower-count">
-                                    <i class="ri-heart-fill"></i>
-                                    89.7K
-                                </div>
-                            </td>
-                            <td>8</td>
-                            <td>₩28,500,000</td>
-                            <td><span class="badge badge-warning">승인 대기</span></td>
-                            <td>
-                                <div class="action-btns">
-                                    <button class="action-btn approve">
-                                        <i class="ri-check-line"></i>
-                                        승인
-                                    </button>
-                                    <button class="action-btn reject">
-                                        <i class="ri-close-line"></i>
-                                        거부
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="user-cell">
-                                    <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100" alt="User" class="avatar avatar-sm">
-                                    <div class="user-info">
-                                        <span class="user-name">이수진</span>
-                                        <span class="user-handle">@sujin_lifestyle</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="platform-icons">
-                                    <span class="platform-icon instagram">
-                                        <i class="ri-instagram-line"></i>
-                                    </span>
-                                    <span class="platform-icon tiktok">
-                                        <i class="ri-tiktok-line"></i>
-                                    </span>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="follower-count">
-                                    <i class="ri-heart-fill"></i>
-                                    215.8K
-                                </div>
-                            </td>
-                            <td>22</td>
-                            <td>₩78,900,000</td>
-                            <td><span class="badge badge-success">활성</span></td>
-                            <td>
-                                <div class="action-btns">
-                                    <button class="action-btn">
-                                        <i class="ri-eye-line"></i>
-                                        상세
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="user-cell">
-                                    <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100" alt="User" class="avatar avatar-sm">
-                                    <div class="user-info">
-                                        <span class="user-name">최민준</span>
-                                        <span class="user-handle">@minjun_food</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="platform-icons">
-                                    <span class="platform-icon youtube">
-                                        <i class="ri-youtube-line"></i>
-                                    </span>
-                                    <span class="platform-icon tiktok">
-                                        <i class="ri-tiktok-line"></i>
-                                    </span>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="follower-count">
-                                    <i class="ri-heart-fill"></i>
-                                    67.2K
-                                </div>
-                            </td>
-                            <td>5</td>
-                            <td>₩12,300,000</td>
-                            <td><span class="badge badge-info">비활성</span></td>
-                            <td>
-                                <div class="action-btns">
-                                    <button class="action-btn">
-                                        <i class="ri-eye-line"></i>
-                                        상세
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="user-cell">
-                                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100" alt="User" class="avatar avatar-sm">
-                                    <div class="user-info">
-                                        <span class="user-name">정다은</span>
-                                        <span class="user-handle">@daeun_beauty</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="platform-icons">
-                                    <span class="platform-icon instagram">
-                                        <i class="ri-instagram-line"></i>
-                                    </span>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="follower-count">
-                                    <i class="ri-heart-fill"></i>
-                                    156.4K
-                                </div>
-                            </td>
-                            <td>11</td>
-                            <td>₩52,100,000</td>
-                            <td><span class="badge badge-warning">승인 대기</span></td>
-                            <td>
-                                <div class="action-btns">
-                                    <button class="action-btn approve">
-                                        <i class="ri-check-line"></i>
-                                        승인
-                                    </button>
-                                    <button class="action-btn reject">
-                                        <i class="ri-close-line"></i>
-                                        거부
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <!-- Pagination -->
-                <div class="pagination">
-                    <span class="pagination-info">총 342명 중 1-5 표시</span>
-                    <div class="pagination-btns">
-                        <button class="pagination-btn" disabled>
-                            <i class="ri-arrow-left-s-line"></i>
-                        </button>
-                        <button class="pagination-btn active">1</button>
-                        <button class="pagination-btn">2</button>
-                        <button class="pagination-btn">3</button>
-                        <button class="pagination-btn">...</button>
-                        <button class="pagination-btn">69</button>
-                        <button class="pagination-btn">
-                            <i class="ri-arrow-right-s-line"></i>
-                        </button>
-                    </div>
-                </div>
+        <!-- Card 2 -->
+        <div class="influencer-card">
+          <div class="influencer-header">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100" alt="" class="influencer-avatar">
+            <div class="influencer-info">
+              <div class="influencer-name">이준혁</div>
+              <div class="influencer-handle">@junhyuk_trip</div>
+              <div class="influencer-platform">
+                <span class="platform-badge">Instagram</span>
+              </div>
             </div>
-        </main>
-    </div>
+          </div>
+          <div class="influencer-stats">
+            <div class="stat-item">
+              <div class="stat-value">89K</div>
+              <div class="stat-label">팔로워</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value">3.8%</div>
+              <div class="stat-label">참여율</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value">124</div>
+              <div class="stat-label">게시물</div>
+            </div>
+          </div>
+          <div class="influencer-meta">
+            <span class="meta-item"><span class="meta-label">신청일:</span> 2024-01-14</span>
+            <span class="status-badge pending">대기중</span>
+          </div>
+          <div class="influencer-actions">
+            <button class="action-btn action-btn-approve">승인</button>
+            <button class="action-btn action-btn-reject">반려</button>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="influencer-card">
+          <div class="influencer-header">
+            <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100" alt="" class="influencer-avatar">
+            <div class="influencer-info">
+              <div class="influencer-name">박서윤</div>
+              <div class="influencer-handle">@seoyun_travel</div>
+              <div class="influencer-platform">
+                <span class="platform-badge">YouTube</span>
+                <span class="platform-badge">TikTok</span>
+              </div>
+            </div>
+          </div>
+          <div class="influencer-stats">
+            <div class="stat-item">
+              <div class="stat-value">256K</div>
+              <div class="stat-label">구독자</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value">5.1%</div>
+              <div class="stat-label">참여율</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value">203</div>
+              <div class="stat-label">영상</div>
+            </div>
+          </div>
+          <div class="influencer-meta">
+            <span class="meta-item"><span class="meta-label">신청일:</span> 2024-01-14</span>
+            <span class="status-badge pending">대기중</span>
+          </div>
+          <div class="influencer-actions">
+            <button class="action-btn action-btn-approve">승인</button>
+            <button class="action-btn action-btn-reject">반려</button>
+          </div>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="influencer-card">
+          <div class="influencer-header">
+            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100" alt="" class="influencer-avatar">
+            <div class="influencer-info">
+              <div class="influencer-name">정민재</div>
+              <div class="influencer-handle">@minjae_adventure</div>
+              <div class="influencer-platform">
+                <span class="platform-badge">Instagram</span>
+              </div>
+            </div>
+          </div>
+          <div class="influencer-stats">
+            <div class="stat-item">
+              <div class="stat-value">45K</div>
+              <div class="stat-label">팔로워</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value">6.2%</div>
+              <div class="stat-label">참여율</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value">67</div>
+              <div class="stat-label">게시물</div>
+            </div>
+          </div>
+          <div class="influencer-meta">
+            <span class="meta-item"><span class="meta-label">신청일:</span> 2024-01-13</span>
+            <span class="status-badge pending">대기중</span>
+          </div>
+          <div class="influencer-actions">
+            <button class="action-btn action-btn-approve">승인</button>
+            <button class="action-btn action-btn-reject">반려</button>
+          </div>
+        </div>
+
+        <!-- Card 5 -->
+        <div class="influencer-card">
+          <div class="influencer-header">
+            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100" alt="" class="influencer-avatar">
+            <div class="influencer-info">
+              <div class="influencer-name">최동현</div>
+              <div class="influencer-handle">@donghyun_travel</div>
+              <div class="influencer-platform">
+                <span class="platform-badge">YouTube</span>
+              </div>
+            </div>
+          </div>
+          <div class="influencer-stats">
+            <div class="stat-item">
+              <div class="stat-value">178K</div>
+              <div class="stat-label">구독자</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value">4.5%</div>
+              <div class="stat-label">참여율</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value">156</div>
+              <div class="stat-label">영상</div>
+            </div>
+          </div>
+          <div class="influencer-meta">
+            <span class="meta-item"><span class="meta-label">신청일:</span> 2024-01-12</span>
+            <span class="status-badge pending">대기중</span>
+          </div>
+          <div class="influencer-actions">
+            <button class="action-btn action-btn-approve">승인</button>
+            <button class="action-btn action-btn-reject">반려</button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
 </body>
 </html>

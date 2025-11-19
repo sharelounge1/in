@@ -1,432 +1,227 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>공지사항 - TRAVELY</title>
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
-    <link rel="stylesheet" href="../shared/aurora-style.css">
-    <style>
-        .announcements-container {
-            padding-bottom: 90px;
-        }
-
-        /* Travel Header */
-        .travel-header {
-            padding: 16px 20px;
-            background: var(--bg-glass);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            margin-bottom: 16px;
-        }
-
-        .travel-mini {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .travel-mini-image {
-            width: 48px;
-            height: 48px;
-            border-radius: var(--radius-md);
-            object-fit: cover;
-        }
-
-        .travel-mini-info {
-            flex: 1;
-        }
-
-        .travel-mini-title {
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 2px;
-        }
-
-        .travel-mini-date {
-            font-size: 11px;
-            color: var(--text-muted);
-        }
-
-        /* Tabs */
-        .detail-tabs {
-            display: flex;
-            padding: 0 20px;
-            gap: 8px;
-            margin-bottom: 20px;
-            overflow-x: auto;
-        }
-
-        .detail-tabs::-webkit-scrollbar {
-            display: none;
-        }
-
-        .detail-tab {
-            padding: 10px 18px;
-            border-radius: var(--radius-full);
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--text-secondary);
-            background: var(--bg-glass);
-            border: none;
-            cursor: pointer;
-            white-space: nowrap;
-            transition: all 0.3s ease;
-            text-decoration: none;
-        }
-
-        .detail-tab.active {
-            background: var(--gradient-primary);
-            color: white;
-        }
-
-        .detail-tab .badge-count {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            min-width: 18px;
-            height: 18px;
-            padding: 0 5px;
-            background: rgba(245, 101, 101, 0.9);
-            border-radius: var(--radius-full);
-            font-size: 10px;
-            margin-left: 6px;
-        }
-
-        .detail-tab.active .badge-count {
-            background: rgba(255, 255, 255, 0.3);
-        }
-
-        /* Announcement List */
-        .announcement-list {
-            padding: 0 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .announcement-card {
-            padding: 16px;
-            background: var(--bg-glass);
-            border-radius: var(--radius-lg);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            text-decoration: none;
-            color: var(--text-primary);
-            transition: all 0.3s;
-        }
-
-        .announcement-card:hover {
-            background: rgba(255, 255, 255, 0.15);
-        }
-
-        .announcement-card.pinned {
-            border-color: var(--aurora-purple);
-            background: rgba(102, 126, 234, 0.1);
-        }
-
-        .announcement-header {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 10px;
-        }
-
-        .announcement-badge {
-            padding: 3px 8px;
-            border-radius: var(--radius-full);
-            font-size: 10px;
-            font-weight: 600;
-        }
-
-        .badge-pinned {
-            background: var(--gradient-primary);
-            color: white;
-        }
-
-        .badge-new {
-            background: rgba(245, 101, 101, 0.2);
-            color: var(--error);
-        }
-
-        .badge-important {
-            background: rgba(236, 201, 75, 0.2);
-            color: var(--warning);
-        }
-
-        .announcement-date {
-            font-size: 11px;
-            color: var(--text-muted);
-            margin-left: auto;
-        }
-
-        .announcement-title {
-            font-size: 15px;
-            font-weight: 600;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .announcement-title i {
-            color: var(--aurora-purple);
-            font-size: 14px;
-        }
-
-        .announcement-preview {
-            font-size: 13px;
-            color: var(--text-secondary);
-            line-height: 1.5;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            margin-bottom: 12px;
-        }
-
-        .announcement-footer {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .announcement-meta {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            font-size: 11px;
-            color: var(--text-muted);
-        }
-
-        .announcement-meta i {
-            font-size: 14px;
-        }
-
-        /* Image Preview */
-        .announcement-images {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 12px;
-        }
-
-        .announcement-thumb {
-            width: 60px;
-            height: 60px;
-            border-radius: var(--radius-sm);
-            object-fit: cover;
-        }
-
-        .announcement-thumb-more {
-            width: 60px;
-            height: 60px;
-            border-radius: var(--radius-sm);
-            background: rgba(0, 0, 0, 0.5);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            font-weight: 600;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>공지사항 - TRAVELY</title>
+  <link rel="stylesheet" href="../shared/clean-style.css">
+  <style>
+    .content {
+      padding-bottom: 20px;
+    }
+    .announcement-list {
+      padding: 0 20px;
+    }
+    .announcement-item {
+      display: block;
+      padding: 16px;
+      background: var(--bg-white);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-card);
+      margin-bottom: 12px;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.2s;
+    }
+    .announcement-item:hover {
+      transform: translateY(-2px);
+    }
+    .announcement-item.unread {
+      border-left: 3px solid var(--primary-start);
+    }
+    .announcement-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .announcement-type {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .announcement-type.important {
+      color: #EF4444;
+    }
+    .announcement-type.schedule {
+      color: var(--primary-start);
+    }
+    .announcement-type.general {
+      color: var(--text-secondary);
+    }
+    .announcement-type svg {
+      width: 14px;
+      height: 14px;
+    }
+    .announcement-date {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .announcement-title {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      line-height: 1.4;
+    }
+    .announcement-preview {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .new-badge {
+      display: inline-block;
+      padding: 2px 6px;
+      background: var(--primary-gradient);
+      color: white;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 600;
+      margin-left: 6px;
+    }
+    .filter-tabs {
+      display: flex;
+      gap: 8px;
+      padding: 16px 20px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .filter-tabs::-webkit-scrollbar {
+      display: none;
+    }
+    .filter-tab {
+      flex-shrink: 0;
+      padding: 8px 16px;
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 500;
+      background: var(--bg-gray);
+      color: var(--text-secondary);
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .filter-tab.active {
+      background: var(--text-primary);
+      color: white;
+    }
+  </style>
 </head>
 <body>
-    <div class="aurora-bg">
-        <div class="aurora-orb aurora-orb-1"></div>
-        <div class="aurora-orb aurora-orb-2"></div>
-        <div class="aurora-orb aurora-orb-3"></div>
+  <div class="mobile-container">
+    <!-- Header -->
+    <header class="header">
+      <button onclick="history.back()" style="background: none; border: none; cursor: pointer;">
+        <svg class="header-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+        </svg>
+      </button>
+      <span class="header-title">공지사항</span>
+      <div style="width: 24px;"></div>
+    </header>
+
+    <!-- Content -->
+    <div class="content">
+      <!-- Filter Tabs -->
+      <div class="filter-tabs">
+        <button class="filter-tab active">전체</button>
+        <button class="filter-tab">중요</button>
+        <button class="filter-tab">일정변경</button>
+        <button class="filter-tab">안내</button>
+      </div>
+
+      <!-- Announcement List -->
+      <div class="announcement-list">
+        <a href="announcement-detail.html" class="announcement-item unread">
+          <div class="announcement-header">
+            <span class="announcement-type important">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+              </svg>
+              중요
+            </span>
+            <span class="announcement-date">오늘 10:30</span>
+          </div>
+          <h3 class="announcement-title">2일차 일정 변경 안내<span class="new-badge">NEW</span></h3>
+          <p class="announcement-preview">안녕하세요, 기상 악화로 인해 2일차 한라산 트레킹 시간이 08:00에서 08:30으로 변경되었습니다. 안전한 등반을 위한 조치이니 양해 부탁드립니다.</p>
+        </a>
+
+        <a href="announcement-detail.html" class="announcement-item unread">
+          <div class="announcement-header">
+            <span class="announcement-type schedule">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+              </svg>
+              일정
+            </span>
+            <span class="announcement-date">오늘 08:00</span>
+          </div>
+          <h3 class="announcement-title">오늘의 준비물 안내<span class="new-badge">NEW</span></h3>
+          <p class="announcement-preview">한라산 트레킹을 위한 준비물을 안내드립니다. 등산화, 방한복, 물, 간식을 꼭 챙겨주세요. 등산 스틱은 현장에서 대여 가능합니다.</p>
+        </a>
+
+        <a href="announcement-detail.html" class="announcement-item">
+          <div class="announcement-header">
+            <span class="announcement-type general">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+              안내
+            </span>
+            <span class="announcement-date">어제</span>
+          </div>
+          <h3 class="announcement-title">1일차 일정 완료 및 후기</h3>
+          <p class="announcement-preview">1일차 성산일출봉과 우도 투어가 성공적으로 마무리되었습니다. 모두 수고하셨습니다! 내일 일정도 기대해주세요.</p>
+        </a>
+
+        <a href="announcement-detail.html" class="announcement-item">
+          <div class="announcement-header">
+            <span class="announcement-type general">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+              안내
+            </span>
+            <span class="announcement-date">1.25</span>
+          </div>
+          <h3 class="announcement-title">여행 시작! 집합 장소 안내</h3>
+          <p class="announcement-preview">드디어 제주 힐링 3박 4일 여행이 시작됩니다! 오늘 09:00에 제주공항 1번 게이트 앞에서 만나요. 지민 팻말을 찾아주세요!</p>
+        </a>
+
+        <a href="announcement-detail.html" class="announcement-item">
+          <div class="announcement-header">
+            <span class="announcement-type important">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+              </svg>
+              중요
+            </span>
+            <span class="announcement-date">1.24</span>
+          </div>
+          <h3 class="announcement-title">여행 전 필독 사항</h3>
+          <p class="announcement-preview">출발 전 꼭 확인해야 할 사항들을 안내드립니다. 신분증, 편한 복장, 여행자 보험 가입 확인을 부탁드립니다.</p>
+        </a>
+
+        <a href="announcement-detail.html" class="announcement-item">
+          <div class="announcement-header">
+            <span class="announcement-type general">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+              안내
+            </span>
+            <span class="announcement-date">1.20</span>
+          </div>
+          <h3 class="announcement-title">최종 참가자 명단 확정</h3>
+          <p class="announcement-preview">제주 힐링 3박 4일 여행의 최종 참가자 명단이 확정되었습니다. 총 18명의 여행 멤버와 함께합니다!</p>
+        </a>
+      </div>
     </div>
-
-    <div class="mobile-container announcements-container">
-        <!-- Header -->
-        <header class="header">
-            <a href="travel-detail.html" class="header-back">
-                <i class="ri-arrow-left-line"></i>
-            </a>
-            <h1 class="header-title">공지사항</h1>
-            <div style="width: 40px;"></div>
-        </header>
-
-        <!-- Travel Header -->
-        <div class="travel-header">
-            <div class="travel-mini">
-                <img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=200" class="travel-mini-image" alt="여행">
-                <div class="travel-mini-info">
-                    <div class="travel-mini-title">발리 럭셔리 힐링 7일</div>
-                    <div class="travel-mini-date">2025.02.20 - 02.26</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Tabs -->
-        <div class="detail-tabs">
-            <a href="travel-detail.html" class="detail-tab">
-                요약
-            </a>
-            <a href="travel-announcements.html" class="detail-tab active">
-                공지사항
-                <span class="badge-count">2</span>
-            </a>
-            <a href="travel-schedule.html" class="detail-tab">
-                일정
-            </a>
-            <a href="travel-expenses.html" class="detail-tab">
-                경비
-            </a>
-            <a href="travel-participants.html" class="detail-tab">
-                참가자
-            </a>
-        </div>
-
-        <!-- Announcement List -->
-        <div class="announcement-list">
-            <!-- Pinned Announcement -->
-            <a href="announcement-detail.html" class="announcement-card pinned">
-                <div class="announcement-header">
-                    <span class="announcement-badge badge-pinned">
-                        <i class="ri-pushpin-fill"></i> 고정
-                    </span>
-                    <span class="announcement-date">2025.01.25</span>
-                </div>
-                <div class="announcement-title">
-                    <i class="ri-pushpin-line"></i>
-                    필독! 출발 전 필수 확인사항
-                </div>
-                <div class="announcement-preview">
-                    여행에 참가해주신 모든 분들께 감사드립니다. 출발 전 반드시 확인해주셔야 할 사항들을 안내드리니 꼭 읽어주세요. 여권 유효기간, 비자 발급 여부...
-                </div>
-                <div class="announcement-footer">
-                    <div class="announcement-meta">
-                        <i class="ri-chat-3-line"></i>
-                        <span>8</span>
-                    </div>
-                    <div class="announcement-meta">
-                        <i class="ri-eye-line"></i>
-                        <span>12</span>
-                    </div>
-                </div>
-            </a>
-
-            <!-- New Announcement -->
-            <a href="announcement-detail.html" class="announcement-card">
-                <div class="announcement-header">
-                    <span class="announcement-badge badge-new">NEW</span>
-                    <span class="announcement-date">2시간 전</span>
-                </div>
-                <div class="announcement-title">
-                    여행 준비물 안내
-                </div>
-                <div class="announcement-preview">
-                    안녕하세요, 여행자 여러분! 출발이 얼마 남지 않았네요. 준비물 체크리스트를 공유드립니다. 수영복, 선크림(SPF50 이상 권장)...
-                </div>
-                <div class="announcement-images">
-                    <img src="https://images.unsplash.com/photo-1596178060810-72f53ce9a65c?w=200" class="announcement-thumb" alt="이미지">
-                    <img src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=200" class="announcement-thumb" alt="이미지">
-                </div>
-                <div class="announcement-footer">
-                    <div class="announcement-meta">
-                        <i class="ri-chat-3-line"></i>
-                        <span>3</span>
-                    </div>
-                    <div class="announcement-meta">
-                        <i class="ri-eye-line"></i>
-                        <span>10</span>
-                    </div>
-                </div>
-            </a>
-
-            <!-- Important Announcement -->
-            <a href="announcement-detail.html" class="announcement-card">
-                <div class="announcement-header">
-                    <span class="announcement-badge badge-important">중요</span>
-                    <span class="announcement-date">1일 전</span>
-                </div>
-                <div class="announcement-title">
-                    경비 충전 안내
-                </div>
-                <div class="announcement-preview">
-                    현지에서 사용할 공동 경비 충전을 안내드립니다. 앱 내 경비 탭에서 충전 요청을 해주시면 됩니다. 권장 금액은 50만원입니다...
-                </div>
-                <div class="announcement-footer">
-                    <div class="announcement-meta">
-                        <i class="ri-chat-3-line"></i>
-                        <span>5</span>
-                    </div>
-                    <div class="announcement-meta">
-                        <i class="ri-eye-line"></i>
-                        <span>12</span>
-                    </div>
-                </div>
-            </a>
-
-            <!-- Regular Announcement -->
-            <a href="announcement-detail.html" class="announcement-card">
-                <div class="announcement-header">
-                    <span class="announcement-date">3일 전</span>
-                </div>
-                <div class="announcement-title">
-                    참가자 단체 채팅방 안내
-                </div>
-                <div class="announcement-preview">
-                    여행 참가자 분들과 소통할 수 있는 단체 채팅방을 개설했습니다. 아래 링크를 통해 입장해주세요...
-                </div>
-                <div class="announcement-footer">
-                    <div class="announcement-meta">
-                        <i class="ri-chat-3-line"></i>
-                        <span>12</span>
-                    </div>
-                    <div class="announcement-meta">
-                        <i class="ri-eye-line"></i>
-                        <span>12</span>
-                    </div>
-                </div>
-            </a>
-
-            <!-- Regular Announcement -->
-            <a href="announcement-detail.html" class="announcement-card">
-                <div class="announcement-header">
-                    <span class="announcement-date">5일 전</span>
-                </div>
-                <div class="announcement-title">
-                    선정 완료 안내
-                </div>
-                <div class="announcement-preview">
-                    많은 분들이 신청해주셔서 감사합니다. 최종 선정이 완료되었음을 안내드립니다. 선정되신 모든 분들께 개별 연락드리겠습니다...
-                </div>
-                <div class="announcement-footer">
-                    <div class="announcement-meta">
-                        <i class="ri-chat-3-line"></i>
-                        <span>20</span>
-                    </div>
-                    <div class="announcement-meta">
-                        <i class="ri-eye-line"></i>
-                        <span>12</span>
-                    </div>
-                </div>
-            </a>
-        </div>
-
-        <!-- Bottom Navigation -->
-        <nav class="bottom-nav">
-            <a href="home.html" class="nav-item">
-                <i class="ri-home-5-line"></i>
-                <span>홈</span>
-            </a>
-            <a href="#" class="nav-item">
-                <i class="ri-sparkling-line"></i>
-                <span>파티</span>
-            </a>
-            <a href="my-applications.html" class="nav-item">
-                <i class="ri-file-list-3-line"></i>
-                <span>내신청</span>
-            </a>
-            <a href="active-travels.html" class="nav-item active">
-                <i class="ri-suitcase-3-fill"></i>
-                <span>진행중</span>
-            </a>
-            <a href="mypage.html" class="nav-item">
-                <i class="ri-user-line"></i>
-                <span>마이</span>
-            </a>
-        </nav>
-    </div>
+  </div>
 </body>
 </html>

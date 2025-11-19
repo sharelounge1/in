@@ -1,313 +1,236 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>결제 완료 - TRAVELY</title>
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
-    <link rel="stylesheet" href="../shared/aurora-style.css">
-    <style>
-        .complete-container {
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .complete-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 40px 0;
-        }
-
-        /* Success Icon */
-        .success-icon {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            background: var(--gradient-primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 32px;
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        .success-icon i {
-            font-size: 60px;
-            color: white;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.4); }
-            50% { transform: scale(1.05); box-shadow: 0 0 30px rgba(102, 126, 234, 0.6); }
-        }
-
-        .complete-title {
-            font-size: 24px;
-            font-weight: 800;
-            margin-bottom: 12px;
-        }
-
-        .complete-subtitle {
-            font-size: 14px;
-            color: var(--text-secondary);
-            line-height: 1.6;
-            margin-bottom: 32px;
-        }
-
-        /* Payment Info Card */
-        .payment-info-card {
-            width: 100%;
-            padding: 24px;
-            background: var(--bg-glass);
-            border-radius: var(--radius-lg);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            margin-bottom: 24px;
-        }
-
-        .payment-info-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding-bottom: 16px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            margin-bottom: 16px;
-        }
-
-        .payment-info-thumb {
-            width: 60px;
-            height: 60px;
-            border-radius: var(--radius-md);
-            object-fit: cover;
-        }
-
-        .payment-info-course {
-            flex: 1;
-            text-align: left;
-        }
-
-        .payment-info-name {
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .payment-info-date {
-            font-size: 12px;
-            color: var(--text-secondary);
-        }
-
-        .payment-info-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-        }
-
-        .payment-info-label {
-            font-size: 13px;
-            color: var(--text-secondary);
-        }
-
-        .payment-info-value {
-            font-size: 13px;
-            font-weight: 600;
-        }
-
-        .payment-info-total {
-            display: flex;
-            justify-content: space-between;
-            padding-top: 16px;
-            margin-top: 8px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .payment-total-label {
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        .payment-total-value {
-            font-size: 18px;
-            font-weight: 800;
-            background: var(--gradient-primary);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        /* Notice Box */
-        .notice-box {
-            width: 100%;
-            padding: 16px;
-            background: rgba(102, 126, 234, 0.1);
-            border: 1px solid rgba(102, 126, 234, 0.3);
-            border-radius: var(--radius-md);
-            margin-bottom: 24px;
-        }
-
-        .notice-title {
-            font-size: 13px;
-            font-weight: 600;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .notice-title i {
-            color: var(--aurora-cyan);
-        }
-
-        .notice-list {
-            list-style: none;
-        }
-
-        .notice-item {
-            font-size: 12px;
-            color: var(--text-secondary);
-            padding: 4px 0;
-            display: flex;
-            align-items: flex-start;
-            gap: 6px;
-        }
-
-        .notice-item i {
-            color: var(--aurora-purple);
-            font-size: 14px;
-            margin-top: 1px;
-        }
-
-        /* Action Buttons */
-        .action-buttons {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .btn-check-status {
-            width: 100%;
-            padding: 16px;
-            background: var(--gradient-primary);
-            border: none;
-            border-radius: var(--radius-md);
-            color: white;
-            font-size: 15px;
-            font-weight: 700;
-            cursor: pointer;
-            box-shadow: var(--shadow-glow);
-        }
-
-        .btn-go-home {
-            width: 100%;
-            padding: 14px;
-            background: transparent;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: var(--radius-md);
-            color: var(--text-secondary);
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        /* Order Number */
-        .order-number {
-            font-size: 12px;
-            color: var(--text-muted);
-            margin-top: 16px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>결제 완료 - TRAVELY</title>
+  <link rel="stylesheet" href="../shared/clean-style.css">
+  <style>
+    .content {
+      padding: 20px;
+      padding-bottom: 120px;
+    }
+    .success-section {
+      text-align: center;
+      padding: 40px 20px;
+    }
+    .success-icon {
+      width: 80px;
+      height: 80px;
+      background: var(--primary-gradient);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px;
+    }
+    .success-icon svg {
+      width: 40px;
+      height: 40px;
+      color: white;
+    }
+    .success-title {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .success-subtitle {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+    .order-info {
+      background: var(--bg-light);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    .order-info-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: var(--text-secondary);
+    }
+    .order-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      font-size: 14px;
+    }
+    .order-row:last-child {
+      margin-bottom: 0;
+    }
+    .order-row-label {
+      color: var(--text-secondary);
+    }
+    .order-row-value {
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+    .product-card {
+      display: flex;
+      gap: 12px;
+      padding: 16px;
+      background: var(--bg-white);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+      margin-bottom: 20px;
+    }
+    .product-image {
+      width: 80px;
+      height: 80px;
+      border-radius: var(--radius-sm);
+      object-fit: cover;
+    }
+    .product-info {
+      flex: 1;
+    }
+    .product-title {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .product-date {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+    .product-price {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--primary-start);
+    }
+    .notice-box {
+      padding: 16px;
+      background: rgba(124, 58, 237, 0.05);
+      border-radius: var(--radius-md);
+      margin-bottom: 20px;
+    }
+    .notice-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .notice-title svg {
+      width: 18px;
+      height: 18px;
+      color: var(--primary-start);
+    }
+    .notice-text {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+    .action-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .btn-primary-full {
+      width: 100%;
+      padding: 16px;
+      background: var(--primary-gradient);
+      color: white;
+      border-radius: var(--radius-md);
+      font-size: 15px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(124, 58, 237, 0.3);
+      text-decoration: none;
+      text-align: center;
+    }
+    .btn-secondary-full {
+      width: 100%;
+      padding: 16px;
+      background: var(--bg-gray);
+      color: var(--text-primary);
+      border-radius: var(--radius-md);
+      font-size: 15px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+    }
+  </style>
 </head>
 <body>
-    <div class="aurora-bg">
-        <div class="aurora-orb aurora-orb-1"></div>
-        <div class="aurora-orb aurora-orb-2"></div>
-        <div class="aurora-orb aurora-orb-3"></div>
-    </div>
+  <div class="mobile-container">
+    <!-- Header -->
+    <header class="header">
+      <div style="width: 24px;"></div>
+      <span class="header-title">결제 완료</span>
+      <div style="width: 24px;"></div>
+    </header>
 
-    <div class="mobile-container">
-        <div class="complete-container">
-            <div class="complete-content">
-                <!-- Success Icon -->
-                <div class="success-icon">
-                    <i class="ri-check-line"></i>
-                </div>
-
-                <h1 class="complete-title">결제가 완료되었습니다</h1>
-                <p class="complete-subtitle">
-                    신청이 정상적으로 접수되었습니다.<br>
-                    인플루언서의 선정 결과를 기다려주세요.
-                </p>
-
-                <!-- Payment Info -->
-                <div class="payment-info-card">
-                    <div class="payment-info-header">
-                        <img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=200" class="payment-info-thumb" alt="코스">
-                        <div class="payment-info-course">
-                            <div class="payment-info-name">발리 럭셔리 힐링 7일</div>
-                            <div class="payment-info-date">2025.02.20 - 02.26</div>
-                        </div>
-                    </div>
-                    <div class="payment-info-row">
-                        <span class="payment-info-label">참가비</span>
-                        <span class="payment-info-value">1,890,000원</span>
-                    </div>
-                    <div class="payment-info-row">
-                        <span class="payment-info-label">결제 수단</span>
-                        <span class="payment-info-value">네이버페이</span>
-                    </div>
-                    <div class="payment-info-row">
-                        <span class="payment-info-label">결제 일시</span>
-                        <span class="payment-info-value">2025.01.18 14:32</span>
-                    </div>
-                    <div class="payment-info-total">
-                        <span class="payment-total-label">결제 금액</span>
-                        <span class="payment-total-value">1,890,000원</span>
-                    </div>
-                </div>
-
-                <!-- Notice -->
-                <div class="notice-box">
-                    <div class="notice-title">
-                        <i class="ri-information-line"></i>
-                        안내 사항
-                    </div>
-                    <ul class="notice-list">
-                        <li class="notice-item">
-                            <i class="ri-arrow-right-s-line"></i>
-                            선정 결과는 모집 마감 후 3일 내에 알림으로 안내됩니다.
-                        </li>
-                        <li class="notice-item">
-                            <i class="ri-arrow-right-s-line"></i>
-                            미선정 시 결제 금액은 자동으로 전액 환불됩니다.
-                        </li>
-                        <li class="notice-item">
-                            <i class="ri-arrow-right-s-line"></i>
-                            선정 시 카카오톡으로 상세 안내가 발송됩니다.
-                        </li>
-                    </ul>
-                </div>
-
-                <!-- Action Buttons -->
-                <div class="action-buttons">
-                    <button class="btn-check-status" onclick="location.href='my-applications.html'">
-                        신청 현황 확인하기
-                    </button>
-                    <button class="btn-go-home" onclick="location.href='home.html'">
-                        홈으로 돌아가기
-                    </button>
-                </div>
-
-                <div class="order-number">
-                    주문번호: ORD-2025011814320001
-                </div>
-            </div>
+    <!-- Content -->
+    <div class="content">
+      <!-- Success Message -->
+      <div class="success-section">
+        <div class="success-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+          </svg>
         </div>
+        <h1 class="success-title">결제가 완료되었습니다</h1>
+        <p class="success-subtitle">신청 내역이 이메일로 발송되었습니다</p>
+      </div>
+
+      <!-- Product Card -->
+      <div class="product-card">
+        <img src="https://images.unsplash.com/photo-1590523741831-ab7e8b8f9c7f?w=200" alt="제주" class="product-image">
+        <div class="product-info">
+          <h3 class="product-title">제주 힐링 3박 4일</h3>
+          <p class="product-date">2025.01.25 - 01.28</p>
+          <p class="product-price">890,000원</p>
+        </div>
+      </div>
+
+      <!-- Order Info -->
+      <div class="order-info">
+        <h3 class="order-info-title">결제 정보</h3>
+        <div class="order-row">
+          <span class="order-row-label">주문번호</span>
+          <span class="order-row-value">ORD-2024122847382</span>
+        </div>
+        <div class="order-row">
+          <span class="order-row-label">결제일시</span>
+          <span class="order-row-value">2024.12.21 15:32</span>
+        </div>
+        <div class="order-row">
+          <span class="order-row-label">결제수단</span>
+          <span class="order-row-value">네이버페이</span>
+        </div>
+        <div class="order-row">
+          <span class="order-row-label">결제금액</span>
+          <span class="order-row-value">890,000원</span>
+        </div>
+      </div>
+
+      <!-- Notice -->
+      <div class="notice-box">
+        <h4 class="notice-title">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+          안내사항
+        </h4>
+        <p class="notice-text">
+          출발 7일 전까지 전액 환불 가능합니다.<br>
+          상세 일정은 출발 3일 전 카카오톡으로 안내됩니다.<br>
+          문의사항은 마이페이지에서 확인해주세요.
+        </p>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="action-buttons">
+        <a href="my-applications.html" class="btn-primary-full">신청 내역 확인</a>
+        <a href="home.html" class="btn-secondary-full">홈으로 돌아가기</a>
+      </div>
     </div>
+  </div>
 </body>
 </html>

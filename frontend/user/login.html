@@ -1,207 +1,178 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>로그인 - TRAVELY</title>
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
-    <link rel="stylesheet" href="../shared/aurora-style.css">
-    <style>
-        .login-container {
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            padding: 40px 20px;
-        }
-
-        .login-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .login-logo {
-            text-align: center;
-            margin-bottom: 48px;
-        }
-
-        .logo-text {
-            font-size: 40px;
-            font-weight: 900;
-            background: var(--gradient-primary);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .logo-subtitle {
-            font-size: 14px;
-            color: var(--text-secondary);
-            margin-top: 8px;
-        }
-
-        .login-intro {
-            text-align: center;
-            margin-bottom: 48px;
-        }
-
-        .login-intro h1 {
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 12px;
-        }
-
-        .login-intro p {
-            font-size: 14px;
-            color: var(--text-secondary);
-            line-height: 1.6;
-        }
-
-        .login-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-bottom: 32px;
-        }
-
-        .social-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            padding: 16px;
-            border-radius: var(--radius-md);
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            border: none;
-            width: 100%;
-            transition: transform 0.2s;
-        }
-
-        .social-btn:active {
-            transform: scale(0.98);
-        }
-
-        .social-btn i {
-            font-size: 20px;
-        }
-
-        .btn-kakao {
-            background: #FEE500;
-            color: #000000;
-        }
-
-        .btn-naver {
-            background: #03C75A;
-            color: white;
-        }
-
-        .btn-apple {
-            background: white;
-            color: #000000;
-        }
-
-        .divider {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            margin-bottom: 24px;
-        }
-
-        .divider-line {
-            flex: 1;
-            height: 1px;
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .divider-text {
-            font-size: 12px;
-            color: var(--text-muted);
-        }
-
-        .guest-btn {
-            width: 100%;
-            padding: 14px;
-            background: transparent;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: var(--radius-md);
-            color: var(--text-secondary);
-            font-size: 14px;
-            cursor: pointer;
-        }
-
-        .login-footer {
-            text-align: center;
-            padding-top: 24px;
-        }
-
-        .login-footer p {
-            font-size: 11px;
-            color: var(--text-muted);
-            line-height: 1.6;
-        }
-
-        .login-footer a {
-            color: var(--aurora-purple);
-            text-decoration: none;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>로그인 - TRAVELY</title>
+  <link rel="stylesheet" href="../shared/clean-style.css">
+  <style>
+    .login-container {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 40px 20px;
+    }
+    .logo-section {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 40px 0;
+    }
+    .logo {
+      font-size: 36px;
+      font-weight: 800;
+      background: var(--primary-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 12px;
+    }
+    .logo-subtitle {
+      font-size: 15px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+    .login-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .social-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 16px;
+      border-radius: var(--radius-md);
+      font-size: 15px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .social-btn:hover {
+      transform: translateY(-1px);
+    }
+    .social-btn svg {
+      width: 20px;
+      height: 20px;
+    }
+    .kakao-btn {
+      background: #FEE500;
+      color: #191919;
+    }
+    .naver-btn {
+      background: #03C75A;
+      color: white;
+    }
+    .apple-btn {
+      background: #000000;
+      color: white;
+    }
+    .divider {
+      display: flex;
+      align-items: center;
+      margin: 24px 0;
+    }
+    .divider-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border-light);
+    }
+    .divider-text {
+      padding: 0 16px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .email-login-btn {
+      width: 100%;
+      padding: 16px;
+      background: var(--bg-gray);
+      color: var(--text-primary);
+      border-radius: var(--radius-md);
+      font-size: 15px;
+      font-weight: 500;
+      border: none;
+      cursor: pointer;
+    }
+    .terms-text {
+      margin-top: 24px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .terms-text a {
+      color: var(--primary-start);
+      text-decoration: none;
+    }
+    .guest-link {
+      text-align: center;
+      margin-top: 16px;
+    }
+    .guest-link a {
+      font-size: 14px;
+      color: var(--text-secondary);
+      text-decoration: none;
+    }
+  </style>
 </head>
 <body>
-    <div class="aurora-bg">
-        <div class="aurora-orb aurora-orb-1"></div>
-        <div class="aurora-orb aurora-orb-2"></div>
-        <div class="aurora-orb aurora-orb-3"></div>
+  <div class="mobile-container">
+    <div class="login-container">
+      <!-- Logo Section -->
+      <div class="logo-section">
+        <h1 class="logo">TRAVELY</h1>
+        <p class="logo-subtitle">인플루언서와 함께하는<br>특별한 여행 플랫폼</p>
+      </div>
+
+      <!-- Social Login Buttons -->
+      <div class="login-buttons">
+        <button class="social-btn kakao-btn">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 3C6.48 3 2 6.58 2 11c0 2.84 1.89 5.33 4.71 6.73-.19.7-.68 2.53-.78 2.92-.13.51.19.5.4.37.16-.1 2.59-1.76 3.64-2.47.66.09 1.34.14 2.03.14 5.52 0 10-3.58 10-8s-4.48-8-10-8z"/>
+          </svg>
+          카카오로 시작하기
+        </button>
+        <button class="social-btn naver-btn">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M16.273 12.845L7.376 0H0v24h7.726V11.156L16.624 24H24V0h-7.727z"/>
+          </svg>
+          네이버로 시작하기
+        </button>
+        <button class="social-btn apple-btn">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/>
+          </svg>
+          Apple로 시작하기
+        </button>
+      </div>
+
+      <!-- Divider -->
+      <div class="divider">
+        <div class="divider-line"></div>
+        <span class="divider-text">또는</span>
+        <div class="divider-line"></div>
+      </div>
+
+      <!-- Email Login -->
+      <button class="email-login-btn">이메일로 로그인</button>
+
+      <!-- Terms -->
+      <p class="terms-text">
+        로그인 시 <a href="terms-agreement.html">서비스 이용약관</a> 및<br>
+        <a href="terms-agreement.html">개인정보 처리방침</a>에 동의하게 됩니다.
+      </p>
+
+      <!-- Guest Link -->
+      <div class="guest-link">
+        <a href="home.html">둘러보기</a>
+      </div>
     </div>
-
-    <div class="mobile-container">
-        <div class="login-container">
-            <div class="login-content">
-                <div class="login-logo">
-                    <div class="logo-text">TRAVELY</div>
-                    <p class="logo-subtitle">인플루언서와 함께하는 특별한 여행</p>
-                </div>
-
-                <div class="login-intro">
-                    <h1>반가워요! 👋</h1>
-                    <p>좋아하는 인플루언서와 함께<br>특별한 여행을 시작해보세요</p>
-                </div>
-
-                <div class="login-buttons">
-                    <button class="social-btn btn-kakao" onclick="location.href='terms-agreement.html'">
-                        <i class="ri-kakao-talk-fill"></i>
-                        카카오로 시작하기
-                    </button>
-                    <button class="social-btn btn-naver">
-                        <i class="ri-naver-fill"></i>
-                        네이버로 시작하기
-                    </button>
-                    <button class="social-btn btn-apple">
-                        <i class="ri-apple-fill"></i>
-                        Apple로 시작하기
-                    </button>
-                </div>
-
-                <div class="divider">
-                    <div class="divider-line"></div>
-                    <span class="divider-text">또는</span>
-                    <div class="divider-line"></div>
-                </div>
-
-                <button class="guest-btn" onclick="location.href='home.html'">
-                    둘러보기
-                </button>
-            </div>
-
-            <div class="login-footer">
-                <p>
-                    로그인 시 <a href="#">이용약관</a> 및 <a href="#">개인정보처리방침</a>에<br>
-                    동의하는 것으로 간주합니다.
-                </p>
-            </div>
-        </div>
-    </div>
+  </div>
 </body>
 </html>

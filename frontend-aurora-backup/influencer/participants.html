@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>참가자 관리 - TRAVELY 인플루언서</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="../shared/aurora-style.css">
+    <style>
+        .app-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background: var(--bg-secondary);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 24px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .sidebar-logo {
+            font-size: 24px;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 32px;
+        }
+
+        .sidebar-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            background: var(--bg-glass);
+            border-radius: var(--radius-lg);
+            margin-bottom: 24px;
+        }
+
+        .profile-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--aurora-purple);
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .profile-name {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .profile-handle {
+            font-size: 12px;
+            color: var(--aurora-purple);
+        }
+
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: var(--radius-md);
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .nav-item:hover {
+            background: var(--bg-glass);
+            color: var(--text-primary);
+        }
+
+        .nav-item.active {
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .nav-item i {
+            font-size: 18px;
+        }
+
+        .nav-divider {
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+            margin: 16px 0;
+        }
+
+        .nav-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 8px 16px;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 260px;
+            padding: 32px;
+        }
+
+        .main-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .page-title-area {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .back-btn {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius-md);
+            background: var(--bg-glass);
+            color: var(--text-primary);
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 800;
+        }
+
+        .page-subtitle {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        /* Stats Summary */
+        .stats-summary {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            padding: 20px;
+            background: var(--bg-glass);
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--aurora-purple);
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        /* Content Card */
+        .content-card {
+            background: var(--bg-glass);
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .card-body {
+            padding: 24px;
+        }
+
+        /* Participant List */
+        .participant-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .participant-card {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: var(--radius-md);
+            transition: all 0.3s;
+        }
+
+        .participant-card:hover {
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .participant-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--aurora-purple);
+        }
+
+        .participant-info {
+            flex: 1;
+        }
+
+        .participant-name {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .participant-contact {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .contact-item i {
+            font-size: 14px;
+            color: var(--aurora-purple);
+            width: 16px;
+        }
+
+        .contact-item a {
+            color: var(--aurora-purple);
+            text-decoration: none;
+        }
+
+        .contact-item a:hover {
+            text-decoration: underline;
+        }
+
+        .participant-expense {
+            text-align: right;
+            min-width: 120px;
+        }
+
+        .expense-amount {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--aurora-purple);
+        }
+
+        .expense-label {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .participant-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .action-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 10px 16px;
+            border-radius: var(--radius-md);
+            font-size: 12px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .action-btn.message {
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .action-btn.message:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .action-btn.secondary {
+            background: var(--bg-glass);
+            color: var(--text-primary);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .action-btn.secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* Search and Filter */
+        .search-filter {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 12px 16px;
+            padding-left: 40px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--aurora-purple);
+        }
+
+        .search-wrapper {
+            position: relative;
+            flex: 1;
+        }
+
+        .search-wrapper i {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+
+        /* Message All Button */
+        .message-all-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            background: var(--gradient-secondary);
+            border: none;
+            border-radius: var(--radius-md);
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .message-all-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(79, 209, 197, 0.4);
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .stats-summary {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .participant-card {
+                flex-wrap: wrap;
+            }
+
+            .participant-expense {
+                order: 3;
+                width: 100%;
+                text-align: left;
+                margin-top: 12px;
+                padding-top: 12px;
+                border-top: 1px solid rgba(255, 255, 255, 0.1);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .stats-summary {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="aurora-bg">
+        <div class="aurora-orb aurora-orb-1"></div>
+        <div class="aurora-orb aurora-orb-2"></div>
+        <div class="aurora-orb aurora-orb-3"></div>
+    </div>
+
+    <div class="app-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">TRAVELY</div>
+
+            <div class="sidebar-profile">
+                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200" class="profile-avatar" alt="프로필">
+                <div class="profile-info">
+                    <div class="profile-name">여행하는 지나</div>
+                    <div class="profile-handle">@travel_jina</div>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">
+                    <i class="ri-dashboard-line"></i>
+                    대시보드
+                </a>
+                <a href="course-list.html" class="nav-item active">
+                    <i class="ri-map-pin-line"></i>
+                    내 코스
+                </a>
+                <a href="applications.html" class="nav-item">
+                    <i class="ri-user-follow-line"></i>
+                    신청자 관리
+                </a>
+                <a href="settlements.html" class="nav-item">
+                    <i class="ri-money-dollar-circle-line"></i>
+                    정산 내역
+                </a>
+
+                <div class="nav-divider"></div>
+                <div class="nav-label">설정</div>
+
+                <a href="profile.html" class="nav-item">
+                    <i class="ri-user-settings-line"></i>
+                    프로필 설정
+                </a>
+                <a href="account.html" class="nav-item">
+                    <i class="ri-bank-card-line"></i>
+                    계좌 관리
+                </a>
+                <a href="notifications.html" class="nav-item">
+                    <i class="ri-notification-3-line"></i>
+                    알림 설정
+                </a>
+
+                <div class="nav-divider"></div>
+
+                <a href="help.html" class="nav-item">
+                    <i class="ri-question-line"></i>
+                    도움말
+                </a>
+                <a href="logout.html" class="nav-item">
+                    <i class="ri-logout-box-line"></i>
+                    로그아웃
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="main-header">
+                <div class="page-title-area">
+                    <a href="course-detail.html" class="back-btn">
+                        <i class="ri-arrow-left-line"></i>
+                    </a>
+                    <div>
+                        <h1 class="page-title">참가자 관리</h1>
+                        <p class="page-subtitle">발리 럭셔리 힐링 7일</p>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="message-all-btn">
+                        <i class="ri-send-plane-line"></i>
+                        전체 메시지
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats Summary -->
+            <div class="stats-summary">
+                <div class="stat-card">
+                    <div class="stat-value">6</div>
+                    <div class="stat-label">총 참가자</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">3,000,000원</div>
+                    <div class="stat-label">총 충전액</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">1,850,000원</div>
+                    <div class="stat-label">총 사용액</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">1,150,000원</div>
+                    <div class="stat-label">총 잔액</div>
+                </div>
+            </div>
+
+            <!-- Participants Card -->
+            <div class="content-card">
+                <div class="card-header">
+                    <h3 class="card-title">참가자 목록</h3>
+                    <span style="font-size: 13px; color: var(--text-secondary);">총 6명</span>
+                </div>
+                <div class="card-body">
+                    <!-- Search -->
+                    <div class="search-filter">
+                        <div class="search-wrapper">
+                            <i class="ri-search-line"></i>
+                            <input type="text" class="search-input" placeholder="이름 또는 연락처 검색">
+                        </div>
+                    </div>
+
+                    <!-- Participant List -->
+                    <div class="participant-list">
+                        <div class="participant-card">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200" class="participant-avatar" alt="참가자">
+                            <div class="participant-info">
+                                <div class="participant-name">박준혁</div>
+                                <div class="participant-contact">
+                                    <div class="contact-item">
+                                        <i class="ri-phone-line"></i>
+                                        010-1234-5678
+                                    </div>
+                                    <div class="contact-item">
+                                        <i class="ri-instagram-line"></i>
+                                        <a href="https://instagram.com/junhyuk_p" target="_blank">@junhyuk_p</a>
+                                    </div>
+                                    <div class="contact-item">
+                                        <i class="ri-mail-line"></i>
+                                        junhyuk@email.com
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="participant-expense">
+                                <div class="expense-amount">500,000원</div>
+                                <div class="expense-label">경비 잔액</div>
+                            </div>
+                            <div class="participant-actions">
+                                <button class="action-btn message">
+                                    <i class="ri-send-plane-line"></i>
+                                    메시지
+                                </button>
+                                <button class="action-btn secondary">
+                                    <i class="ri-user-line"></i>
+                                    상세
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="participant-card">
+                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200" class="participant-avatar" alt="참가자">
+                            <div class="participant-info">
+                                <div class="participant-name">정다은</div>
+                                <div class="participant-contact">
+                                    <div class="contact-item">
+                                        <i class="ri-phone-line"></i>
+                                        010-9876-5432
+                                    </div>
+                                    <div class="contact-item">
+                                        <i class="ri-instagram-line"></i>
+                                        <a href="https://instagram.com/daeun_j" target="_blank">@daeun_j</a>
+                                    </div>
+                                    <div class="contact-item">
+                                        <i class="ri-mail-line"></i>
+                                        daeun@email.com
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="participant-expense">
+                                <div class="expense-amount">500,000원</div>
+                                <div class="expense-label">경비 잔액</div>
+                            </div>
+                            <div class="participant-actions">
+                                <button class="action-btn message">
+                                    <i class="ri-send-plane-line"></i>
+                                    메시지
+                                </button>
+                                <button class="action-btn secondary">
+                                    <i class="ri-user-line"></i>
+                                    상세
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="participant-card">
+                            <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200" class="participant-avatar" alt="참가자">
+                            <div class="participant-info">
+                                <div class="participant-name">김민지</div>
+                                <div class="participant-contact">
+                                    <div class="contact-item">
+                                        <i class="ri-phone-line"></i>
+                                        010-5555-1234
+                                    </div>
+                                    <div class="contact-item">
+                                        <i class="ri-instagram-line"></i>
+                                        <a href="https://instagram.com/minji_kim" target="_blank">@minji_kim</a>
+                                    </div>
+                                    <div class="contact-item">
+                                        <i class="ri-mail-line"></i>
+                                        minji@email.com
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="participant-expense">
+                                <div class="expense-amount">150,000원</div>
+                                <div class="expense-label">경비 잔액</div>
+                            </div>
+                            <div class="participant-actions">
+                                <button class="action-btn message">
+                                    <i class="ri-send-plane-line"></i>
+                                    메시지
+                                </button>
+                                <button class="action-btn secondary">
+                                    <i class="ri-user-line"></i>
+                                    상세
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="participant-card">
+                            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200" class="participant-avatar" alt="참가자">
+                            <div class="participant-info">
+                                <div class="participant-name">이수현</div>
+                                <div class="participant-contact">
+                                    <div class="contact-item">
+                                        <i class="ri-phone-line"></i>
+                                        010-7777-8888
+                                    </div>
+                                    <div class="contact-item">
+                                        <i class="ri-instagram-line"></i>
+                                        <a href="https://instagram.com/suhyun_lee" target="_blank">@suhyun_lee</a>
+                                    </div>
+                                    <div class="contact-item">
+                                        <i class="ri-mail-line"></i>
+                                        suhyun@email.com
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="participant-expense">
+                                <div class="expense-amount">0원</div>
+                                <div class="expense-label">경비 잔액</div>
+                            </div>
+                            <div class="participant-actions">
+                                <button class="action-btn message">
+                                    <i class="ri-send-plane-line"></i>
+                                    메시지
+                                </button>
+                                <button class="action-btn secondary">
+                                    <i class="ri-user-line"></i>
+                                    상세
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="participant-card">
+                            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200" class="participant-avatar" alt="참가자">
+                            <div class="participant-info">
+                                <div class="participant-name">최영호</div>
+                                <div class="participant-contact">
+                                    <div class="contact-item">
+                                        <i class="ri-phone-line"></i>
+                                        010-3333-4444
+                                    </div>
+                                    <div class="contact-item">
+                                        <i class="ri-instagram-line"></i>
+                                        <a href="https://instagram.com/youngho_c" target="_blank">@youngho_c</a>
+                                    </div>
+                                    <div class="contact-item">
+                                        <i class="ri-mail-line"></i>
+                                        youngho@email.com
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="participant-expense">
+                                <div class="expense-amount">0원</div>
+                                <div class="expense-label">경비 잔액</div>
+                            </div>
+                            <div class="participant-actions">
+                                <button class="action-btn message">
+                                    <i class="ri-send-plane-line"></i>
+                                    메시지
+                                </button>
+                                <button class="action-btn secondary">
+                                    <i class="ri-user-line"></i>
+                                    상세
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="participant-card">
+                            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=200" class="participant-avatar" alt="참가자">
+                            <div class="participant-info">
+                                <div class="participant-name">한소희</div>
+                                <div class="participant-contact">
+                                    <div class="contact-item">
+                                        <i class="ri-phone-line"></i>
+                                        010-6666-7777
+                                    </div>
+                                    <div class="contact-item">
+                                        <i class="ri-instagram-line"></i>
+                                        <a href="https://instagram.com/sohee_han" target="_blank">@sohee_han</a>
+                                    </div>
+                                    <div class="contact-item">
+                                        <i class="ri-mail-line"></i>
+                                        sohee@email.com
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="participant-expense">
+                                <div class="expense-amount">0원</div>
+                                <div class="expense-label">경비 잔액</div>
+                            </div>
+                            <div class="participant-actions">
+                                <button class="action-btn message">
+                                    <i class="ri-send-plane-line"></i>
+                                    메시지
+                                </button>
+                                <button class="action-btn secondary">
+                                    <i class="ri-user-line"></i>
+                                    상세
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

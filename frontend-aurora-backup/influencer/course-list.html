@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>내 코스 - TRAVELY 인플루언서</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="../shared/aurora-style.css">
+    <style>
+        .app-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background: var(--bg-secondary);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 24px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .sidebar-logo {
+            font-size: 24px;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 32px;
+        }
+
+        .sidebar-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            background: var(--bg-glass);
+            border-radius: var(--radius-lg);
+            margin-bottom: 24px;
+        }
+
+        .profile-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--aurora-purple);
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .profile-name {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .profile-handle {
+            font-size: 12px;
+            color: var(--aurora-purple);
+        }
+
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: var(--radius-md);
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .nav-item:hover {
+            background: var(--bg-glass);
+            color: var(--text-primary);
+        }
+
+        .nav-item.active {
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .nav-item i {
+            font-size: 18px;
+        }
+
+        .nav-divider {
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+            margin: 16px 0;
+        }
+
+        .nav-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 8px 16px;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 260px;
+            padding: 32px;
+        }
+
+        .main-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 800;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        /* Filter Tabs */
+        .filter-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 8px;
+        }
+
+        .filter-tab {
+            padding: 10px 20px;
+            border-radius: var(--radius-full);
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            background: var(--bg-glass);
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-tab.active {
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .filter-tab:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .filter-tab .count {
+            margin-left: 6px;
+            padding: 2px 6px;
+            border-radius: var(--radius-full);
+            background: rgba(255, 255, 255, 0.2);
+            font-size: 11px;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            background: var(--bg-glass);
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .search-box input {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 14px;
+            width: 200px;
+        }
+
+        .search-box input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .search-box input:focus {
+            outline: none;
+        }
+
+        .search-box i {
+            color: var(--text-muted);
+        }
+
+        /* Course Grid */
+        .course-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .course-card {
+            background: var(--bg-glass);
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .course-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .course-image {
+            position: relative;
+            height: 180px;
+            overflow: hidden;
+        }
+
+        .course-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .course-badges {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            display: flex;
+            gap: 6px;
+        }
+
+        .course-status {
+            padding: 4px 10px;
+            border-radius: var(--radius-full);
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .course-status.recruiting {
+            background: rgba(102, 126, 234, 0.9);
+            color: white;
+        }
+
+        .course-status.closed {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .course-status.ongoing {
+            background: rgba(72, 187, 120, 0.9);
+            color: white;
+        }
+
+        .course-status.completed {
+            background: rgba(160, 174, 192, 0.9);
+            color: white;
+        }
+
+        .course-menu {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.5);
+            border: none;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .course-content {
+            padding: 20px;
+        }
+
+        .course-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .course-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 16px;
+        }
+
+        .course-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .course-meta-item i {
+            color: var(--aurora-purple);
+            font-size: 14px;
+        }
+
+        .course-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 16px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .course-price {
+            font-size: 18px;
+            font-weight: 700;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .course-applicants {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .applicants-bar {
+            width: 60px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .applicants-fill {
+            height: 100%;
+            background: var(--aurora-purple);
+            border-radius: 2px;
+        }
+
+        /* Create Button */
+        .create-card {
+            background: var(--bg-glass);
+            border-radius: var(--radius-lg);
+            border: 2px dashed rgba(255, 255, 255, 0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 360px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+
+        .create-card:hover {
+            border-color: var(--aurora-purple);
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .create-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin-bottom: 16px;
+        }
+
+        .create-text {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        /* Responsive */
+        @media (max-width: 1400px) {
+            .course-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .course-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-section {
+                flex-direction: column;
+                gap: 16px;
+                align-items: stretch;
+            }
+
+            .filter-tabs {
+                overflow-x: auto;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="aurora-bg">
+        <div class="aurora-orb aurora-orb-1"></div>
+        <div class="aurora-orb aurora-orb-2"></div>
+        <div class="aurora-orb aurora-orb-3"></div>
+    </div>
+
+    <div class="app-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">TRAVELY</div>
+
+            <div class="sidebar-profile">
+                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200" class="profile-avatar" alt="프로필">
+                <div class="profile-info">
+                    <div class="profile-name">여행하는 지나</div>
+                    <div class="profile-handle">@travel_jina</div>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">
+                    <i class="ri-dashboard-line"></i>
+                    대시보드
+                </a>
+                <a href="course-list.html" class="nav-item active">
+                    <i class="ri-map-pin-line"></i>
+                    내 코스
+                </a>
+                <a href="applications.html" class="nav-item">
+                    <i class="ri-user-follow-line"></i>
+                    신청자 관리
+                </a>
+                <a href="settlements.html" class="nav-item">
+                    <i class="ri-money-dollar-circle-line"></i>
+                    정산 내역
+                </a>
+
+                <div class="nav-divider"></div>
+                <div class="nav-label">설정</div>
+
+                <a href="profile.html" class="nav-item">
+                    <i class="ri-user-settings-line"></i>
+                    프로필 설정
+                </a>
+                <a href="account.html" class="nav-item">
+                    <i class="ri-bank-card-line"></i>
+                    계좌 관리
+                </a>
+                <a href="notifications.html" class="nav-item">
+                    <i class="ri-notification-3-line"></i>
+                    알림 설정
+                </a>
+
+                <div class="nav-divider"></div>
+
+                <a href="help.html" class="nav-item">
+                    <i class="ri-question-line"></i>
+                    도움말
+                </a>
+                <a href="logout.html" class="nav-item">
+                    <i class="ri-logout-box-line"></i>
+                    로그아웃
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="main-header">
+                <h1 class="page-title">내 코스</h1>
+                <div class="header-actions">
+                    <a href="course-create.html" class="btn btn-primary">
+                        <i class="ri-add-line"></i>
+                        새 코스 만들기
+                    </a>
+                </div>
+            </div>
+
+            <!-- Filter Section -->
+            <div class="filter-section">
+                <div class="filter-tabs">
+                    <button class="filter-tab active">
+                        전체 <span class="count">12</span>
+                    </button>
+                    <button class="filter-tab">
+                        모집중 <span class="count">3</span>
+                    </button>
+                    <button class="filter-tab">
+                        모집마감 <span class="count">2</span>
+                    </button>
+                    <button class="filter-tab">
+                        진행중 <span class="count">1</span>
+                    </button>
+                    <button class="filter-tab">
+                        완료 <span class="count">6</span>
+                    </button>
+                </div>
+                <div class="search-box">
+                    <i class="ri-search-line"></i>
+                    <input type="text" placeholder="코스 검색...">
+                </div>
+            </div>
+
+            <!-- Course Grid -->
+            <div class="course-grid">
+                <!-- Create New Course Card -->
+                <a href="course-create.html" class="create-card">
+                    <div class="create-icon">
+                        <i class="ri-add-line"></i>
+                    </div>
+                    <div class="create-text">새 코스 만들기</div>
+                </a>
+
+                <!-- Course Card 1 -->
+                <div class="course-card">
+                    <div class="course-image">
+                        <img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=600" alt="발리">
+                        <div class="course-badges">
+                            <span class="course-status recruiting">모집중</span>
+                        </div>
+                        <button class="course-menu">
+                            <i class="ri-more-2-fill"></i>
+                        </button>
+                    </div>
+                    <div class="course-content">
+                        <h3 class="course-title">발리 럭셔리 힐링 7일</h3>
+                        <div class="course-meta">
+                            <div class="course-meta-item">
+                                <i class="ri-calendar-line"></i>
+                                2025.02.20 - 02.26
+                            </div>
+                            <div class="course-meta-item">
+                                <i class="ri-map-pin-line"></i>
+                                인도네시아, 발리
+                            </div>
+                        </div>
+                        <div class="course-footer">
+                            <div class="course-price">1,890,000원</div>
+                            <div class="course-applicants">
+                                <div class="applicants-bar">
+                                    <div class="applicants-fill" style="width: 66.7%"></div>
+                                </div>
+                                8/12명
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Course Card 2 -->
+                <div class="course-card">
+                    <div class="course-image">
+                        <img src="https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=600" alt="도쿄">
+                        <div class="course-badges">
+                            <span class="course-status recruiting">모집중</span>
+                        </div>
+                        <button class="course-menu">
+                            <i class="ri-more-2-fill"></i>
+                        </button>
+                    </div>
+                    <div class="course-content">
+                        <h3 class="course-title">도쿄 맛집 투어 5일</h3>
+                        <div class="course-meta">
+                            <div class="course-meta-item">
+                                <i class="ri-calendar-line"></i>
+                                2025.03.05 - 03.09
+                            </div>
+                            <div class="course-meta-item">
+                                <i class="ri-map-pin-line"></i>
+                                일본, 도쿄
+                            </div>
+                        </div>
+                        <div class="course-footer">
+                            <div class="course-price">1,290,000원</div>
+                            <div class="course-applicants">
+                                <div class="applicants-bar">
+                                    <div class="applicants-fill" style="width: 75%"></div>
+                                </div>
+                                15/20명
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Course Card 3 -->
+                <div class="course-card">
+                    <div class="course-image">
+                        <img src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=600" alt="파리">
+                        <div class="course-badges">
+                            <span class="course-status closed">모집마감</span>
+                        </div>
+                        <button class="course-menu">
+                            <i class="ri-more-2-fill"></i>
+                        </button>
+                    </div>
+                    <div class="course-content">
+                        <h3 class="course-title">파리 아트 투어 6일</h3>
+                        <div class="course-meta">
+                            <div class="course-meta-item">
+                                <i class="ri-calendar-line"></i>
+                                2025.03.15 - 03.20
+                            </div>
+                            <div class="course-meta-item">
+                                <i class="ri-map-pin-line"></i>
+                                프랑스, 파리
+                            </div>
+                        </div>
+                        <div class="course-footer">
+                            <div class="course-price">2,450,000원</div>
+                            <div class="course-applicants">
+                                <div class="applicants-bar">
+                                    <div class="applicants-fill" style="width: 100%"></div>
+                                </div>
+                                10/10명
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Course Card 4 -->
+                <div class="course-card">
+                    <div class="course-image">
+                        <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600" alt="스위스">
+                        <div class="course-badges">
+                            <span class="course-status ongoing">진행중</span>
+                        </div>
+                        <button class="course-menu">
+                            <i class="ri-more-2-fill"></i>
+                        </button>
+                    </div>
+                    <div class="course-content">
+                        <h3 class="course-title">스위스 알프스 트레킹 8일</h3>
+                        <div class="course-meta">
+                            <div class="course-meta-item">
+                                <i class="ri-calendar-line"></i>
+                                2025.01.15 - 01.22
+                            </div>
+                            <div class="course-meta-item">
+                                <i class="ri-map-pin-line"></i>
+                                스위스
+                            </div>
+                        </div>
+                        <div class="course-footer">
+                            <div class="course-price">3,200,000원</div>
+                            <div class="course-applicants">
+                                <div class="applicants-bar">
+                                    <div class="applicants-fill" style="width: 100%"></div>
+                                </div>
+                                8/8명
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Course Card 5 -->
+                <div class="course-card">
+                    <div class="course-image">
+                        <img src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=600" alt="두바이">
+                        <div class="course-badges">
+                            <span class="course-status completed">완료</span>
+                        </div>
+                        <button class="course-menu">
+                            <i class="ri-more-2-fill"></i>
+                        </button>
+                    </div>
+                    <div class="course-content">
+                        <h3 class="course-title">두바이 럭셔리 투어 5일</h3>
+                        <div class="course-meta">
+                            <div class="course-meta-item">
+                                <i class="ri-calendar-line"></i>
+                                2024.12.20 - 12.24
+                            </div>
+                            <div class="course-meta-item">
+                                <i class="ri-map-pin-line"></i>
+                                UAE, 두바이
+                            </div>
+                        </div>
+                        <div class="course-footer">
+                            <div class="course-price">2,800,000원</div>
+                            <div class="course-applicants">
+                                <div class="applicants-bar">
+                                    <div class="applicants-fill" style="width: 100%"></div>
+                                </div>
+                                12/12명
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Filter tabs
+        document.querySelectorAll('.filter-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>

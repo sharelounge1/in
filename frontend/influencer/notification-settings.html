@@ -1,536 +1,394 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>알림 설정 - TRAVELY 인플루언서</title>
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
-    <link rel="stylesheet" href="../shared/aurora-style.css">
-    <style>
-        .app-layout {
-            display: flex;
-            min-height: 100vh;
-        }
-
-        /* Sidebar */
-        .sidebar {
-            width: 260px;
-            background: var(--bg-secondary);
-            border-right: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 24px;
-            position: fixed;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            overflow-y: auto;
-            z-index: 100;
-        }
-
-        .sidebar-logo {
-            font-size: 24px;
-            font-weight: 800;
-            background: var(--gradient-primary);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 32px;
-        }
-
-        .sidebar-profile {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 16px;
-            background: var(--bg-glass);
-            border-radius: var(--radius-lg);
-            margin-bottom: 24px;
-        }
-
-        .profile-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid var(--aurora-purple);
-        }
-
-        .profile-info {
-            flex: 1;
-        }
-
-        .profile-name {
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        .profile-handle {
-            font-size: 12px;
-            color: var(--aurora-purple);
-        }
-
-        .sidebar-nav {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .nav-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 16px;
-            border-radius: var(--radius-md);
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.3s;
-        }
-
-        .nav-item:hover {
-            background: var(--bg-glass);
-            color: var(--text-primary);
-        }
-
-        .nav-item.active {
-            background: var(--gradient-primary);
-            color: white;
-        }
-
-        .nav-item i {
-            font-size: 18px;
-        }
-
-        .nav-divider {
-            height: 1px;
-            background: rgba(255, 255, 255, 0.1);
-            margin: 16px 0;
-        }
-
-        .nav-label {
-            font-size: 11px;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            padding: 8px 16px;
-        }
-
-        /* Main Content */
-        .main-content {
-            flex: 1;
-            margin-left: 260px;
-            padding: 32px;
-        }
-
-        .main-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 32px;
-        }
-
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .back-btn {
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: var(--radius-md);
-            background: var(--bg-glass);
-            color: var(--text-primary);
-            text-decoration: none;
-            font-size: 20px;
-            transition: all 0.3s;
-        }
-
-        .back-btn:hover {
-            background: rgba(255, 255, 255, 0.15);
-        }
-
-        .page-title {
-            font-size: 28px;
-            font-weight: 800;
-        }
-
-        /* Settings Section */
-        .settings-section {
-            margin-bottom: 32px;
-        }
-
-        .settings-section-title {
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 16px;
-            padding-left: 4px;
-        }
-
-        .settings-card {
-            background: var(--bg-glass);
-            border-radius: var(--radius-lg);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            overflow: hidden;
-        }
-
-        /* Toggle Item */
-        .toggle-item {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            padding: 20px 24px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .toggle-item:last-child {
-            border-bottom: none;
-        }
-
-        .toggle-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: var(--radius-md);
-            background: rgba(255, 255, 255, 0.05);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            color: var(--aurora-purple);
-            flex-shrink: 0;
-        }
-
-        .toggle-content {
-            flex: 1;
-        }
-
-        .toggle-title {
-            font-size: 15px;
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .toggle-desc {
-            font-size: 13px;
-            color: var(--text-secondary);
-        }
-
-        /* Toggle Switch */
-        .toggle-switch {
-            position: relative;
-            width: 52px;
-            height: 28px;
-            flex-shrink: 0;
-        }
-
-        .toggle-switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .toggle-slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 28px;
-            transition: 0.3s;
-        }
-
-        .toggle-slider:before {
-            position: absolute;
-            content: "";
-            height: 22px;
-            width: 22px;
-            left: 3px;
-            bottom: 3px;
-            background-color: white;
-            border-radius: 50%;
-            transition: 0.3s;
-        }
-
-        .toggle-switch input:checked + .toggle-slider {
-            background: var(--gradient-primary);
-        }
-
-        .toggle-switch input:checked + .toggle-slider:before {
-            transform: translateX(24px);
-        }
-
-        /* Notification Type Items */
-        .notification-type-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 16px 24px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .notification-type-item:last-child {
-            border-bottom: none;
-        }
-
-        .notification-type-info {
-            flex: 1;
-        }
-
-        .notification-type-title {
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 2px;
-        }
-
-        .notification-type-desc {
-            font-size: 12px;
-            color: var(--text-secondary);
-        }
-
-        /* Info Box */
-        .info-box {
-            display: flex;
-            gap: 12px;
-            padding: 16px;
-            background: rgba(102, 126, 234, 0.1);
-            border-radius: var(--radius-md);
-            margin-bottom: 24px;
-        }
-
-        .info-box-icon {
-            font-size: 20px;
-            color: var(--aurora-purple);
-            flex-shrink: 0;
-        }
-
-        .info-box-content {
-            font-size: 13px;
-            color: var(--text-secondary);
-            line-height: 1.6;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .sidebar {
-                transform: translateX(-100%);
-            }
-
-            .main-content {
-                margin-left: 0;
-                padding: 20px;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>알림 설정 - 인플루언서</title>
+  <link rel="stylesheet" href="../shared/clean-style.css">
+  <style>
+    .content {
+      padding-bottom: 80px;
+    }
+    .notification-banner {
+      margin: 20px;
+      padding: 16px;
+      background: var(--bg-light);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .notification-banner-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--primary-gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .notification-banner-icon svg {
+      width: 20px;
+      height: 20px;
+      color: white;
+    }
+    .notification-banner-text {
+      flex: 1;
+    }
+    .notification-banner-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+    .notification-banner-subtitle {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+    .settings-section {
+      padding: 0 20px;
+      margin-bottom: 24px;
+    }
+    .section-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+    .toggle-group {
+      background: var(--bg-white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+    }
+    .toggle-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .toggle-item:last-child {
+      border-bottom: none;
+    }
+    .toggle-content {
+      flex: 1;
+    }
+    .toggle-title {
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 2px;
+    }
+    .toggle-description {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+    .toggle-switch {
+      position: relative;
+      width: 48px;
+      height: 28px;
+      flex-shrink: 0;
+      margin-left: 12px;
+    }
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: var(--border-medium);
+      transition: 0.3s;
+      border-radius: 28px;
+    }
+    .toggle-slider:before {
+      position: absolute;
+      content: "";
+      height: 22px;
+      width: 22px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: 0.3s;
+      border-radius: 50%;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .toggle-switch input:checked + .toggle-slider {
+      background: var(--primary-gradient);
+    }
+    .toggle-switch input:checked + .toggle-slider:before {
+      transform: translateX(20px);
+    }
+    .time-setting {
+      margin-top: 24px;
+    }
+    .time-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .time-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    .time-card {
+      background: var(--bg-white);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      box-shadow: var(--shadow-card);
+    }
+    .time-label {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+    .time-select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-family: inherit;
+      background: var(--bg-white);
+    }
+    .time-select:focus {
+      outline: none;
+      border-color: var(--primary-start);
+    }
+    .info-section {
+      margin: 20px;
+      padding: 16px;
+      background: rgba(59, 130, 246, 0.1);
+      border-radius: var(--radius-md);
+    }
+    .info-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #3B82F6;
+      margin-bottom: 8px;
+    }
+    .info-text {
+      font-size: 12px;
+      color: #1E40AF;
+      line-height: 1.5;
+    }
+    .back-btn {
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+    }
+    .back-btn svg {
+      width: 24px;
+      height: 24px;
+      color: var(--text-primary);
+    }
+  </style>
 </head>
 <body>
-    <div class="aurora-bg">
-        <div class="aurora-orb aurora-orb-1"></div>
-        <div class="aurora-orb aurora-orb-2"></div>
-        <div class="aurora-orb aurora-orb-3"></div>
+  <div class="mobile-container">
+    <!-- Header -->
+    <header class="header">
+      <button class="back-btn" onclick="history.back()">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+        </svg>
+      </button>
+      <span class="header-title">알림 설정</span>
+      <div style="width: 24px;"></div>
+    </header>
+
+    <!-- Content -->
+    <div class="content">
+      <!-- Notification Banner -->
+      <div class="notification-banner">
+        <div class="notification-banner-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+          </svg>
+        </div>
+        <div class="notification-banner-text">
+          <p class="notification-banner-title">푸시 알림 활성화됨</p>
+          <p class="notification-banner-subtitle">중요한 소식을 놓치지 마세요</p>
+        </div>
+      </div>
+
+      <!-- Push Notifications -->
+      <div class="settings-section">
+        <h3 class="section-title">푸시 알림</h3>
+        <div class="toggle-group">
+          <div class="toggle-item">
+            <div class="toggle-content">
+              <p class="toggle-title">새 신청 알림</p>
+              <p class="toggle-description">새로운 참가 신청이 들어올 때</p>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <div class="toggle-item">
+            <div class="toggle-content">
+              <p class="toggle-title">결제 완료 알림</p>
+              <p class="toggle-description">참가자가 결제를 완료했을 때</p>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <div class="toggle-item">
+            <div class="toggle-content">
+              <p class="toggle-title">문의 알림</p>
+              <p class="toggle-description">참가자가 문의를 남겼을 때</p>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <div class="toggle-item">
+            <div class="toggle-content">
+              <p class="toggle-title">정산 알림</p>
+              <p class="toggle-description">정산이 완료되었을 때</p>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <div class="toggle-item">
+            <div class="toggle-content">
+              <p class="toggle-title">리뷰 알림</p>
+              <p class="toggle-description">새로운 리뷰가 작성되었을 때</p>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Email Notifications -->
+      <div class="settings-section">
+        <h3 class="section-title">이메일 알림</h3>
+        <div class="toggle-group">
+          <div class="toggle-item">
+            <div class="toggle-content">
+              <p class="toggle-title">일일 요약</p>
+              <p class="toggle-description">하루 동안의 활동 요약</p>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <div class="toggle-item">
+            <div class="toggle-content">
+              <p class="toggle-title">주간 리포트</p>
+              <p class="toggle-description">주간 통계 및 분석</p>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <div class="toggle-item">
+            <div class="toggle-content">
+              <p class="toggle-title">마케팅 정보</p>
+              <p class="toggle-description">프로모션 및 이벤트 안내</p>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quiet Hours -->
+      <div class="settings-section">
+        <h3 class="section-title">방해금지 시간</h3>
+        <div class="toggle-group">
+          <div class="toggle-item">
+            <div class="toggle-content">
+              <p class="toggle-title">방해금지 모드</p>
+              <p class="toggle-description">설정 시간 동안 알림 끄기</p>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="time-setting">
+          <h4 class="time-title">방해금지 시간 설정</h4>
+          <div class="time-grid">
+            <div class="time-card">
+              <p class="time-label">시작 시간</p>
+              <select class="time-select">
+                <option>오후 10:00</option>
+                <option>오후 11:00</option>
+                <option>자정 12:00</option>
+              </select>
+            </div>
+            <div class="time-card">
+              <p class="time-label">종료 시간</p>
+              <select class="time-select">
+                <option>오전 7:00</option>
+                <option selected>오전 8:00</option>
+                <option>오전 9:00</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Info Section -->
+      <div class="info-section">
+        <h4 class="info-title">알림 팁</h4>
+        <p class="info-text">
+          중요한 알림(결제, 정산 관련)은 방해금지 시간에도 수신됩니다.
+          모든 알림을 끄려면 기기의 알림 설정에서 앱 알림을 비활성화해 주세요.
+        </p>
+      </div>
     </div>
 
-    <div class="app-layout">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="sidebar-logo">TRAVELY</div>
-
-            <div class="sidebar-profile">
-                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200" class="profile-avatar" alt="프로필">
-                <div class="profile-info">
-                    <div class="profile-name">여행하는 지나</div>
-                    <div class="profile-handle">@travel_jina</div>
-                </div>
-            </div>
-
-            <nav class="sidebar-nav">
-                <a href="dashboard.html" class="nav-item">
-                    <i class="ri-dashboard-line"></i>
-                    대시보드
-                </a>
-                <a href="course-list.html" class="nav-item">
-                    <i class="ri-map-pin-line"></i>
-                    내 코스
-                </a>
-                <a href="applications.html" class="nav-item">
-                    <i class="ri-user-follow-line"></i>
-                    신청자 관리
-                </a>
-                <a href="settlements.html" class="nav-item">
-                    <i class="ri-money-dollar-circle-line"></i>
-                    정산 내역
-                </a>
-
-                <div class="nav-divider"></div>
-                <div class="nav-label">설정</div>
-
-                <a href="settings.html" class="nav-item active">
-                    <i class="ri-settings-3-line"></i>
-                    설정
-                </a>
-
-                <div class="nav-divider"></div>
-
-                <a href="help.html" class="nav-item">
-                    <i class="ri-question-line"></i>
-                    도움말
-                </a>
-                <a href="logout.html" class="nav-item">
-                    <i class="ri-logout-box-line"></i>
-                    로그아웃
-                </a>
-            </nav>
-        </aside>
-
-        <!-- Main Content -->
-        <main class="main-content">
-            <div class="main-header">
-                <div class="header-left">
-                    <a href="settings.html" class="back-btn">
-                        <i class="ri-arrow-left-line"></i>
-                    </a>
-                    <h1 class="page-title">알림 설정</h1>
-                </div>
-            </div>
-
-            <!-- Info Box -->
-            <div class="info-box">
-                <i class="ri-information-line info-box-icon"></i>
-                <div class="info-box-content">
-                    알림 설정을 통해 원하는 방식으로 중요한 정보를 받아보세요. 푸시 알림을 켜면 실시간으로 새로운 소식을 확인할 수 있습니다.
-                </div>
-            </div>
-
-            <!-- Notification Channels -->
-            <div class="settings-section">
-                <div class="settings-section-title">알림 수신 방법</div>
-                <div class="settings-card">
-                    <div class="toggle-item">
-                        <div class="toggle-icon">
-                            <i class="ri-notification-3-line"></i>
-                        </div>
-                        <div class="toggle-content">
-                            <div class="toggle-title">푸시 알림</div>
-                            <div class="toggle-desc">앱 푸시로 실시간 알림 받기</div>
-                        </div>
-                        <label class="toggle-switch">
-                            <input type="checkbox" checked>
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
-                    <div class="toggle-item">
-                        <div class="toggle-icon">
-                            <i class="ri-mail-line"></i>
-                        </div>
-                        <div class="toggle-content">
-                            <div class="toggle-title">이메일 알림</div>
-                            <div class="toggle-desc">등록된 이메일로 알림 받기</div>
-                        </div>
-                        <label class="toggle-switch">
-                            <input type="checkbox" checked>
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
-                    <div class="toggle-item">
-                        <div class="toggle-icon">
-                            <i class="ri-message-2-line"></i>
-                        </div>
-                        <div class="toggle-content">
-                            <div class="toggle-title">SMS 알림</div>
-                            <div class="toggle-desc">등록된 휴대폰 번호로 문자 알림 받기</div>
-                        </div>
-                        <label class="toggle-switch">
-                            <input type="checkbox">
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Notification Types -->
-            <div class="settings-section">
-                <div class="settings-section-title">알림 유형별 설정</div>
-                <div class="settings-card">
-                    <div class="notification-type-item">
-                        <div class="notification-type-info">
-                            <div class="notification-type-title">신청 알림</div>
-                            <div class="notification-type-desc">새로운 코스 신청이 있을 때 알림</div>
-                        </div>
-                        <label class="toggle-switch">
-                            <input type="checkbox" checked>
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
-                    <div class="notification-type-item">
-                        <div class="notification-type-info">
-                            <div class="notification-type-title">결제 알림</div>
-                            <div class="notification-type-desc">참가자 결제 완료 시 알림</div>
-                        </div>
-                        <label class="toggle-switch">
-                            <input type="checkbox" checked>
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
-                    <div class="notification-type-item">
-                        <div class="notification-type-info">
-                            <div class="notification-type-title">정산 알림</div>
-                            <div class="notification-type-desc">정산 완료, 정산 예정 알림</div>
-                        </div>
-                        <label class="toggle-switch">
-                            <input type="checkbox" checked>
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
-                    <div class="notification-type-item">
-                        <div class="notification-type-info">
-                            <div class="notification-type-title">취소/환불 알림</div>
-                            <div class="notification-type-desc">참가 취소 및 환불 요청 알림</div>
-                        </div>
-                        <label class="toggle-switch">
-                            <input type="checkbox" checked>
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
-                    <div class="notification-type-item">
-                        <div class="notification-type-info">
-                            <div class="notification-type-title">리뷰 알림</div>
-                            <div class="notification-type-desc">새로운 리뷰 작성 시 알림</div>
-                        </div>
-                        <label class="toggle-switch">
-                            <input type="checkbox" checked>
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
-                    <div class="notification-type-item">
-                        <div class="notification-type-info">
-                            <div class="notification-type-title">공지사항 알림</div>
-                            <div class="notification-type-desc">플랫폼 공지사항 알림</div>
-                        </div>
-                        <label class="toggle-switch">
-                            <input type="checkbox" checked>
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
-                    <div class="notification-type-item">
-                        <div class="notification-type-info">
-                            <div class="notification-type-title">마케팅 알림</div>
-                            <div class="notification-type-desc">이벤트, 프로모션 등 마케팅 정보</div>
-                        </div>
-                        <label class="toggle-switch">
-                            <input type="checkbox">
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
-                </div>
-            </div>
-        </main>
-    </div>
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+      <a href="dashboard.html" class="nav-item">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+        </svg>
+        <span>홈</span>
+      </a>
+      <a href="course-list.html" class="nav-item">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+        </svg>
+        <span>코스</span>
+      </a>
+      <a href="settlements.html" class="nav-item">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+        </svg>
+        <span>정산</span>
+      </a>
+      <a href="settings.html" class="nav-item active">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+        </svg>
+        <span>설정</span>
+      </a>
+    </nav>
+  </div>
 </body>
 </html>

@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>알림 - TRAVELY</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="../shared/aurora-style.css">
+    <style>
+        .notifications-container {
+            padding-bottom: 20px;
+        }
+
+        /* Header Actions */
+        .header-action {
+            font-size: 13px;
+            color: var(--aurora-purple);
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* Date Section */
+        .notification-date {
+            padding: 16px 20px 8px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        /* Notification List */
+        .notification-list {
+            padding: 0 20px;
+        }
+
+        .notification-item {
+            display: flex;
+            gap: 12px;
+            padding: 16px;
+            background: var(--bg-glass);
+            border-radius: var(--radius-lg);
+            margin-bottom: 12px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .notification-item:active {
+            transform: scale(0.99);
+        }
+
+        .notification-item.unread {
+            background: rgba(102, 126, 234, 0.1);
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+
+        .notification-item.unread::before {
+            content: '';
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 8px;
+            height: 8px;
+            background: var(--aurora-purple);
+            border-radius: 50%;
+        }
+
+        .notification-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .notification-icon i {
+            font-size: 20px;
+        }
+
+        .notification-icon.success {
+            background: rgba(72, 187, 120, 0.2);
+            color: var(--success);
+        }
+
+        .notification-icon.warning {
+            background: rgba(236, 201, 75, 0.2);
+            color: var(--warning);
+        }
+
+        .notification-icon.info {
+            background: rgba(66, 153, 225, 0.2);
+            color: var(--info);
+        }
+
+        .notification-icon.error {
+            background: rgba(245, 101, 101, 0.2);
+            color: var(--error);
+        }
+
+        .notification-icon.promo {
+            background: rgba(240, 147, 251, 0.2);
+            color: var(--aurora-pink);
+        }
+
+        .notification-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .notification-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            padding-right: 20px;
+        }
+
+        .notification-message {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .notification-time {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 8px;
+        }
+
+        .notification-thumb {
+            width: 60px;
+            height: 60px;
+            border-radius: var(--radius-md);
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+        }
+
+        .empty-state-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--bg-glass);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+
+        .empty-state-icon i {
+            font-size: 32px;
+            color: var(--text-muted);
+        }
+
+        .empty-state-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .empty-state-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        /* Notification Settings Link */
+        .settings-link {
+            display: block;
+            text-align: center;
+            padding: 20px;
+            font-size: 13px;
+            color: var(--aurora-purple);
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="aurora-bg">
+        <div class="aurora-orb aurora-orb-1"></div>
+        <div class="aurora-orb aurora-orb-2"></div>
+        <div class="aurora-orb aurora-orb-3"></div>
+    </div>
+
+    <div class="mobile-container notifications-container">
+        <!-- Header -->
+        <header class="header">
+            <a href="home.html" class="header-back">
+                <i class="ri-arrow-left-line"></i>
+            </a>
+            <h1 class="header-title">알림</h1>
+            <button class="header-action">모두 읽음</button>
+        </header>
+
+        <!-- Today -->
+        <div class="notification-date">오늘</div>
+        <div class="notification-list">
+            <!-- Unread - Selection Result -->
+            <div class="notification-item unread">
+                <div class="notification-icon success">
+                    <i class="ri-check-double-line"></i>
+                </div>
+                <div class="notification-content">
+                    <div class="notification-title">선정 결과 안내</div>
+                    <div class="notification-message">
+                        축하합니다! '도쿄 맛집 & 카페 투어 5일' 코스에 선정되셨습니다. 상세 안내를 확인해주세요.
+                    </div>
+                    <div class="notification-time">오후 2:30</div>
+                </div>
+                <img src="https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=200" class="notification-thumb" alt="코스">
+            </div>
+
+            <!-- Unread - New Announcement -->
+            <div class="notification-item unread">
+                <div class="notification-icon info">
+                    <i class="ri-megaphone-line"></i>
+                </div>
+                <div class="notification-content">
+                    <div class="notification-title">새 공지사항</div>
+                    <div class="notification-message">
+                        @travel_jina님이 '발리 럭셔리 힐링 7일' 코스에 새 공지사항을 등록했습니다.
+                    </div>
+                    <div class="notification-time">오전 10:15</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Yesterday -->
+        <div class="notification-date">어제</div>
+        <div class="notification-list">
+            <!-- Payment Complete -->
+            <div class="notification-item">
+                <div class="notification-icon success">
+                    <i class="ri-secure-payment-line"></i>
+                </div>
+                <div class="notification-content">
+                    <div class="notification-title">결제 완료</div>
+                    <div class="notification-message">
+                        '발리 럭셔리 힐링 7일' 코스 결제가 완료되었습니다. (1,890,000원)
+                    </div>
+                    <div class="notification-time">오후 3:45</div>
+                </div>
+            </div>
+
+            <!-- Deadline Warning -->
+            <div class="notification-item">
+                <div class="notification-icon warning">
+                    <i class="ri-alarm-warning-line"></i>
+                </div>
+                <div class="notification-content">
+                    <div class="notification-title">모집 마감 임박</div>
+                    <div class="notification-message">
+                        찜한 '제주 힐링 3일' 코스가 3일 후 모집 마감됩니다. 서둘러 신청하세요!
+                    </div>
+                    <div class="notification-time">오전 9:00</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- This Week -->
+        <div class="notification-date">이번 주</div>
+        <div class="notification-list">
+            <!-- Refund -->
+            <div class="notification-item">
+                <div class="notification-icon info">
+                    <i class="ri-refund-2-line"></i>
+                </div>
+                <div class="notification-content">
+                    <div class="notification-title">환불 완료</div>
+                    <div class="notification-message">
+                        '파리 아트 & 와인 투어 6일' 코스 미선정에 따른 환불이 완료되었습니다.
+                    </div>
+                    <div class="notification-time">1월 16일</div>
+                </div>
+            </div>
+
+            <!-- Not Selected -->
+            <div class="notification-item">
+                <div class="notification-icon error">
+                    <i class="ri-close-circle-line"></i>
+                </div>
+                <div class="notification-content">
+                    <div class="notification-title">선정 결과 안내</div>
+                    <div class="notification-message">
+                        아쉽게도 '파리 아트 & 와인 투어 6일' 코스에 선정되지 않았습니다. 결제 금액은 자동 환불됩니다.
+                    </div>
+                    <div class="notification-time">1월 15일</div>
+                </div>
+            </div>
+
+            <!-- Promo -->
+            <div class="notification-item">
+                <div class="notification-icon promo">
+                    <i class="ri-gift-line"></i>
+                </div>
+                <div class="notification-content">
+                    <div class="notification-title">신규 가입 쿠폰 발급</div>
+                    <div class="notification-message">
+                        환영합니다! 첫 여행에 사용할 수 있는 50,000원 할인 쿠폰이 발급되었습니다.
+                    </div>
+                    <div class="notification-time">1월 10일</div>
+                </div>
+            </div>
+
+            <!-- New Course from Following -->
+            <div class="notification-item">
+                <div class="notification-icon info">
+                    <i class="ri-map-pin-add-line"></i>
+                </div>
+                <div class="notification-content">
+                    <div class="notification-title">새 코스 오픈</div>
+                    <div class="notification-message">
+                        팔로우 중인 @tokyo_life님이 새 코스 '오사카 로컬 푸드 투어 4일'을 오픈했습니다.
+                    </div>
+                    <div class="notification-time">1월 8일</div>
+                </div>
+                <img src="https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=200" class="notification-thumb" alt="코스">
+            </div>
+        </div>
+
+        <!-- Settings Link -->
+        <a href="#" class="settings-link">
+            <i class="ri-settings-3-line"></i> 알림 설정
+        </a>
+    </div>
+</body>
+</html>
