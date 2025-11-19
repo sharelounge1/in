@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>디자인 프리뷰 - Clean White Concept</title>
+  <link rel="stylesheet" href="shared/clean-style.css">
+  <style>
+    body {
+      background: var(--bg-light);
+      min-height: 100vh;
+    }
+    .preview-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+    .preview-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+    .preview-title {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      background: var(--primary-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .preview-subtitle {
+      font-size: 16px;
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+    }
+    .preview-description {
+      max-width: 600px;
+      margin: 0 auto;
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+    .section-title {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 24px;
+      padding-left: 16px;
+      border-left: 4px solid var(--primary-start);
+    }
+    .screen-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      margin-bottom: 48px;
+    }
+    .screen-card {
+      background: var(--bg-white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .screen-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+    }
+    .screen-preview {
+      height: 400px;
+      overflow: hidden;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .screen-preview iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      transform: scale(0.8);
+      transform-origin: top left;
+      width: 125%;
+      height: 125%;
+    }
+    .screen-info {
+      padding: 16px;
+    }
+    .screen-name {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .screen-type {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+    }
+    .screen-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      background: var(--primary-gradient);
+      color: white;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: transform 0.2s;
+    }
+    .screen-link:hover {
+      transform: translateY(-1px);
+    }
+    .screen-link svg {
+      width: 16px;
+      height: 16px;
+    }
+    .design-features {
+      background: var(--bg-white);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      margin-bottom: 48px;
+      box-shadow: var(--shadow-card);
+    }
+    .features-title {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+    }
+    .feature-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .feature-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-sm);
+      background: rgba(124, 58, 237, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .feature-icon svg {
+      width: 20px;
+      height: 20px;
+      color: var(--primary-start);
+    }
+    .feature-content h4 {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .feature-content p {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+    .color-palette {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+    }
+    .color-item {
+      text-align: center;
+    }
+    .color-swatch {
+      width: 60px;
+      height: 60px;
+      border-radius: var(--radius-md);
+      margin-bottom: 8px;
+      box-shadow: var(--shadow-sm);
+    }
+    .color-name {
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+  </style>
+</head>
+<body>
+  <div class="preview-container">
+    <!-- Header -->
+    <header class="preview-header">
+      <h1 class="preview-title">Clean White Design Concept</h1>
+      <p class="preview-subtitle">깔끔하고 미니멀한 디자인 컨셉</p>
+      <p class="preview-description">
+        흰색 배경과 보라-파란 그라데이션을 활용한 깔끔한 디자인입니다.
+        Pretendard 폰트와 부드러운 그림자 효과로 모던한 느낌을 강조했습니다.
+      </p>
+    </header>
+
+    <!-- Design Features -->
+    <div class="design-features">
+      <h3 class="features-title">디자인 특징</h3>
+      <div class="features-grid">
+        <div class="feature-item">
+          <div class="feature-icon">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/>
+            </svg>
+          </div>
+          <div class="feature-content">
+            <h4>깔끔한 흰색 배경</h4>
+            <p>순수한 흰색 기반의 밝은 인터페이스</p>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+            </svg>
+          </div>
+          <div class="feature-content">
+            <h4>보라-파랑 그라데이션</h4>
+            <p>버튼과 강조 요소에 사용</p>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"/>
+            </svg>
+          </div>
+          <div class="feature-content">
+            <h4>카드 스타일</h4>
+            <p>부드러운 그림자의 카드 UI</p>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"/>
+            </svg>
+          </div>
+          <div class="feature-content">
+            <h4>Pretendard 폰트</h4>
+            <p>가독성 높은 한글 최적화 폰트</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Color Palette -->
+      <div class="color-palette">
+        <div class="color-item">
+          <div class="color-swatch" style="background: #7C3AED;"></div>
+          <p class="color-name">Primary</p>
+        </div>
+        <div class="color-item">
+          <div class="color-swatch" style="background: #3B82F6;"></div>
+          <p class="color-name">Secondary</p>
+        </div>
+        <div class="color-item">
+          <div class="color-swatch" style="background: #FFFFFF; border: 1px solid #E2E8F0;"></div>
+          <p class="color-name">Background</p>
+        </div>
+        <div class="color-item">
+          <div class="color-swatch" style="background: #1E293B;"></div>
+          <p class="color-name">Text</p>
+        </div>
+        <div class="color-item">
+          <div class="color-swatch" style="background: #64748B;"></div>
+          <p class="color-name">Secondary</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- User Screens -->
+    <h2 class="section-title">유저 화면</h2>
+    <div class="screen-grid">
+      <div class="screen-card">
+        <div class="screen-preview">
+          <iframe src="user/home.html" title="홈"></iframe>
+        </div>
+        <div class="screen-info">
+          <h3 class="screen-name">홈</h3>
+          <p class="screen-type">메인 홈 화면</p>
+          <a href="user/home.html" class="screen-link" target="_blank">
+            <span>전체 보기</span>
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="screen-card">
+        <div class="screen-preview">
+          <iframe src="user/course-detail.html" title="코스 상세"></iframe>
+        </div>
+        <div class="screen-info">
+          <h3 class="screen-name">코스 상세</h3>
+          <p class="screen-type">여행 코스 상세 정보</p>
+          <a href="user/course-detail.html" class="screen-link" target="_blank">
+            <span>전체 보기</span>
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="screen-card">
+        <div class="screen-preview">
+          <iframe src="user/mypage.html" title="마이페이지"></iframe>
+        </div>
+        <div class="screen-info">
+          <h3 class="screen-name">마이페이지</h3>
+          <p class="screen-type">내 정보 및 활동</p>
+          <a href="user/mypage.html" class="screen-link" target="_blank">
+            <span>전체 보기</span>
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Influencer Screens -->
+    <h2 class="section-title">인플루언서 화면</h2>
+    <div class="screen-grid">
+      <div class="screen-card">
+        <div class="screen-preview">
+          <iframe src="influencer/dashboard.html" title="대시보드"></iframe>
+        </div>
+        <div class="screen-info">
+          <h3 class="screen-name">대시보드</h3>
+          <p class="screen-type">수익 및 현황 요약</p>
+          <a href="influencer/dashboard.html" class="screen-link" target="_blank">
+            <span>전체 보기</span>
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="screen-card">
+        <div class="screen-preview">
+          <iframe src="influencer/course-list.html" title="코스 관리"></iframe>
+        </div>
+        <div class="screen-info">
+          <h3 class="screen-name">코스 관리</h3>
+          <p class="screen-type">내 코스 목록 및 관리</p>
+          <a href="influencer/course-list.html" class="screen-link" target="_blank">
+            <span>전체 보기</span>
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="screen-card">
+        <div class="screen-preview">
+          <iframe src="influencer/settlements.html" title="정산"></iframe>
+        </div>
+        <div class="screen-info">
+          <h3 class="screen-name">정산</h3>
+          <p class="screen-type">정산 내역 및 출금</p>
+          <a href="influencer/settlements.html" class="screen-link" target="_blank">
+            <span>전체 보기</span>
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>코스 상세 - Clean Design</title>
+  <link rel="stylesheet" href="../shared/clean-style.css">
+  <style>
+    .hero-image {
+      width: 100%;
+      height: 280px;
+      object-fit: cover;
+    }
+    .back-button {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      width: 36px;
+      height: 36px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+    .back-button svg {
+      width: 20px;
+      height: 20px;
+    }
+    .share-button {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 36px;
+      height: 36px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+    .share-button svg {
+      width: 20px;
+      height: 20px;
+    }
+    .course-info {
+      padding: 20px;
+      background: var(--bg-white);
+      margin-top: -20px;
+      border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+      position: relative;
+    }
+    .influencer-profile {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .influencer-profile img {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    .influencer-info {
+      flex: 1;
+    }
+    .influencer-name {
+      font-size: 15px;
+      font-weight: 600;
+    }
+    .influencer-followers {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+    .follow-btn {
+      padding: 8px 16px;
+      background: var(--primary-gradient);
+      color: white;
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 500;
+      border: none;
+    }
+    .course-title {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .course-location {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: 16px;
+    }
+    .course-location svg {
+      width: 16px;
+      height: 16px;
+      display: inline;
+      vertical-align: middle;
+      margin-right: 4px;
+    }
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      padding: 16px;
+      background: var(--bg-light);
+      border-radius: var(--radius-md);
+      margin-bottom: 20px;
+    }
+    .info-item {
+      text-align: center;
+    }
+    .info-item-label {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-bottom: 4px;
+    }
+    .info-item-value {
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .schedule-item {
+      display: flex;
+      gap: 16px;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .schedule-day {
+      width: 50px;
+      flex-shrink: 0;
+    }
+    .schedule-day-number {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--primary-start);
+    }
+    .schedule-day-label {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+    .schedule-content {
+      flex: 1;
+    }
+    .schedule-title {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .schedule-desc {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+    .bottom-bar {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 430px;
+      padding: 16px 20px;
+      background: var(--bg-white);
+      border-top: 1px solid var(--border-light);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .price-info {
+      flex: 1;
+    }
+    .price-label {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+    .price-value {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--primary-start);
+    }
+    .apply-btn {
+      padding: 14px 32px;
+      background: var(--primary-gradient);
+      color: white;
+      border-radius: var(--radius-md);
+      font-size: 15px;
+      font-weight: 600;
+      border: none;
+      box-shadow: 0 4px 14px rgba(124, 58, 237, 0.3);
+    }
+    .content {
+      padding-bottom: 100px;
+    }
+  </style>
+</head>
+<body>
+  <div class="mobile-container">
+    <!-- Hero Image -->
+    <div style="position: relative;">
+      <img src="https://images.unsplash.com/photo-1590523741831-ab7e8b8f9c7f?w=800" alt="제주" class="hero-image">
+      <button class="back-button">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+        </svg>
+      </button>
+      <button class="share-button">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+      <div class="course-info">
+        <!-- Influencer Profile -->
+        <div class="influencer-profile">
+          <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100" alt="인플루언서">
+          <div class="influencer-info">
+            <p class="influencer-name">여행하는 지민</p>
+            <p class="influencer-followers">팔로워 12.5만</p>
+          </div>
+          <button class="follow-btn">팔로우</button>
+        </div>
+
+        <!-- Course Title -->
+        <h1 class="course-title">제주 힐링 3박 4일</h1>
+        <p class="course-location">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+          </svg>
+          제주도, 대한민국
+        </p>
+
+        <!-- Info Grid -->
+        <div class="info-grid">
+          <div class="info-item">
+            <p class="info-item-label">일정</p>
+            <p class="info-item-value">3박 4일</p>
+          </div>
+          <div class="info-item">
+            <p class="info-item-label">인원</p>
+            <p class="info-item-value">12/20명</p>
+          </div>
+          <div class="info-item">
+            <p class="info-item-label">출발일</p>
+            <p class="info-item-value">1.25 (토)</p>
+          </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+          <div class="tab active">일정</div>
+          <div class="tab">상세정보</div>
+          <div class="tab">후기</div>
+        </div>
+
+        <!-- Schedule -->
+        <div class="section" style="padding: 20px 0;">
+          <div class="schedule-item">
+            <div class="schedule-day">
+              <p class="schedule-day-number">1</p>
+              <p class="schedule-day-label">Day</p>
+            </div>
+            <div class="schedule-content">
+              <p class="schedule-title">제주 도착 & 동쪽 해안</p>
+              <p class="schedule-desc">공항 픽업 후 성산일출봉 방문, 우도 투어, 해녀 체험</p>
+            </div>
+          </div>
+          <div class="schedule-item">
+            <div class="schedule-day">
+              <p class="schedule-day-number">2</p>
+              <p class="schedule-day-label">Day</p>
+            </div>
+            <div class="schedule-content">
+              <p class="schedule-title">한라산 트레킹</p>
+              <p class="schedule-desc">한라산 영실코스 등반, 1100고지 방문, 산방산 일몰</p>
+            </div>
+          </div>
+          <div class="schedule-item">
+            <div class="schedule-day">
+              <p class="schedule-day-number">3</p>
+              <p class="schedule-day-label">Day</p>
+            </div>
+            <div class="schedule-content">
+              <p class="schedule-title">서쪽 해안 & 카페 투어</p>
+              <p class="schedule-desc">협재 해수욕장, 오설록 티뮤지엄, 인생샷 카페 투어</p>
+            </div>
+          </div>
+          <div class="schedule-item" style="border-bottom: none;">
+            <div class="schedule-day">
+              <p class="schedule-day-number">4</p>
+              <p class="schedule-day-label">Day</p>
+            </div>
+            <div class="schedule-content">
+              <p class="schedule-title">자유시간 & 출발</p>
+              <p class="schedule-desc">올레시장 쇼핑, 공항 이동 및 출발</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Bar -->
+    <div class="bottom-bar">
+      <div class="price-info">
+        <p class="price-label">1인 참가비</p>
+        <p class="price-value">890,000원</p>
+      </div>
+      <button class="apply-btn">신청하기</button>
+    </div>
+  </div>
+</body>
+</html>

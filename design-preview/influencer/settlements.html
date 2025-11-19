@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>정산 내역 - 인플루언서</title>
+  <link rel="stylesheet" href="../shared/clean-style.css">
+  <style>
+    .content {
+      padding-bottom: 80px;
+    }
+    .balance-card {
+      margin: 20px;
+      background: var(--primary-gradient);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      color: white;
+      box-shadow: 0 10px 30px rgba(124, 58, 237, 0.3);
+    }
+    .balance-label {
+      font-size: 13px;
+      opacity: 0.9;
+      margin-bottom: 8px;
+    }
+    .balance-amount {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+    .balance-actions {
+      display: flex;
+      gap: 8px;
+    }
+    .balance-btn {
+      flex: 1;
+      padding: 10px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 500;
+      text-align: center;
+      border: none;
+      cursor: pointer;
+    }
+    .balance-btn.primary {
+      background: white;
+      color: var(--primary-start);
+    }
+    .balance-btn.secondary {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+    }
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin: 0 20px 20px;
+    }
+    .summary-card {
+      background: var(--bg-white);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      box-shadow: var(--shadow-card);
+    }
+    .summary-label {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-bottom: 4px;
+    }
+    .summary-value {
+      font-size: 18px;
+      font-weight: 700;
+    }
+    .summary-value.positive {
+      color: #10B981;
+    }
+    .summary-value.negative {
+      color: #EF4444;
+    }
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 20px;
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-size: 16px;
+      font-weight: 600;
+    }
+    .period-selector {
+      font-size: 13px;
+      color: var(--text-secondary);
+      background: var(--bg-light);
+      padding: 6px 12px;
+      border-radius: 100px;
+      border: none;
+    }
+    .settlement-list {
+      margin: 0 20px;
+    }
+    .settlement-item {
+      background: var(--bg-white);
+      border-radius: var(--radius-md);
+      margin-bottom: 12px;
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+    }
+    .settlement-item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .settlement-course {
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .settlement-status {
+      padding: 4px 10px;
+      border-radius: 100px;
+      font-size: 11px;
+      font-weight: 500;
+    }
+    .settlement-status.completed {
+      background: rgba(16, 185, 129, 0.1);
+      color: #10B981;
+    }
+    .settlement-status.pending {
+      background: rgba(245, 158, 11, 0.1);
+      color: #F59E0B;
+    }
+    .settlement-status.scheduled {
+      background: rgba(59, 130, 246, 0.1);
+      color: #3B82F6;
+    }
+    .settlement-item-body {
+      padding: 16px;
+    }
+    .settlement-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .settlement-row:last-child {
+      margin-bottom: 0;
+    }
+    .settlement-row-label {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+    .settlement-row-value {
+      font-size: 13px;
+      font-weight: 500;
+    }
+    .settlement-row-total {
+      padding-top: 8px;
+      border-top: 1px solid var(--border-light);
+      margin-top: 8px;
+    }
+    .settlement-row-total .settlement-row-label {
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    .settlement-row-total .settlement-row-value {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--primary-start);
+    }
+    .account-info {
+      margin: 20px;
+      background: var(--bg-light);
+      border-radius: var(--radius-md);
+      padding: 16px;
+    }
+    .account-info-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .account-info-title {
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .account-info-edit {
+      font-size: 12px;
+      color: var(--primary-start);
+      text-decoration: none;
+    }
+    .account-info-detail {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+    .info-banner {
+      margin: 20px;
+      padding: 14px 16px;
+      background: rgba(59, 130, 246, 0.1);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .info-banner svg {
+      width: 20px;
+      height: 20px;
+      color: #3B82F6;
+      flex-shrink: 0;
+    }
+    .info-banner-text {
+      font-size: 13px;
+      color: #3B82F6;
+    }
+  </style>
+</head>
+<body>
+  <div class="mobile-container">
+    <!-- Header -->
+    <header class="header">
+      <span class="header-title">정산</span>
+      <svg class="header-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+      </svg>
+    </header>
+
+    <!-- Content -->
+    <div class="content">
+      <!-- Balance Card -->
+      <div class="balance-card">
+        <p class="balance-label">출금 가능 금액</p>
+        <p class="balance-amount">3,240,000원</p>
+        <div class="balance-actions">
+          <button class="balance-btn primary">출금 신청</button>
+          <button class="balance-btn secondary">상세 내역</button>
+        </div>
+      </div>
+
+      <!-- Summary Grid -->
+      <div class="summary-grid">
+        <div class="summary-card">
+          <p class="summary-label">이번 달 수익</p>
+          <p class="summary-value positive">+2,450,000</p>
+        </div>
+        <div class="summary-card">
+          <p class="summary-label">이번 달 수수료</p>
+          <p class="summary-value negative">-245,000</p>
+        </div>
+      </div>
+
+      <!-- Info Banner -->
+      <div class="info-banner">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+        <p class="info-banner-text">정산은 여행 완료 후 7일 이내 처리됩니다</p>
+      </div>
+
+      <!-- Settlement List -->
+      <div class="section-header">
+        <h3 class="section-title">정산 내역</h3>
+        <select class="period-selector">
+          <option>2025년 1월</option>
+          <option>2024년 12월</option>
+          <option>2024년 11월</option>
+        </select>
+      </div>
+
+      <div class="settlement-list">
+        <!-- Settlement Item 1 -->
+        <div class="settlement-item">
+          <div class="settlement-item-header">
+            <span class="settlement-course">제주 힐링 3박 4일</span>
+            <span class="settlement-status scheduled">정산 예정</span>
+          </div>
+          <div class="settlement-item-body">
+            <div class="settlement-row">
+              <span class="settlement-row-label">총 수익</span>
+              <span class="settlement-row-value">10,680,000원</span>
+            </div>
+            <div class="settlement-row">
+              <span class="settlement-row-label">플랫폼 수수료 (10%)</span>
+              <span class="settlement-row-value">-1,068,000원</span>
+            </div>
+            <div class="settlement-row">
+              <span class="settlement-row-label">정산 예정일</span>
+              <span class="settlement-row-value">2025.02.04</span>
+            </div>
+            <div class="settlement-row settlement-row-total">
+              <span class="settlement-row-label">정산 예정 금액</span>
+              <span class="settlement-row-value">9,612,000원</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Settlement Item 2 -->
+        <div class="settlement-item">
+          <div class="settlement-item-header">
+            <span class="settlement-course">도쿄 맛집 투어 4박 5일</span>
+            <span class="settlement-status pending">정산 처리중</span>
+          </div>
+          <div class="settlement-item-body">
+            <div class="settlement-row">
+              <span class="settlement-row-label">총 수익</span>
+              <span class="settlement-row-value">25,000,000원</span>
+            </div>
+            <div class="settlement-row">
+              <span class="settlement-row-label">플랫폼 수수료 (10%)</span>
+              <span class="settlement-row-value">-2,500,000원</span>
+            </div>
+            <div class="settlement-row">
+              <span class="settlement-row-label">정산 예정일</span>
+              <span class="settlement-row-value">2025.01.21</span>
+            </div>
+            <div class="settlement-row settlement-row-total">
+              <span class="settlement-row-label">정산 예정 금액</span>
+              <span class="settlement-row-value">22,500,000원</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Settlement Item 3 -->
+        <div class="settlement-item">
+          <div class="settlement-item-header">
+            <span class="settlement-course">파리 로맨틱 5박 6일</span>
+            <span class="settlement-status completed">정산 완료</span>
+          </div>
+          <div class="settlement-item-body">
+            <div class="settlement-row">
+              <span class="settlement-row-label">총 수익</span>
+              <span class="settlement-row-value">31,500,000원</span>
+            </div>
+            <div class="settlement-row">
+              <span class="settlement-row-label">플랫폼 수수료 (10%)</span>
+              <span class="settlement-row-value">-3,150,000원</span>
+            </div>
+            <div class="settlement-row">
+              <span class="settlement-row-label">정산일</span>
+              <span class="settlement-row-value">2025.01.02</span>
+            </div>
+            <div class="settlement-row settlement-row-total">
+              <span class="settlement-row-label">정산 금액</span>
+              <span class="settlement-row-value">28,350,000원</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Account Info -->
+      <div class="account-info">
+        <div class="account-info-header">
+          <span class="account-info-title">정산 계좌</span>
+          <a href="#" class="account-info-edit">변경</a>
+        </div>
+        <p class="account-info-detail">신한은행 110-123-456789 (김*민)</p>
+      </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+      <a href="dashboard.html" class="nav-item">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+        </svg>
+        <span>홈</span>
+      </a>
+      <a href="course-list.html" class="nav-item">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+        </svg>
+        <span>코스</span>
+      </a>
+      <a href="#" class="nav-item active">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+        </svg>
+        <span>정산</span>
+      </a>
+      <a href="#" class="nav-item">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+        </svg>
+        <span>설정</span>
+      </a>
+    </nav>
+  </div>
+</body>
+</html>
